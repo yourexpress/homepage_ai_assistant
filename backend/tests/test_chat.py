@@ -81,14 +81,15 @@ class TestChatRateLimit:
         cfg.settings.rate_limit_burst = 2
         cfg.settings.rate_limit_refill_interval = 3600  # 1 hour — won't refill in test
 
-        test_app = create_app()
-        async with AsyncClient(transport=ASGITransport(app=test_app), base_url="http://test") as ac:
-            r1 = await ac.post("/api/chat", json={"message": "hello"})
-            r2 = await ac.post("/api/chat", json={"message": "hello"})
-            r3 = await ac.post("/api/chat", json={"message": "hello"})
-
-        cfg.settings.rate_limit_burst = original_burst
-        cfg.settings.rate_limit_refill_interval = original_refill
+        try:
+            test_app = create_app()
+            async with AsyncClient(transport=ASGITransport(app=test_app), base_url="http://test") as ac:
+                r1 = await ac.post("/api/chat", json={"message": "hello"})
+                r2 = await ac.post("/api/chat", json={"message": "hello"})
+                r3 = await ac.post("/api/chat", json={"message": "hello"})
+        finally:
+            cfg.settings.rate_limit_burst = original_burst
+            cfg.settings.rate_limit_refill_interval = original_refill
 
         assert r1.status_code == 200
         assert r2.status_code == 200
@@ -123,22 +124,23 @@ class TestChatConcurrencyLimit:
 
         mock_llm.side_effect = slow_complete
 
-        test_app = create_app()
-        async with AsyncClient(transport=ASGITransport(app=test_app), base_url="http://test") as ac:
-            # Launch a slow request that occupies the single slot
-            slow_task = asyncio.create_task(
-                ac.post("/api/chat", json={"message": "slow"})
-            )
-            # Brief wait to let the slow request acquire the semaphore
-            await asyncio.sleep(0.1)
+        try:
+            test_app = create_app()
+            async with AsyncClient(transport=ASGITransport(app=test_app), base_url="http://test") as ac:
+                # Launch a slow request that occupies the single slot
+                slow_task = asyncio.create_task(
+                    ac.post("/api/chat", json={"message": "slow"})
+                )
+                # Brief wait to let the slow request acquire the semaphore
+                await asyncio.sleep(0.1)
 
-            # This request should be rejected with 503
-            r2 = await ac.post("/api/chat", json={"message": "fast"})
+                # This request should be rejected with 503
+                r2 = await ac.post("/api/chat", json={"message": "fast"})
 
-            # Wait for the slow request to complete
-            r1 = await slow_task
-
-        cfg.settings.max_concurrent_requests = original_max
+                # Wait for the slow request to complete
+                r1 = await slow_task
+        finally:
+            cfg.settings.max_concurrent_requests = original_max
 
         assert r1.status_code == 200
         assert r2.status_code == 503
