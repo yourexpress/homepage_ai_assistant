@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Chen · Assistant Metrics</title>
+  <meta name="description"
+        content="Public operational metrics for the Portfolio AI Assistant." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <span class="logo">Alex Chen</span>
+    <nav>
+      <a href="index.html">Chat</a>
+      <a href="metrics.html" class="active">Metrics</a>
+      <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <div class="hero">
+      <h1>Operational Metrics</h1>
+      <p>Live counters from the assistant backend. Resets on each deployment.</p>
+    </div>
+
+    <div id="metrics-root">
+      <p class="metrics-refresh-note">Loading…</p>
+    </div>
+
+    <p class="metrics-refresh-note" id="refresh-note"></p>
+  </main>
+
+  <script src="js/metrics.js"></script>
+</body>
+</html>
