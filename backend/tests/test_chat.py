@@ -96,6 +96,55 @@ class TestChatRateLimit:
         assert "Retry-After" in r3.headers
 
 
+class TestChatConcurrencyLimit:
+    async def test_concurrency_limited_returns_503(self, mock_llm, reset_metrics):
+        """When all concurrency slots are occupied, requests return 503."""
+        import asyncio
+
+        from app.main import create_app
+        from httpx import ASGITransport, AsyncClient
+
+        import app.config as cfg
+        original_max = cfg.settings.max_concurrent_requests
+
+        # Set to 1 so we can saturate with a single slow request
+        cfg.settings.max_concurrent_requests = 1
+
+        # Make the LLM slow so the slot stays occupied
+        async def slow_complete(messages):
+            from unittest.mock import MagicMock
+
+            await asyncio.sleep(2)
+            resp = MagicMock()
+            resp.text = "Slow response."
+            resp.prompt_tokens = 10
+            resp.completion_tokens = 20
+            return resp
+
+        mock_llm.side_effect = slow_complete
+
+        test_app = create_app()
+        async with AsyncClient(transport=ASGITransport(app=test_app), base_url="http://test") as ac:
+            # Launch a slow request that occupies the single slot
+            slow_task = asyncio.create_task(
+                ac.post("/api/chat", json={"message": "slow"})
+            )
+            # Brief wait to let the slow request acquire the semaphore
+            await asyncio.sleep(0.1)
+
+            # This request should be rejected with 503
+            r2 = await ac.post("/api/chat", json={"message": "fast"})
+
+            # Wait for the slow request to complete
+            r1 = await slow_task
+
+        cfg.settings.max_concurrent_requests = original_max
+
+        assert r1.status_code == 200
+        assert r2.status_code == 503
+        assert "Retry-After" in r2.headers
+
+
 class TestChatMetricsIntegration:
     async def test_successful_request_increments_counters(self, client):
         from app.services.metrics_store import metrics

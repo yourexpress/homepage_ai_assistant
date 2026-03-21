@@ -37,7 +37,12 @@ implementation of that component.
 | Chat endpoint happy path | `test_chat.py::test_happy_path` |
 | Chat endpoint returns refusal on policy violation | `test_chat.py::test_policy_violation` |
 | Chat endpoint returns 429 on rate limit | `test_chat.py::test_rate_limited` |
-| Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_exceeded` |
+| Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_limited_returns_503` |
+| Visitor identity: direct connection | `test_rate_limiter.py::test_client_key_without_proxy` |
+| Visitor identity: X-Forwarded-For header | `test_rate_limiter.py::test_client_key_with_proxy_header` |
+| Visitor identity: multiple IPs in X-Forwarded-For | `test_rate_limiter.py::test_client_key_with_multiple_forwarded_ips` |
+| Visitor identity: missing request.client | `test_rate_limiter.py::test_client_key_without_client` |
+| Visitor identity: empty X-Forwarded-For | `test_rate_limiter.py::test_client_key_with_empty_forwarded_header` |
 | Prompt injection: DAN / do-anything-now | `test_policy_guard.py::test_prompt_injection_do_anything_now` |
 | Prompt injection: developer mode | `test_policy_guard.py::test_prompt_injection_enter_developer_mode` |
 | Prompt injection: override policy/filter/rules | `test_policy_guard.py::test_prompt_injection_override_safety_policy` |
