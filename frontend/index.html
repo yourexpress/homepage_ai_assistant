@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Chen · Portfolio AI Assistant</title>
+  <meta name="description"
+        content="Chat with an AI assistant to learn about Alex Chen's public background, projects, and experience." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <span class="logo">Alex Chen</span>
+    <nav>
+      <a href="index.html" class="active">Chat</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <div class="hero">
+      <h1>Portfolio AI Assistant</h1>
+      <p>
+        Ask me about Alex's background, projects, research interests, and
+        skills. I only discuss publicly available information.
+      </p>
+    </div>
+
+    <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages">
+      <div class="message assistant">
+        👋 Hi! I'm an AI assistant for Alex Chen's portfolio. Ask me anything
+        about his public background, projects, or experience.
+      </div>
+    </div>
+
+    <form id="chat-form" autocomplete="off" novalidate>
+      <textarea
+        id="chat-input"
+        rows="2"
+        maxlength="1000"
+        placeholder="Ask about Alex's projects, experience, or skills…"
+        aria-label="Your message"
+      ></textarea>
+      <button type="submit" id="send-btn">Send</button>
+    </form>
+
+    <div class="char-counter" id="char-counter">0 / 1000</div>
+    <p class="chat-disclaimer">
+      This assistant only discusses public portfolio information.
+      Rate limit: 10 messages per 10 minutes.
+    </p>
+  </main>
+
+  <script src="js/chat.js"></script>
+</body>
+</html>
