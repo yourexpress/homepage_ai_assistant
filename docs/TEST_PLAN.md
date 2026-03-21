@@ -38,6 +38,21 @@ implementation of that component.
 | Chat endpoint returns refusal on policy violation | `test_chat.py::test_policy_violation` |
 | Chat endpoint returns 429 on rate limit | `test_chat.py::test_rate_limited` |
 | Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_exceeded` |
+| Prompt injection: DAN / do-anything-now | `test_policy_guard.py::test_prompt_injection_do_anything_now` |
+| Prompt injection: developer mode | `test_policy_guard.py::test_prompt_injection_enter_developer_mode` |
+| Prompt injection: override policy/filter/rules | `test_policy_guard.py::test_prompt_injection_override_safety_policy` |
+| Private data: salary | `test_policy_guard.py::test_private_salary` |
+| Secrets: API keys | `test_policy_guard.py::test_secret_api_key` |
+| Secrets: access tokens | `test_policy_guard.py::test_secret_access_token` |
+| Secrets: credentials | `test_policy_guard.py::test_secret_credentials` |
+| Secrets: secret keys | `test_policy_guard.py::test_secret_key` |
+| Deployment: environment variables | `test_policy_guard.py::test_deployment_environment_variables` |
+| Deployment: server info | `test_policy_guard.py::test_deployment_server_running` |
+| Deployment: cloud provider | `test_policy_guard.py::test_deployment_cloud_provider` |
+| Architecture: database/backend | `test_policy_guard.py::test_architecture_database_backend` |
+| Architecture: source code | `test_policy_guard.py::test_architecture_source_code` |
+| Architecture: internal config | `test_policy_guard.py::test_architecture_internal_config` |
+| No false positives on clean input | `test_policy_guard.py::test_no_false_positive_on_*` |
 
 ---
 

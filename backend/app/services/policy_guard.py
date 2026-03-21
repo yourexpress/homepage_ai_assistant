@@ -53,7 +53,7 @@ Guidelines:
 # ---------------------------------------------------------------------------
 
 BLOCKED_PATTERNS: list[re.Pattern] = [
-    # Prompt injection attempts
+    # ── Prompt injection attempts ──────────────────────────────────────
     re.compile(r"ignore\s+(all\s+)?previous\s+instructions?", re.IGNORECASE),
     re.compile(r"disregard\s+(all\s+)?instructions?", re.IGNORECASE),
     re.compile(r"forget\s+(?:all\s+|your\s+)?instructions?", re.IGNORECASE),
@@ -63,13 +63,31 @@ BLOCKED_PATTERNS: list[re.Pattern] = [
     re.compile(r"reveal\s+(?:your\s+)?system\s+prompt", re.IGNORECASE),
     re.compile(r"show\s+(?:me\s+)?(?:your\s+)?(?:system\s+)?instructions?", re.IGNORECASE),
     re.compile(r"jailbreak", re.IGNORECASE),
-    # Requests for private information
+    re.compile(r"do\s+anything\s+now", re.IGNORECASE),
+    re.compile(r"(?:enter|enable|activate)\s+developer\s+mode", re.IGNORECASE),
+    re.compile(r"override\s+(?:(?:your|safety|content)\s+)*(?:policy|filter|rules?)", re.IGNORECASE),
+    # ── Requests for private information ───────────────────────────────
     re.compile(r"\b(?:home\s+)?address\b", re.IGNORECASE),
     re.compile(r"\bphone\s+number\b", re.IGNORECASE),
     re.compile(r"\bpersonal\s+email\b", re.IGNORECASE),
     re.compile(r"\bsocial\s+security\b", re.IGNORECASE),
     re.compile(r"\bpassword\b", re.IGNORECASE),
     re.compile(r"\bcredit\s+card\b", re.IGNORECASE),
+    re.compile(r"\bsalary\b", re.IGNORECASE),
+    # ── API keys, credentials, and secrets ─────────────────────────────
+    re.compile(r"\bapi[_\s]?key\b", re.IGNORECASE),
+    re.compile(r"\baccess[_\s]?token\b", re.IGNORECASE),
+    re.compile(r"\bcredentials?\b", re.IGNORECASE),
+    re.compile(r"\bsecret[_\s]?key\b", re.IGNORECASE),
+    # ── Deployment and infrastructure secrets ──────────────────────────
+    re.compile(r"\benvironment\s+variables?\b", re.IGNORECASE),
+    re.compile(r"\bserver\b.{0,20}\brunning\b", re.IGNORECASE),
+    re.compile(r"\bcloud\s+provider\b", re.IGNORECASE),
+    # ── Backend architecture probing ───────────────────────────────────
+    re.compile(r"\bdatabase\b.{0,20}\bbackend\b", re.IGNORECASE),
+    re.compile(r"\bbackend\b.{0,20}\bdatabase\b", re.IGNORECASE),
+    re.compile(r"\bsource\s+code\b", re.IGNORECASE),
+    re.compile(r"\binternal\s+config", re.IGNORECASE),
 ]
 
 
