@@ -306,7 +306,7 @@ Incoming HTTP request
   │     Reject with 422 if:
   │       • message field is missing
   │       • body is not valid JSON
-  │       • message exceeds MAX_INPUT_LENGTH (1 000 chars)
+  │       • message exceeds MAX_INPUT_LENGTH (1000 chars)
   │
   ├─[5] Policy pre-filter (policy_guard.is_blocked)
   │     Return 200 + blocked=true refusal if regex matches
@@ -473,7 +473,7 @@ unconditionally.
 **Module:** `app/models.py :: ChatRequest.check_length()`
 
 A Pydantic `field_validator` on the `message` field rejects values exceeding
-`MAX_INPUT_LENGTH` (default 1 000 characters) with a `ValueError`, which
+`MAX_INPUT_LENGTH` (default 1000 characters) with a `ValueError`, which
 FastAPI converts to HTTP 422:
 
 ```json
@@ -761,7 +761,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 |----------|---------|------|
 | **In-memory state** (rate limits, metrics) | Zero infrastructure; instant reads | Lost on restart; single-instance only |
 | **No conversation history** | Stateless backend; no session storage; no cross-visitor leakage | Each message is context-free; multi-turn conversations require restating context |
-| **System prompt as knowledge source** | Simple to audit and deploy; no vector DB | Limited to ~4 K tokens of context; updates require redeployment |
+| **System prompt as knowledge source** | Simple to audit and deploy; no vector DB | Limited to ~4K tokens of context; updates require redeployment |
 | **Regex pre-filter** | Zero-latency rejection for known patterns | Easily bypassed by paraphrasing; requires manual pattern maintenance |
 | **Token-bucket rate limiting** | Allows burst then degrades gracefully; simple implementation | Per-process state is not shared across instances |
 | **Non-blocking concurrency limiter** | Immediate 503 prevents request pile-up | Visitors during traffic spikes are turned away rather than queued |
