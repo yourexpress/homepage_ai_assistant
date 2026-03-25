@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import time
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -93,3 +94,81 @@ class TestRateLimiterBurstBehaviour:
         _, retry_after = mw._consume("ip2")
         # Should be close to one full refill interval
         assert 500 < retry_after <= 600
+
+
+class TestClientKeyResolution:
+    """Tests for _get_client_key() under various proxy/client configurations."""
+
+    def _make_mw(self):
+        mw = RateLimiterMiddleware.__new__(RateLimiterMiddleware)
+        mw._capacity = 10
+        mw._refill_interval = 600.0
+        mw._buckets = {}
+        return mw
+
+    def _make_request(self, host="127.0.0.1", forwarded_for=None, client=True):
+        """Build a mock Request with configurable client and headers."""
+        request = MagicMock()
+        if client:
+            request.client = MagicMock()
+            request.client.host = host
+        else:
+            request.client = None
+        headers = {}
+        if forwarded_for is not None:
+            headers["X-Forwarded-For"] = forwarded_for
+        request.headers = headers
+        return request
+
+    @patch("app.middleware.rate_limiter.settings")
+    def test_client_key_without_proxy(self, mock_settings):
+        """Direct connection uses request.client.host."""
+        mock_settings.trust_proxy_headers = False
+        mw = self._make_mw()
+        request = self._make_request(host="192.168.1.1")
+        key = mw._get_client_key(request)
+        expected = hashlib.sha256("192.168.1.1".encode()).hexdigest()[:16]
+        assert key == expected
+
+    @patch("app.middleware.rate_limiter.settings")
+    def test_client_key_with_proxy_header(self, mock_settings):
+        """When trusting proxy, reads X-Forwarded-For."""
+        mock_settings.trust_proxy_headers = True
+        mw = self._make_mw()
+        request = self._make_request(host="10.0.0.1", forwarded_for="203.0.113.50")
+        key = mw._get_client_key(request)
+        expected = hashlib.sha256("203.0.113.50".encode()).hexdigest()[:16]
+        assert key == expected
+
+    @patch("app.middleware.rate_limiter.settings")
+    def test_client_key_with_multiple_forwarded_ips(self, mock_settings):
+        """Multiple X-Forwarded-For entries → first IP is used."""
+        mock_settings.trust_proxy_headers = True
+        mw = self._make_mw()
+        request = self._make_request(
+            host="10.0.0.1",
+            forwarded_for="203.0.113.50, 198.51.100.10, 10.0.0.1",
+        )
+        key = mw._get_client_key(request)
+        expected = hashlib.sha256("203.0.113.50".encode()).hexdigest()[:16]
+        assert key == expected
+
+    @patch("app.middleware.rate_limiter.settings")
+    def test_client_key_without_client(self, mock_settings):
+        """When request.client is None, falls back to 'unknown'."""
+        mock_settings.trust_proxy_headers = False
+        mw = self._make_mw()
+        request = self._make_request(client=False)
+        key = mw._get_client_key(request)
+        expected = hashlib.sha256("unknown".encode()).hexdigest()[:16]
+        assert key == expected
+
+    @patch("app.middleware.rate_limiter.settings")
+    def test_client_key_with_empty_forwarded_header(self, mock_settings):
+        """Empty X-Forwarded-For falls back to request.client.host."""
+        mock_settings.trust_proxy_headers = True
+        mw = self._make_mw()
+        request = self._make_request(host="192.168.1.1", forwarded_for="")
+        key = mw._get_client_key(request)
+        expected = hashlib.sha256("192.168.1.1".encode()).hexdigest()[:16]
+        assert key == expected

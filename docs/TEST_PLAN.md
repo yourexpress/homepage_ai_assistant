@@ -16,6 +16,7 @@ implementation of that component.
 | Unit — rate limiter | pytest | `backend/tests/test_rate_limiter.py` |
 | Unit — concurrency limiter | pytest | `backend/tests/test_concurrency.py` |
 | Unit — metrics store | pytest | `backend/tests/test_metrics.py` |
+| Unit — knowledge base | pytest | `backend/tests/test_knowledge_base.py` |
 | Integration — chat endpoint | pytest + httpx | `backend/tests/test_chat.py` |
 | Integration — metrics endpoint | pytest + httpx | `backend/tests/test_metrics_api.py` |
 
@@ -37,7 +38,41 @@ implementation of that component.
 | Chat endpoint happy path | `test_chat.py::test_happy_path` |
 | Chat endpoint returns refusal on policy violation | `test_chat.py::test_policy_violation` |
 | Chat endpoint returns 429 on rate limit | `test_chat.py::test_rate_limited` |
-| Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_exceeded` |
+| Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_limited_returns_503` |
+| Visitor identity: direct connection | `test_rate_limiter.py::test_client_key_without_proxy` |
+| Visitor identity: X-Forwarded-For header | `test_rate_limiter.py::test_client_key_with_proxy_header` |
+| Visitor identity: multiple IPs in X-Forwarded-For | `test_rate_limiter.py::test_client_key_with_multiple_forwarded_ips` |
+| Visitor identity: missing request.client | `test_rate_limiter.py::test_client_key_without_client` |
+| Visitor identity: empty X-Forwarded-For | `test_rate_limiter.py::test_client_key_with_empty_forwarded_header` |
+| Prompt injection: DAN / do-anything-now | `test_policy_guard.py::test_prompt_injection_do_anything_now` |
+| Prompt injection: developer mode | `test_policy_guard.py::test_prompt_injection_enter_developer_mode` |
+| Prompt injection: override policy/filter/rules | `test_policy_guard.py::test_prompt_injection_override_safety_policy` |
+| Private data: salary | `test_policy_guard.py::test_private_salary` |
+| Secrets: API keys | `test_policy_guard.py::test_secret_api_key` |
+| Secrets: access tokens | `test_policy_guard.py::test_secret_access_token` |
+| Secrets: credentials | `test_policy_guard.py::test_secret_credentials` |
+| Secrets: secret keys | `test_policy_guard.py::test_secret_key` |
+| Deployment: environment variables | `test_policy_guard.py::test_deployment_environment_variables` |
+| Deployment: server info | `test_policy_guard.py::test_deployment_server_running` |
+| Deployment: cloud provider | `test_policy_guard.py::test_deployment_cloud_provider` |
+| Architecture: database/backend | `test_policy_guard.py::test_architecture_database_backend` |
+| Architecture: source code | `test_policy_guard.py::test_architecture_source_code` |
+| Architecture: internal config | `test_policy_guard.py::test_architecture_internal_config` |
+| No false positives on clean input | `test_policy_guard.py::test_no_false_positive_on_*` |
+| Knowledge: JSON files load correctly | `test_knowledge_base.py::TestLoadJson::test_loads_valid_*` |
+| Knowledge: missing file graceful fallback | `test_knowledge_base.py::TestLoadJson::test_missing_file_returns_empty_dict` |
+| Knowledge: invalid JSON graceful fallback | `test_knowledge_base.py::TestLoadJson::test_invalid_json_returns_empty_dict` |
+| Knowledge: all source files loaded | `test_knowledge_base.py::TestLoadAll::test_returns_all_source_files` |
+| Knowledge: profile schema valid | `test_knowledge_base.py::TestKnowledgeSchemas::test_profile_has_required_fields` |
+| Knowledge: experience schema valid | `test_knowledge_base.py::TestKnowledgeSchemas::test_experience_positions_have_required_fields` |
+| Knowledge: projects schema valid | `test_knowledge_base.py::TestKnowledgeSchemas::test_projects_entries_have_required_fields` |
+| Knowledge: FAQ schema valid | `test_knowledge_base.py::TestKnowledgeSchemas::test_faq_entries_have_question_and_answer` |
+| Knowledge: context contains source citations | `test_knowledge_base.py::TestBuildContext::test_contains_source_citations` |
+| Knowledge: context contains key facts | `test_knowledge_base.py::TestBuildContext::test_contains_key_facts` |
+| Knowledge: grounding instructions present | `test_knowledge_base.py::TestGroundingConstraints::test_context_instructs_only_approved_info` |
+| Knowledge: no private data in files | `test_knowledge_base.py::TestGroundingConstraints::test_no_private_data_in_knowledge_files` |
+| Knowledge: context caching works | `test_knowledge_base.py::TestGetContext::test_returns_cached_context` |
+| Knowledge: reload rebuilds context | `test_knowledge_base.py::TestGetContext::test_reload_rebuilds_context` |
 
 ---
 

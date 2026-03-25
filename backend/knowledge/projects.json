@@ -1,0 +1,11 @@
+{
+  "projects": [
+    {
+      "name": "homepage_ai_assistant",
+      "description": "AI-powered portfolio chat assistant with safety controls, rate limiting, and public metrics.",
+      "url": "https://github.com/yourexpress/homepage_ai_assistant",
+      "technologies": ["Python", "FastAPI", "OpenAI API"],
+      "status": "active"
+    }
+  ]
+}
