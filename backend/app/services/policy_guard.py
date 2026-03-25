@@ -126,9 +126,11 @@ def build_messages(user_message: str) -> list[dict[str, str]]:
     """Return the full messages list to send to the LLM.
 
     Prepends the system prompt so every conversation starts with the
-    portfolio context and policy instructions.
+    portfolio context and policy instructions.  The context is resolved
+    fresh on each call so that ``knowledge_base.reload()`` takes effect
+    without restarting the process.
     """
     return [
-        {"role": "system", "content": PORTFOLIO_CONTEXT},
+        {"role": "system", "content": _get_portfolio_context()},
         {"role": "user", "content": user_message},
     ]
