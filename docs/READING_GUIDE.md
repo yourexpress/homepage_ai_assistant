@@ -15,6 +15,7 @@ homepage_ai_assistant/
 │   ├── REQUIREMENTS.md          ← engineering requirements (start here for scope)
 │   ├── SYSTEM_DESIGN.md         ← architecture, data-flow, design decisions
 │   ├── TEST_PLAN.md             ← what is tested and why
+│   ├── TESTING.md               ← how to run, extend, and debug tests
 │   ├── IMPLEMENTATION_PLAN.md   ← phased dev plan, traceability matrix
 │   ├── READING_GUIDE.md         ← this file
 │   └── TROUBLESHOOTING.md       ← common failure modes + fixes

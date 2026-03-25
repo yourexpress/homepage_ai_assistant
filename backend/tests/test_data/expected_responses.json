@@ -1,0 +1,10 @@
+{
+  "successful_reply": {
+    "reply": "Mocked LLM response.",
+    "blocked": false
+  },
+  "blocked_reply": {
+    "reply": "I'm sorry, I can't help with that request.",
+    "blocked": true
+  }
+}
