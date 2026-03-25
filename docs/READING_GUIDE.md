@@ -14,6 +14,7 @@ homepage_ai_assistant/
 ├── docs/
 │   ├── SYSTEM_DESIGN.md         ← architecture, data-flow, design decisions
 │   ├── TEST_PLAN.md             ← what is tested and why
+│   ├── IMPLEMENTATION_PLAN.md   ← phased dev plan, traceability matrix
 │   ├── READING_GUIDE.md         ← this file
 │   └── TROUBLESHOOTING.md       ← common failure modes + fixes
 ├── frontend/                    ← GitHub Pages static site
