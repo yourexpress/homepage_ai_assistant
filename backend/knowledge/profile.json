@@ -1,0 +1,29 @@
+{
+  "name": "Alex Chen",
+  "headline": "Software Engineer — Distributed Systems & Backend Infrastructure",
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science",
+      "institution": "University of Washington",
+      "year": 2020
+    }
+  ],
+  "location_public": "Seattle, WA area",
+  "links": {
+    "github": "https://github.com/yourexpress",
+    "portfolio": "https://yourexpress.github.io"
+  },
+  "research_interests": [
+    "Distributed systems",
+    "LLM inference optimization",
+    "Developer tooling"
+  ],
+  "skills": [
+    "Python",
+    "Go",
+    "TypeScript",
+    "Kubernetes",
+    "PostgreSQL",
+    "Redis"
+  ]
+}

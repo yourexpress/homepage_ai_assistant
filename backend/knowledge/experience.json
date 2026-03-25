@@ -1,0 +1,12 @@
+{
+  "positions": [
+    {
+      "title": "Software Engineer",
+      "organization": "A technology company",
+      "start_year": 2020,
+      "end_year": null,
+      "focus": "Distributed systems and backend infrastructure",
+      "description": "Building and maintaining backend services at scale, with a focus on reliability and performance."
+    }
+  ]
+}
