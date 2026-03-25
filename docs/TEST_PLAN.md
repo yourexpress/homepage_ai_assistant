@@ -6,12 +6,17 @@ Tests are written **before** feature implementations. Each test file
 documents the expected contract for its component, then drives the
 implementation of that component.
 
+> For detailed instructions on running tests, interpreting failures, and
+> extending the suite, see [TESTING.md](TESTING.md).
+
 ---
 
 ## Test Layers
 
 | Layer | Tool | Location |
 |-------|------|----------|
+| Unit — configuration | pytest | `backend/tests/test_config.py` |
+| Unit — schema contracts | pytest | `backend/tests/test_models.py` |
 | Unit — policy guard | pytest | `backend/tests/test_policy_guard.py` |
 | Unit — rate limiter | pytest | `backend/tests/test_rate_limiter.py` |
 | Unit — concurrency limiter | pytest | `backend/tests/test_concurrency.py` |
@@ -19,6 +24,8 @@ implementation of that component.
 | Unit — knowledge base | pytest | `backend/tests/test_knowledge_base.py` |
 | Integration — chat endpoint | pytest + httpx | `backend/tests/test_chat.py` |
 | Integration — metrics endpoint | pytest + httpx | `backend/tests/test_metrics_api.py` |
+| End-to-end — full lifecycle | pytest + httpx | `backend/tests/test_e2e.py` |
+| Frontend — smoke tests | Browser JS | `frontend/tests/smoke_tests.html` |
 
 ---
 
@@ -26,6 +33,12 @@ implementation of that component.
 
 | Requirement | Test(s) |
 |-------------|---------|
+| Settings load defaults without `.env` | `test_config.py::TestSettingsDefaults::test_settings_instantiates` |
+| `origins_list` parses comma-separated values | `test_config.py::TestOriginsListProperty::test_multiple_origins` |
+| `ChatRequest` validates message field | `test_models.py::TestChatRequestSchema::test_valid_message_accepted` |
+| `ChatRequest` rejects messages over max length | `test_models.py::TestChatRequestSchema::test_message_exceeding_max_length_rejected` |
+| `ChatResponse` serialises reply + blocked | `test_models.py::TestChatResponseSchema::test_reply_and_blocked_fields` |
+| `MetricsResponse` has all required fields | `test_models.py::TestMetricsResponseSchema::test_all_required_fields_present` |
 | Input length limit (max 1 000 chars) | `test_chat.py::test_message_exceeds_max_length_returns_422` |
 | Rate limit burst (10/10 min) | `test_rate_limiter.py::test_burst_allowed`, `test_burst_exhausted` |
 | Rate limit degraded (1/10 min after burst) | `test_rate_limiter.py::test_degraded_rate` |
@@ -96,3 +109,27 @@ def mock_llm(monkeypatch):
 - All tests pass: `pytest backend/tests/ -v`
 - Coverage ≥ 80%: `pytest --cov=app --cov-report=term-missing`
 - No test imports production secrets; `.env` is not read in test mode
+
+---
+
+## CI Test Stages
+
+Tests run in order from fastest/most-isolated to slowest/most-integrated:
+
+| Stage | Tests | Purpose | Duration |
+|-------|-------|---------|----------|
+| 1. Unit | `test_config.py`, `test_models.py`, `test_metrics.py`, `test_policy_guard.py`, `test_rate_limiter.py`, `test_concurrency.py`, `test_knowledge_base.py` | Verify individual modules | ~1 s |
+| 2. Integration | `test_chat.py`, `test_metrics_api.py` | Verify composed modules with HTTP | ~2 s |
+| 3. End-to-end | `test_e2e.py` | Verify full request lifecycle | ~1 s |
+| 4. Coverage | All files | Enforce ≥ 80% coverage threshold | ~3 s |
+| 5. Frontend | `frontend/tests/smoke_tests.html` | Manual / browser-based DOM checks | Manual |
+
+---
+
+## Test Utilities and Data
+
+| Resource | Location | Purpose |
+|----------|----------|---------|
+| `helpers.py` | `backend/tests/helpers.py` | Factory functions, assertion helpers, test constants |
+| `test_data/` | `backend/tests/test_data/` | Static JSON fixtures for requests, responses, policy samples |
+| `conftest.py` | `backend/tests/conftest.py` | Shared fixtures: mock LLM, HTTP client, metrics reset |

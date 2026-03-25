@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Frontend Smoke Tests</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .pass { color: green; }
+    .fail { color: red; }
+    .skip { color: orange; }
+    #results { margin-top: 1rem; }
+    .test-row { margin: 0.25rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Portfolio AI Assistant — Frontend Smoke Tests</h1>
+  <p>
+    Open this file in a browser to run basic DOM and JS smoke tests.
+    These do <strong>not</strong> require a running backend.
+  </p>
+  <div id="results">Running…</div>
+
+  <!-- Load the page under test in a hidden iframe -->
+  <iframe id="test-frame" src="../index.html" style="display:none;" width="800" height="600"></iframe>
+
+  <script src="smoke_tests.js"></script>
+</body>
+</html>
