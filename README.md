@@ -28,6 +28,7 @@ homepage_ai_assistant/
 ├── README.md
 ├── docs/
 │   ├── SYSTEM_DESIGN.md      ← architecture & design decisions
+│   ├── API_DESIGN.md         ← backend API: endpoints, schemas, pipeline
 │   ├── TEST_PLAN.md          ← test strategy
 │   ├── READING_GUIDE.md      ← how to navigate this codebase
 │   └── TROUBLESHOOTING.md    ← common failure modes + fixes
