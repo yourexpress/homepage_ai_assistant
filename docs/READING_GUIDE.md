@@ -18,7 +18,8 @@ homepage_ai_assistant/
 │   ├── TESTING.md               ← how to run, extend, and debug tests
 │   ├── IMPLEMENTATION_PLAN.md   ← phased dev plan, traceability matrix
 │   ├── READING_GUIDE.md         ← this file
-│   └── TROUBLESHOOTING.md       ← common failure modes + fixes
+│   ├── CODEBASE_GUIDE.md        ← deep-dive: request flow, concerns, extension points
+│   └── TROUBLESHOOTING.md       ← symptom-to-cause diagnostic guide
 ├── frontend/                    ← GitHub Pages static site
 │   ├── index.html               ← chat UI entry point
 │   ├── metrics.html             ← public metrics dashboard
