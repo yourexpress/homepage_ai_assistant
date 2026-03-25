@@ -126,6 +126,7 @@ All backend settings are in `backend/app/config.py` and read from `.env`:
 
 ## Documentation
 
+- 📋 [Engineering Requirements](docs/REQUIREMENTS.md)
 - 📐 [System Design](docs/SYSTEM_DESIGN.md)
 - 🧪 [Test Plan](docs/TEST_PLAN.md)
 - 📖 [Developer Reading Guide](docs/READING_GUIDE.md)

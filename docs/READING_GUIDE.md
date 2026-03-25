@@ -12,6 +12,7 @@ right file when something goes wrong.
 homepage_ai_assistant/
 ├── README.md                    ← start here
 ├── docs/
+│   ├── REQUIREMENTS.md          ← engineering requirements (start here for scope)
 │   ├── SYSTEM_DESIGN.md         ← architecture, data-flow, design decisions
 │   ├── TEST_PLAN.md             ← what is tested and why
 │   ├── IMPLEMENTATION_PLAN.md   ← phased dev plan, traceability matrix
@@ -58,18 +59,20 @@ homepage_ai_assistant/
 ## Reading Order for New Contributors
 
 1. **`README.md`** — project purpose, quick-start, deployment overview.
-2. **`docs/SYSTEM_DESIGN.md`** — understand the full architecture before
+2. **`docs/REQUIREMENTS.md`** — engineering requirements, scope, and
+   prioritized feature list.
+3. **`docs/SYSTEM_DESIGN.md`** — understand the full architecture before
    touching code.
-3. **`backend/app/config.py`** — all tuneable knobs in one place.
-4. **`backend/app/models.py`** — learn the request/response shapes.
-5. **`backend/app/middleware/rate_limiter.py`** — the token-bucket algorithm.
-6. **`backend/app/middleware/concurrency.py`** — the semaphore guard.
-7. **`backend/app/services/policy_guard.py`** — how inputs are filtered and
+4. **`backend/app/config.py`** — all tuneable knobs in one place.
+5. **`backend/app/models.py`** — learn the request/response shapes.
+6. **`backend/app/middleware/rate_limiter.py`** — the token-bucket algorithm.
+7. **`backend/app/middleware/concurrency.py`** — the semaphore guard.
+8. **`backend/app/services/policy_guard.py`** — how inputs are filtered and
    the system prompt is constructed.
-8. **`backend/app/services/llm_client.py`** — thin async LLM wrapper.
-9. **`backend/app/api/chat.py`** — the main request handler; ties everything
-   together.
-10. **`backend/tests/`** — read tests alongside each module; they are the
+9. **`backend/app/services/llm_client.py`** — thin async LLM wrapper.
+10. **`backend/app/api/chat.py`** — the main request handler; ties everything
+    together.
+11. **`backend/tests/`** — read tests alongside each module; they are the
     specification.
 
 ---
