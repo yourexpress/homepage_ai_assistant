@@ -2,5 +2,5 @@ fastapi==0.111.1
 uvicorn[standard]==0.30.1
 pydantic==2.7.4
 pydantic-settings==2.3.4
-openai>=1.60.0
+openai>=1.60.0          # 1.60.0+ avoids the httpx 0.28+ "proxies" kwarg removal
 python-dotenv==1.0.1

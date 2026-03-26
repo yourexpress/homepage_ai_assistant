@@ -77,13 +77,47 @@ the backend horizontally.
 ## Chat Returns 500 Internal Server Error
 
 **Cause:** Unhandled exception, most likely an LLM API error.  
-**Symptoms:** Backend logs show an OpenAI API exception.  
+**Symptoms:** Backend logs show an API exception from the LLM client.  
 **Steps:**
 1. Check backend logs for the full traceback.
-2. Verify `OPENAI_API_KEY` is valid and has quota.
-3. Check [OpenAI status page](https://status.openai.com/).
-4. If the error is transient (timeout, 502), the client should retry with
+2. Verify `OPENAI_API_KEY` is valid for the configured provider.
+3. Check that `OPENAI_MODEL` is a model name supported by your provider.
+   - Some model names are provider-specific (e.g. `gemini-2.5-flash` for Gemini,
+     `llama-3.3-70b-versatile` for Groq).
+   - Deprecated or renamed models return a 404 from the provider; update
+     `OPENAI_MODEL` to a current name.
+4. Check that the provider has remaining quota. Free-tier keys can return 429
+   with `"limit: 0"` — enable billing or switch to a paid tier.
+5. If the error is transient (timeout, 502), the client should retry with
    exponential back-off.
+
+---
+
+## Switching LLM Providers
+
+The backend is provider-agnostic. Any OpenAI-compatible endpoint works via two
+environment variables:
+
+| Provider | `OPENAI_BASE_URL` | Example `OPENAI_MODEL` |
+|----------|-------------------|----------------------|
+| OpenAI (default) | _(empty)_ | `gpt-4o-mini` |
+| Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-flash` |
+| Anthropic Claude | `https://api.anthropic.com/v1/` | `claude-sonnet-4-20250514` |
+| Groq | `https://api.groq.com/openai/v1/` | `llama-3.3-70b-versatile` |
+| OpenRouter | `https://openrouter.ai/api/v1/` | `openai/gpt-4o` |
+| Mistral | `https://api.mistral.ai/v1/` | `mistral-small-latest` |
+| DeepSeek | `https://api.deepseek.com/v1/` | `deepseek-chat` |
+| Ollama (local) | `http://localhost:11434/v1/` | `llama3` |
+
+Set these in `backend/.env`:
+
+```env
+OPENAI_API_KEY=your-provider-api-key
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+OPENAI_MODEL=gemini-2.5-flash
+```
+
+Leave `OPENAI_BASE_URL` unset (or empty) to use the standard OpenAI endpoint.
 
 ---
 

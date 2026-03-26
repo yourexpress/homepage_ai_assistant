@@ -40,7 +40,7 @@ homepage_ai_assistant/
     │   │   └── concurrency.py  ← asyncio.Semaphore guard
     │   └── services/
     │       ├── policy_guard.py  ← pre-filter + system prompt
-    │       ├── llm_client.py    ← OpenAI API wrapper
+    │       ├── llm_client.py    ← OpenAI-compatible LLM wrapper (multi-provider)
     │       └── metrics_store.py ← in-memory counters
     └── tests/
         ├── conftest.py
@@ -49,7 +49,8 @@ homepage_ai_assistant/
         ├── test_concurrency.py
         ├── test_metrics.py
         ├── test_chat.py
-        └── test_metrics_api.py
+        ├── test_metrics_api.py
+        └── test_llm_client.py
 ```
 
 ---
@@ -117,6 +118,7 @@ All configuration lives in `backend/app/config.py`. Copy
 |----------|---------|
 | `OPENAI_API_KEY` | LLM authentication (required) |
 | `OPENAI_MODEL` | Which model to call |
+| `OPENAI_BASE_URL` | Base URL for an alternative OpenAI-compatible provider (Gemini, Groq, Anthropic, Ollama, …). Leave empty to use OpenAI. |
 | `ALLOWED_ORIGINS` | CORS allow-list (comma-separated) |
 | `MAX_INPUT_LENGTH` | Per-message character limit |
 | `MAX_CONCURRENT_REQUESTS` | Semaphore size |
