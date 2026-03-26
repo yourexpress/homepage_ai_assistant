@@ -9,7 +9,7 @@
 "use strict";
 
 // ── Configuration ──────────────────────────────────────────
-const BACKEND_URL = "https://api.yourexpress.dev"; // update after deployment
+const BACKEND_URL = "https://api.runyuma.uk"; // update after deployment
 const MAX_INPUT_LENGTH = 1000;
 
 // ── DOM refs ───────────────────────────────────────────────
