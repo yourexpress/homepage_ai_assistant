@@ -417,12 +417,10 @@ Each regex in `BLOCKED_PATTERNS` maps to a disallowed content category:
 | Category ID | Category Name | Pattern Count |
 |-------------|--------------|---------------|
 | `PROMPT_INJECTION` | Prompt injection attempts | 12 patterns |
-| `PRIVATE_DATA` | Private personal data | 6 patterns |
-| `CONTACT_DETAILS` | Non-public contact details | 3 patterns |
+| `PRIVATE_DATA` | Private personal data | 7 patterns |
 | `SECRETS` | API keys, credentials, tokens | 4 patterns |
-| `ARCHITECTURE` | Backend architecture probing | 4 patterns |
 | `DEPLOYMENT` | Deployment / infrastructure secrets | 3 patterns |
-| `INTERNAL` | Internal-only data | 3 patterns |
+| `ARCHITECTURE` | Backend architecture probing | 4 patterns |
 
 ### 10.4 Pattern Matching Rules
 

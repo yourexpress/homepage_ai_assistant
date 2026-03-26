@@ -59,6 +59,10 @@ class TestSettingsDefaults:
         s = Settings()
         assert s.trust_proxy_headers is False
 
+    def test_default_app_version(self):
+        s = Settings()
+        assert s.app_version == "1.0.0"
+
 
 class TestOriginsListProperty:
     """Verify that origins_list parses the comma-separated allowed_origins."""

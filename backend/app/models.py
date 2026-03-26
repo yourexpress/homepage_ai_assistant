@@ -35,3 +35,29 @@ class MetricsResponse(BaseModel):
     latency_buckets: dict[str, int]
     total_prompt_tokens: int
     total_completion_tokens: int
+
+
+class HealthResponse(BaseModel):
+    """Liveness probe response."""
+
+    status: str = Field(
+        ...,
+        description="'ok' or 'degraded'.",
+        json_schema_extra={"examples": ["ok"]},
+    )
+    version: str = Field(..., description="Application version string.")
+
+
+class ReadinessResponse(BaseModel):
+    """Readiness probe with dependency checks."""
+
+    status: str = Field(
+        ...,
+        description="'ok', 'degraded', or 'unavailable'.",
+    )
+    version: str = Field(..., description="Application version string.")
+    checks: dict[str, str] = Field(
+        ...,
+        description="Per-dependency status map.",
+        json_schema_extra={"examples": [{"knowledge_base": "ok", "llm_configured": "ok"}]},
+    )

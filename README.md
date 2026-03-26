@@ -17,7 +17,7 @@ separate cloud platform.
 | 🔒 Concurrency limit | Configurable max in-flight requests (default: 10) |
 | 📏 Input validation | Per-message character limit (default: 1 000 chars) |
 | 📊 Metrics page | Public-facing throughput, latency, and token counters |
-| 🧪 Test-first | Tests written before implementation; 66 tests, all green |
+| 🧪 Test-first | Tests written before implementation; 237 tests, all green |
 
 ---
 
@@ -28,6 +28,7 @@ homepage_ai_assistant/
 ├── README.md
 ├── docs/
 │   ├── SYSTEM_DESIGN.md      ← architecture & design decisions
+│   ├── API_DESIGN.md         ← backend API: endpoints, schemas, pipeline
 │   ├── TEST_PLAN.md          ← test strategy
 │   ├── READING_GUIDE.md      ← how to navigate this codebase
 │   └── TROUBLESHOOTING.md    ← common failure modes + fixes

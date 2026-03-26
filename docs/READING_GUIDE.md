@@ -14,6 +14,7 @@ homepage_ai_assistant/
 ├── docs/
 │   ├── REQUIREMENTS.md          ← engineering requirements (start here for scope)
 │   ├── SYSTEM_DESIGN.md         ← architecture, data-flow, design decisions
+│   ├── API_DESIGN.md            ← endpoint list, schemas, middleware, pipeline
 │   ├── TEST_PLAN.md             ← what is tested and why
 │   ├── TESTING.md               ← how to run, extend, and debug tests
 │   ├── IMPLEMENTATION_PLAN.md   ← phased dev plan, traceability matrix
@@ -65,16 +66,18 @@ homepage_ai_assistant/
    prioritized feature list.
 3. **`docs/SYSTEM_DESIGN.md`** — understand the full architecture before
    touching code.
-4. **`backend/app/config.py`** — all tuneable knobs in one place.
-5. **`backend/app/models.py`** — learn the request/response shapes.
-6. **`backend/app/middleware/rate_limiter.py`** — the token-bucket algorithm.
-7. **`backend/app/middleware/concurrency.py`** — the semaphore guard.
-8. **`backend/app/services/policy_guard.py`** — how inputs are filtered and
+4. **`docs/API_DESIGN.md`** — endpoint list, Pydantic schemas, middleware
+   stack, request pipeline pseudocode, and response examples.
+5. **`backend/app/config.py`** — all tuneable knobs in one place.
+6. **`backend/app/models.py`** — learn the request/response shapes.
+7. **`backend/app/middleware/rate_limiter.py`** — the token-bucket algorithm.
+8. **`backend/app/middleware/concurrency.py`** — the semaphore guard.
+9. **`backend/app/services/policy_guard.py`** — how inputs are filtered and
    the system prompt is constructed.
-9. **`backend/app/services/llm_client.py`** — thin async LLM wrapper.
-10. **`backend/app/api/chat.py`** — the main request handler; ties everything
+10. **`backend/app/services/llm_client.py`** — thin async LLM wrapper.
+11. **`backend/app/api/chat.py`** — the main request handler; ties everything
     together.
-11. **`backend/tests/`** — read tests alongside each module; they are the
+12. **`backend/tests/`** — read tests alongside each module; they are the
     specification.
 
 ---
