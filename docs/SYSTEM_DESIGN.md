@@ -80,7 +80,7 @@ backend API and LLM serving run on a separate cloud platform.
 | `app/middleware/rate_limiter.py` | Token-bucket rate limiter per IP |
 | `app/middleware/concurrency.py` | Asyncio semaphore concurrency guard |
 | `app/services/policy_guard.py` | Pre-filter input; inject system prompt |
-| `app/services/llm_client.py` | Thin async wrapper over OpenAI API |
+| `app/services/llm_client.py` | Thin async wrapper over the OpenAI-compatible Chat Completions API; supports any provider via `OPENAI_BASE_URL` |
 | `app/services/metrics_store.py` | Thread-safe in-memory metrics accumulator |
 
 ---
@@ -163,8 +163,9 @@ Environment variables (backend):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | — | Required. LLM API key |
-| `OPENAI_MODEL` | `gpt-4o-mini` | Model to use |
+| `OPENAI_API_KEY` | — | Required. API key for the LLM provider |
+| `OPENAI_MODEL` | `gpt-4o-mini` | Model name passed to the provider |
+| `OPENAI_BASE_URL` | _(empty — OpenAI default)_ | Base URL for any OpenAI-compatible provider (Gemini, Groq, Anthropic, Ollama, …). Leave empty to use OpenAI. |
 | `ALLOWED_ORIGINS` | `https://yourexpress.github.io` | CORS origins |
 | `MAX_INPUT_LENGTH` | `1000` | Max chars per message |
 | `MAX_CONCURRENT_REQUESTS` | `10` | Semaphore limit |

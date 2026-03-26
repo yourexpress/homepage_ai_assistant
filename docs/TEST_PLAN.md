@@ -16,6 +16,7 @@ implementation of that component.
 | Unit — rate limiter | pytest | `backend/tests/test_rate_limiter.py` |
 | Unit — concurrency limiter | pytest | `backend/tests/test_concurrency.py` |
 | Unit — metrics store | pytest | `backend/tests/test_metrics.py` |
+| Unit — LLM client factory | pytest | `backend/tests/test_llm_client.py` |
 | Integration — chat endpoint | pytest + httpx | `backend/tests/test_chat.py` |
 | Integration — metrics endpoint | pytest + httpx | `backend/tests/test_metrics_api.py` |
 
@@ -38,6 +39,10 @@ implementation of that component.
 | Chat endpoint returns refusal on policy violation | `test_chat.py::test_policy_violation` |
 | Chat endpoint returns 429 on rate limit | `test_chat.py::test_rate_limited` |
 | Chat endpoint returns 503 on concurrency limit | `test_chat.py::test_concurrency_exceeded` |
+| LLM client uses only `api_key` when `OPENAI_BASE_URL` is empty | `test_llm_client.py::TestGetClient::test_creates_client_with_api_key_only_when_base_url_empty` |
+| LLM client passes `base_url` when `OPENAI_BASE_URL` is set | `test_llm_client.py::TestGetClient::test_creates_client_with_base_url_when_configured` |
+| `base_url` kwarg absent from constructor when `OPENAI_BASE_URL` is empty | `test_llm_client.py::TestGetClient::test_base_url_kwarg_absent_when_empty` |
+| LLM client is a singleton (constructed once) | `test_llm_client.py::TestGetClient::test_returns_singleton` |
 
 ---
 
@@ -47,11 +52,15 @@ Tests mock the OpenAI client so no real API key is required:
 
 ```python
 # conftest.py
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def mock_llm(monkeypatch):
-    async def fake_complete(messages):
-        return "Mocked LLM response."
-    monkeypatch.setattr("app.services.llm_client.complete", fake_complete)
+    fake_response = MagicMock()
+    fake_response.text = "Mocked LLM response."
+    fake_response.prompt_tokens = 10
+    fake_response.completion_tokens = 20
+    async_complete = AsyncMock(return_value=fake_response)
+    monkeypatch.setattr(llm_client, "complete", async_complete)
+    return async_complete
 ```
 
 ---

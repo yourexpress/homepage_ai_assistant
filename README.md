@@ -17,7 +17,7 @@ separate cloud platform.
 | 🔒 Concurrency limit | Configurable max in-flight requests (default: 10) |
 | 📏 Input validation | Per-message character limit (default: 1 000 chars) |
 | 📊 Metrics page | Public-facing throughput, latency, and token counters |
-| 🧪 Test-first | Tests written before implementation; 66 tests, all green |
+| 🧪 Test-first | Tests written before implementation; 70 tests, all green |
 
 ---
 
@@ -65,7 +65,8 @@ homepage_ai_assistant/
         ├── test_concurrency.py
         ├── test_metrics.py
         ├── test_chat.py
-        └── test_metrics_api.py
+        ├── test_metrics_api.py
+        └── test_llm_client.py
 ```
 
 ---
@@ -103,7 +104,7 @@ GitHub Pages. Update the `BACKEND_URL` constant in `frontend/js/chat.js` and
 |-----------|----------|-------|
 | Frontend | GitHub Pages | Configure Pages source to `/ (root)` or `/frontend` |
 | Backend | Render / Fly.io / Railway | Deploy from `backend/Dockerfile` |
-| LLM | OpenAI API | Set `OPENAI_API_KEY` env var |
+| LLM | Any OpenAI-compatible provider | Set `OPENAI_API_KEY`; optionally `OPENAI_BASE_URL` for non-OpenAI providers |
 
 ---
 
@@ -113,8 +114,9 @@ All backend settings are in `backend/app/config.py` and read from `.env`:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | — | Required |
-| `OPENAI_MODEL` | `gpt-4o-mini` | Model to use |
+| `OPENAI_API_KEY` | — | Required. API key for the LLM provider |
+| `OPENAI_MODEL` | `gpt-4o-mini` | Model name passed to the provider |
+| `OPENAI_BASE_URL` | _(empty — OpenAI default)_ | Base URL for any OpenAI-compatible provider (e.g. Gemini, Groq, Ollama) |
 | `ALLOWED_ORIGINS` | `https://yourexpress.github.io` | CORS allow-list (comma-separated) |
 | `MAX_INPUT_LENGTH` | `1000` | Max chars per user message |
 | `MAX_CONCURRENT_REQUESTS` | `10` | Semaphore capacity |
