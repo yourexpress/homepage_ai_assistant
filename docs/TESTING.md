@@ -147,8 +147,8 @@ Test the entire system as a user would experience it.
 
 | File | Module Under Test | Tests | Purpose |
 |------|-------------------|-------|---------|
-| `test_config.py` | `app/config.py` | 13 | Defaults load without `.env`; `origins_list` parses correctly |
-| `test_models.py` | `app/models.py` | 15 | `ChatRequest` validation, `ChatResponse` serialisation, `MetricsResponse` shape |
+| `test_config.py` | `app/config.py` | 14 | Defaults load without `.env`; `origins_list` parses correctly; `app_version` default |
+| `test_models.py` | `app/models.py` | 15 | `ChatRequest` validation, `ChatResponse` serialisation, `MetricsResponse` shape, health models |
 | `test_knowledge_base.py` | `app/services/knowledge_base.py` | 37 | JSON loading (happy + error), schema validation, rendering, context assembly, caching |
 | `test_policy_guard.py` | `app/services/policy_guard.py` | 46 | 30 blocked patterns, false-positive checks, `build_messages()` structure |
 | `test_rate_limiter.py` | `app/middleware/rate_limiter.py` | 13 | Bucket capacity, exhaustion, retry-after, per-IP isolation, refill, client key |
@@ -156,6 +156,7 @@ Test the entire system as a user would experience it.
 | `test_metrics.py` | `app/services/metrics_store.py` | 14 | All counters, latency buckets, token accumulation, snapshot copy |
 | `test_chat.py` | `app/api/chat.py` | 13 | Happy path, validation, policy block, rate limit, concurrency, metrics |
 | `test_metrics_api.py` | `app/api/metrics.py` | 6 | 200 status, JSON shape, field types, counter reflection |
+| `test_health.py` | `app/api/health.py` | 9 | Liveness 200 + status + version, readiness checks + degraded + exception handling |
 | `test_e2e.py` | All modules composed | 7+4 skip | Full lifecycle, policy sweep, input validation, metrics consistency, CORS/cascade TODO |
 | `test_corner_cases.py` | All modules composed | 69 | Uncovered code paths, dangerous inputs, policy bypass, latency boundaries, error recovery |
 | `helpers.py` | (test support) | — | Factories, assertion helpers, test data constants |

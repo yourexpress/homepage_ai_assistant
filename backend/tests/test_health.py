@@ -64,7 +64,12 @@ class TestReadiness:
 
     @pytest.mark.anyio
     async def test_readiness_degraded_without_knowledge(self, client):
-        """When knowledge context is very short, status degrades gracefully."""
+        """When knowledge context is very short, status degrades gracefully.
+
+        Patching ``get_context`` in the health module to return an empty
+        string simulates a missing or corrupt knowledge directory.  The
+        readiness probe should report *degraded* (not crash).
+        """
         with patch(
             "app.api.health.get_context", return_value=""
         ):
