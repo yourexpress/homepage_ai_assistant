@@ -7,7 +7,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import chat, metrics
+from app.api import chat, health, metrics
 from app.config import settings
 from app.middleware.concurrency import ConcurrencyLimiterMiddleware
 from app.middleware.rate_limiter import RateLimiterMiddleware
@@ -46,6 +46,7 @@ def create_app() -> FastAPI:
         max_concurrent=settings.max_concurrent_requests,
     )
 
+    application.include_router(health.router, prefix="/api")
     application.include_router(chat.router, prefix="/api")
     application.include_router(metrics.router, prefix="/api")
 

@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     rate_limit_burst: int = 10
     rate_limit_refill_interval: int = 600  # seconds per token (600 s = 10 min)
 
+    # Application metadata
+    app_version: str = "1.0.0"
+
     # Proxy
     trust_proxy_headers: bool = False
 
