@@ -11,7 +11,7 @@ If you want to host the frontend on GitHub Pages instead, see
 ## Why this setup
 
 - real knowledge files stay on the server instead of the public repository
-- editable homepage content and visitor comments persist in mounted volumes
+- editable homepage content and visitor feedback persist in mounted volumes
 - the manager entrance writes to server-side storage without rebuilding the image
 
 ## Files used
@@ -40,7 +40,10 @@ Do not commit the real values.
 
 ## 2. Prepare private knowledge files
 
-Upload your real server-side knowledge files into:
+Start from the templates in `backend/knowledge/templates/`, fill in your own
+public information, and validate the completed files locally.
+
+Your completed runtime files should be mounted into:
 
 - `/app/knowledge/profile.json`
 - `/app/knowledge/experience.json`
@@ -54,11 +57,12 @@ In local compose, those map from `./backend/knowledge`.
 
 These paths should be mounted to persistent storage:
 
-- `/app/knowledge` for private knowledge
+- `/app/knowledge` for private runtime knowledge
 - `/app/data/site_content.json` for manager-edited homepage content
-- `/app/data/comments.json` for visitor comments
+- `/app/data/comments.json` for visitor feedback
 
-Without a persistent volume, manager edits and comments are lost when the container is recreated.
+Without a persistent volume, manager edits and feedback are lost when the
+container is recreated.
 
 ## 4. Start locally with Compose
 
@@ -73,6 +77,9 @@ Then open:
 
 ## 5. Production notes
 
-- This implementation uses file-backed comments and content storage, so it is best suited to a single backend instance.
-- If you later scale to multiple backend replicas, move comments and editable content to a shared database or object store.
-- The EN/ZH auto-sync runs when content is edited through the manager API. Manual file edits outside that flow will not trigger translation sync.
+- This implementation uses file-backed feedback and content storage, so it is
+  best suited to a single backend instance.
+- If you later scale to multiple backend replicas, move feedback and editable
+  content to a shared database or object store.
+- The EN/ZH auto-sync runs when content is edited through the manager API.
+  Manual file edits outside that flow will not trigger translation sync.
