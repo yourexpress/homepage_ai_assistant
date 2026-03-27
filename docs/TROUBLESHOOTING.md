@@ -14,9 +14,11 @@ Symptoms:
 Checks:
 
 1. confirm the backend is running
-2. confirm the frontend is using the expected backend URL from
-   `frontend/js/app-config.js`
+2. confirm the frontend hostname maps to the expected API host or set the
+   `portfolio-backend-url` meta tag override in the page
 3. confirm `ALLOWED_ORIGINS` includes the frontend origin
+4. remember that the backend `.env` does not automatically reconfigure the
+   static frontend URL by itself
 
 ## Manager Entrance Returns 401
 

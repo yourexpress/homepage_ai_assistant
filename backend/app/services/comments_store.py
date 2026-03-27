@@ -37,7 +37,13 @@ class CommentsStore:
         with open(self.path, "w", encoding="utf-8") as fh:
             json.dump(comments, fh, ensure_ascii=False, indent=2)
 
-    def create_comment(self, author: str, website_rating: int, resume_rating: int, body: str) -> dict[str, Any]:
+    def create_comment(
+        self,
+        author: str,
+        website_rating: int | None,
+        resume_rating: int | None,
+        body: str,
+    ) -> dict[str, Any]:
         with self._lock:
             comments = self._load_all()
             comment = {

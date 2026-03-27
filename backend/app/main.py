@@ -29,8 +29,8 @@ def create_app() -> FastAPI:
     application.add_middleware(
         CORSMiddleware,
         allow_origins=settings.origins_list,
-        allow_methods=["GET", "POST", "PUT"],
-        allow_headers=["Content-Type", "X-Admin-Key"],
+        allow_methods=["GET", "POST", "PUT", "OPTIONS"],
+        allow_headers=["*"],
     )
 
     # Rate limiter — runs before concurrency limiter
