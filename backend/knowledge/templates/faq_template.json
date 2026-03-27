@@ -1,16 +1,34 @@
 {
   "entries": [
     {
-      "question": "What do you do?",
-      "answer": "Replace this with a short description of your work and background."
+      "question": {
+        "en": "What do you do?",
+        "zh": "你主要做什么工作？"
+      },
+      "answer": {
+        "en": "Replace this with a short description of your work and background.",
+        "zh": "请用一句简短的话介绍你的工作和背景。"
+      }
     },
     {
-      "question": "What are your main skills?",
-      "answer": "Replace this with a summary of your key technical skills."
+      "question": {
+        "en": "What are your main skills?",
+        "zh": "你的主要技能是什么？"
+      },
+      "answer": {
+        "en": "Replace this with a summary of your key technical skills.",
+        "zh": "请在这里总结你的核心技术技能。"
+      }
     },
     {
-      "question": "Are you open to new opportunities?",
-      "answer": "Replace this with your honest current availability or redirect to your contact page."
+      "question": {
+        "en": "Are you open to new opportunities?",
+        "zh": "你目前是否考虑新的机会？"
+      },
+      "answer": {
+        "en": "Replace this with your honest current availability or redirect to your contact page.",
+        "zh": "请填写你当前的真实状态，或者引导访问者查看你的联系页面。"
+      }
     }
   ]
 }

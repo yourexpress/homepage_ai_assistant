@@ -29,6 +29,8 @@
   it easy to validate programmatically.
 - **Extensible**: new knowledge categories can be added by creating a new
   JSON file and registering a renderer.
+- **Bilingual-ready**: visitor-facing text can include both English and
+  Chinese in the same knowledge files.
 - **Grounded**: the system prompt explicitly tags each section with its
   source file so the LLM can cite provenance.
 
@@ -77,6 +79,16 @@ FAQ (1:N entries)
 All files are plain JSON, human-editable, and version-controlled alongside the
 application code.
 
+Visitor-facing text fields may be stored either as plain strings or as
+localized objects such as:
+
+```json
+{
+  "en": "Software Engineer",
+  "zh": "软件工程师"
+}
+```
+
 ---
 
 ## 3. Schema for Each Source
@@ -85,22 +97,22 @@ application code.
 
 ```json
 {
-  "name": "string — full display name",
-  "headline": "string — one-line professional headline",
+  "name": "string | { en: string, zh: string }",
+  "headline": "string | { en: string, zh: string }",
   "education": [
     {
-      "degree": "string",
-      "institution": "string",
+      "degree": "string | localized object",
+      "institution": "string | localized object",
       "year": "integer"
     }
   ],
-  "location_public": "string — general area (e.g. 'Seattle, WA area')",
+  "location_public": "string | localized object",
   "links": {
-    "github": "string — URL",
-    "portfolio": "string — URL"
+    "github": "string - URL",
+    "portfolio": "string - URL"
   },
-  "research_interests": ["string"],
-  "skills": ["string"]
+  "research_interests": ["string | localized object"],
+  "skills": ["string | localized object"]
 }
 ```
 
@@ -290,8 +302,8 @@ Each section of the system prompt is tagged with `[source: <filename>]`:
 
 ```
 ## Profile [source: profile.json]
-Name: Alex Chen
-Skills: Python, Go, TypeScript, ...
+Name: Alex Chen / 陈致远
+Skills: Python, Go / Go 语言, TypeScript, ...
 ```
 
 The system prompt instructs the LLM:

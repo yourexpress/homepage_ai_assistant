@@ -1,28 +1,58 @@
 {
-  "name": "Alex Chen",
-  "headline": "Software Engineer — Distributed Systems & Backend Infrastructure",
+  "name": {
+    "en": "Alex Chen",
+    "zh": "陈致远"
+  },
+  "headline": {
+    "en": "Software Engineer - Distributed Systems & Backend Infrastructure",
+    "zh": "软件工程师 - 分布式系统与后端基础设施"
+  },
   "education": [
     {
-      "degree": "Bachelor of Science in Computer Science",
-      "institution": "University of Washington",
+      "degree": {
+        "en": "Bachelor of Science in Computer Science",
+        "zh": "计算机科学理学学士"
+      },
+      "institution": {
+        "en": "University of Washington",
+        "zh": "华盛顿大学"
+      },
       "year": 2020
     }
   ],
-  "location_public": "Seattle, WA area",
+  "location_public": {
+    "en": "Seattle, WA area",
+    "zh": "美国华盛顿州西雅图地区"
+  },
   "links": {
     "github": "https://github.com/yourexpress",
     "portfolio": "https://yourexpress.github.io"
   },
   "research_interests": [
-    "Distributed systems",
-    "LLM inference optimization",
-    "Developer tooling"
+    {
+      "en": "Distributed systems",
+      "zh": "分布式系统"
+    },
+    {
+      "en": "LLM inference optimization",
+      "zh": "大语言模型推理优化"
+    },
+    {
+      "en": "Developer tooling",
+      "zh": "开发者工具"
+    }
   ],
   "skills": [
     "Python",
-    "Go",
+    {
+      "en": "Go",
+      "zh": "Go 语言"
+    },
     "TypeScript",
-    "Kubernetes",
+    {
+      "en": "Kubernetes",
+      "zh": "Kubernetes 容器编排"
+    },
     "PostgreSQL",
     "Redis"
   ]

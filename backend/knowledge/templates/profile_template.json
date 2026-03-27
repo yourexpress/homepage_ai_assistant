@@ -1,25 +1,52 @@
 {
-  "name": "Your Full Name",
-  "headline": "Your Professional Headline — e.g. Software Engineer — Machine Learning & Systems",
+  "name": {
+    "en": "Your Full Name",
+    "zh": "你的中文姓名"
+  },
+  "headline": {
+    "en": "Your Professional Headline - e.g. Software Engineer - Machine Learning & Systems",
+    "zh": "你的职业标题 - 例如：软件工程师 - 机器学习与系统"
+  },
   "education": [
     {
-      "degree": "Bachelor/Master/PhD of Science in Your Field",
-      "institution": "Your University or College",
+      "degree": {
+        "en": "Bachelor/Master/PhD of Science in Your Field",
+        "zh": "你的专业学士/硕士/博士学位"
+      },
+      "institution": {
+        "en": "Your University or College",
+        "zh": "你的大学或学院"
+      },
       "year": 2024
     }
   ],
-  "location_public": "Your City, Country (general area only — no street address)",
+  "location_public": {
+    "en": "Your City, Country (general area only - no street address)",
+    "zh": "你的城市和国家（仅填写大致地区，不要填写街道地址）"
+  },
   "links": {
     "github": "https://github.com/your-username",
     "portfolio": "https://your-username.github.io"
   },
   "research_interests": [
-    "Your first interest",
-    "Your second interest"
+    {
+      "en": "Your first interest",
+      "zh": "你的第一个研究兴趣"
+    },
+    {
+      "en": "Your second interest",
+      "zh": "你的第二个研究兴趣"
+    }
   ],
   "skills": [
     "Python",
-    "Your Language or Tool",
-    "Another Skill"
+    {
+      "en": "Your Language or Tool",
+      "zh": "你的语言或工具"
+    },
+    {
+      "en": "Another Skill",
+      "zh": "另一项技能"
+    }
   ]
 }

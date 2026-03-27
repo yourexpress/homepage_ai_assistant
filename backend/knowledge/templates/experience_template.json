@@ -1,20 +1,44 @@
 {
   "positions": [
     {
-      "title": "Your Job Title",
-      "organization": "Company or Institution Name",
+      "title": {
+        "en": "Your Job Title",
+        "zh": "你的职位名称"
+      },
+      "organization": {
+        "en": "Company or Institution Name",
+        "zh": "公司或机构名称"
+      },
       "start_year": 2022,
       "end_year": null,
-      "focus": "One-line summary of your focus area",
-      "description": "One or two sentences describing your responsibilities and achievements."
+      "focus": {
+        "en": "One-line summary of your focus area",
+        "zh": "用一句话概括你的工作重点"
+      },
+      "description": {
+        "en": "One or two sentences describing your responsibilities and achievements.",
+        "zh": "用一两句话说明你的职责和成果。"
+      }
     },
     {
-      "title": "Previous Job Title",
-      "organization": "Previous Company Name",
+      "title": {
+        "en": "Previous Job Title",
+        "zh": "之前的职位名称"
+      },
+      "organization": {
+        "en": "Previous Company Name",
+        "zh": "之前的公司名称"
+      },
       "start_year": 2020,
       "end_year": 2022,
-      "focus": "One-line summary of your focus area",
-      "description": "One or two sentences describing your responsibilities and achievements."
+      "focus": {
+        "en": "One-line summary of your focus area",
+        "zh": "用一句话概括你的工作重点"
+      },
+      "description": {
+        "en": "One or two sentences describing your responsibilities and achievements.",
+        "zh": "用一两句话说明你的职责和成果。"
+      }
     }
   ]
 }
