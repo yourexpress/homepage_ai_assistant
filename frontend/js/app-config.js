@@ -1,6 +1,21 @@
 "use strict";
 
 (function () {
+  function configuredBackendUrl() {
+    const metaValue = document
+      .querySelector('meta[name="portfolio-backend-url"]')
+      ?.getAttribute("content")
+      ?.trim();
+    if (metaValue) {
+      return metaValue.replace(/\/$/, "");
+    }
+
+    const runtimeValue = window.PORTFOLIO_CONFIG && typeof window.PORTFOLIO_CONFIG.BACKEND_URL === "string"
+      ? window.PORTFOLIO_CONFIG.BACKEND_URL.trim()
+      : "";
+    return runtimeValue ? runtimeValue.replace(/\/$/, "") : "";
+  }
+
   function localeFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const value = (params.get("lang") || params.get("locale") || "").toLowerCase();
@@ -13,9 +28,23 @@
     return "";
   }
 
-  const BACKEND_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-    ? "http://localhost:8000"
-    : "https://api.runyuma.uk";
+  function defaultBackendUrl() {
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol === "http:" ? "http:" : "https:";
+
+    if (["localhost", "127.0.0.1"].includes(hostname)) {
+      return "http://localhost:8000";
+    }
+    if (hostname === "runyuma.uk" || hostname === "www.runyuma.uk" || hostname.endsWith("github.io")) {
+      return "https://api.runyuma.uk";
+    }
+    if (hostname.startsWith("www.")) {
+      return `${protocol}//api.${hostname.slice(4)}`;
+    }
+    return `${protocol}//api.${hostname}`;
+  }
+
+  const BACKEND_URL = configuredBackendUrl() || defaultBackendUrl();
   const MAX_INPUT_LENGTH = 1000;
   const MAX_HISTORY_MESSAGES = 12;
   const COMMENT_PAGE_SIZE = 5;

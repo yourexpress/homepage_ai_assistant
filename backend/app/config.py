@@ -20,7 +20,13 @@ class Settings(BaseSettings):
     openai_base_url: str = ""
 
     # CORS
-    allowed_origins: str = "https://yourexpress.github.io"
+    allowed_origins: str = (
+        "http://localhost:8080,"
+        "http://localhost:3000,"
+        "https://yourexpress.github.io,"
+        "https://runyuma.uk,"
+        "https://www.runyuma.uk"
+    )
 
     # Input validation
     max_input_length: int = 1000

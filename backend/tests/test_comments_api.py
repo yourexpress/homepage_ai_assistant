@@ -32,6 +32,25 @@ class TestCommentsApi:
         assert data["total_items"] == 1
         assert data["items"][0]["body"] == "Clean site and clear profile story."
 
+    async def test_ratings_can_be_omitted(self, client, tmp_path, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "comments_file", str(tmp_path / "comments.json"))
+
+        response = await client.post(
+            "/api/comments",
+            json={
+                "author": "Visitor",
+                "website_rating": None,
+                "resume_rating": None,
+                "body": "Clear homepage and good academic focus.",
+            },
+        )
+        assert response.status_code == 200
+        created = response.json()
+        assert created["website_rating"] is None
+        assert created["resume_rating"] is None
+
     async def test_vote_updates_score(self, client, tmp_path, monkeypatch):
         from app.config import settings
 

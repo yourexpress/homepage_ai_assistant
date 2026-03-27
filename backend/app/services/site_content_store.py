@@ -13,8 +13,8 @@ from app.services import translation_service
 
 _DEFAULT_CONTENT: dict[str, Any] = {
     "hero_badge": {
-        "en": "AI Systems Portfolio",
-        "zh": "AI 系统主页",
+        "en": "Academic profile",
+        "zh": "学术主页",
     },
     "hero_title": {
         "en": "Runyu Ma connects AI systems research with real deployment.",
@@ -22,10 +22,10 @@ _DEFAULT_CONTENT: dict[str, Any] = {
     },
     "hero_summary": {
         "en": (
-            "Explore research, systems work, publications, and public contact details "
-            "through a calmer bilingual portfolio experience."
+            "Explore research interests, education background, public work, projects, "
+            "publications, and contact details."
         ),
-        "zh": "通过一个更平稳的中英双语主页，了解他的研究、系统工作、论文与公开联系方式。",
+        "zh": "了解研究方向、教育背景、公开经历、项目、论文与联系方式。",
     },
     "hero_panel_title": {
         "en": "Current homepage",
@@ -58,8 +58,8 @@ _DEFAULT_CONTENT: dict[str, Any] = {
         "zh": "欢迎对网站外观和简历展示留下反馈。",
     },
     "about_title": {
-        "en": "About me",
-        "zh": "关于我",
+        "en": "Brief introduction",
+        "zh": "简介",
     },
     "about_paragraphs": [
         {
