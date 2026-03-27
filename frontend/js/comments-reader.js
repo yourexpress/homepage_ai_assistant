@@ -50,17 +50,17 @@
         <p>${data.total_items}</p>
       </div>
       <div class="manager-summary-card">
-        <h3>Average website rating</h3>
+        <h3>Average website rating on this page</h3>
         <p>${averageOf(items, "website_rating")}</p>
       </div>
       <div class="manager-summary-card">
-        <h3>Average resume rating</h3>
+        <h3>Average resume rating on this page</h3>
         <p>${averageOf(items, "resume_rating")}</p>
       </div>
     `;
   }
 
-  function renderComment(comment) {
+  function buildCommentCard(comment) {
     const ratings = [
       comment.website_rating !== null && comment.website_rating !== undefined
         ? `Website ${comment.website_rating}/5`
@@ -70,31 +70,78 @@
         : "",
     ].filter(Boolean);
 
-    return `
-      <article class="comment-card">
-        <div class="comment-meta">
-          <div>
-            <div class="comment-author">${comment.author}</div>
-            <div class="comment-time">${formatDate(comment.created_at)}</div>
-          </div>
-          <div class="comment-score">Score: ${comment.score}</div>
-        </div>
-        ${ratings.length ? `<div class="comment-ratings"><span>${ratings.join(" • ")}</span></div>` : ""}
-        <p>${comment.body}</p>
-        <div class="comment-votes">
-          <span class="vote-btn">Upvotes ${comment.upvotes}</span>
-          <span class="vote-btn">Downvotes ${comment.downvotes}</span>
-        </div>
-      </article>
-    `;
+    const card = document.createElement("article");
+    card.className = "comment-card";
+
+    const meta = document.createElement("div");
+    meta.className = "comment-meta";
+
+    const identity = document.createElement("div");
+
+    const author = document.createElement("div");
+    author.className = "comment-author";
+    author.textContent = comment.author;
+
+    const time = document.createElement("div");
+    time.className = "comment-time";
+    time.textContent = formatDate(comment.created_at);
+
+    identity.appendChild(author);
+    identity.appendChild(time);
+
+    const score = document.createElement("div");
+    score.className = "comment-score";
+    score.textContent = `Score: ${comment.score}`;
+
+    meta.appendChild(identity);
+    meta.appendChild(score);
+    card.appendChild(meta);
+
+    if (ratings.length) {
+      const ratingsRow = document.createElement("div");
+      ratingsRow.className = "comment-ratings";
+      const ratingsText = document.createElement("span");
+      ratingsText.textContent = ratings.join(" • ");
+      ratingsRow.appendChild(ratingsText);
+      card.appendChild(ratingsRow);
+    }
+
+    const body = document.createElement("p");
+    body.textContent = comment.body;
+    card.appendChild(body);
+
+    const votes = document.createElement("div");
+    votes.className = "comment-votes";
+
+    const upvotes = document.createElement("span");
+    upvotes.className = "vote-btn";
+    upvotes.textContent = `Upvotes ${comment.upvotes}`;
+
+    const downvotes = document.createElement("span");
+    downvotes.className = "vote-btn";
+    downvotes.textContent = `Downvotes ${comment.downvotes}`;
+
+    votes.appendChild(upvotes);
+    votes.appendChild(downvotes);
+    card.appendChild(votes);
+
+    return card;
   }
 
   function renderComments(data) {
     currentData = data;
     renderSummary(data);
-    list.innerHTML = data.items.length
-      ? data.items.map(renderComment).join("")
-      : '<p class="helper-text">No comments yet.</p>';
+    list.replaceChildren();
+    if (data.items.length) {
+      data.items.forEach((comment) => {
+        list.appendChild(buildCommentCard(comment));
+      });
+    } else {
+      const empty = document.createElement("p");
+      empty.className = "helper-text";
+      empty.textContent = "No comments yet.";
+      list.appendChild(empty);
+    }
     pageLabel.textContent = `Page ${data.page} of ${data.total_pages}`;
     prevBtn.disabled = data.page <= 1;
     nextBtn.disabled = data.page >= data.total_pages;

@@ -209,8 +209,9 @@ class TestGroundingConstraints:
 
     def test_context_discourages_raw_provenance_tags(self):
         ctx = knowledge_base.build_context()
-        assert "Do not expose raw file markers" in ctx
-        assert "instead of inline provenance tags" in ctx
+        assert "Do not expose raw internal file markers" in ctx
+        assert "Do not inline technical provenance tags into normal prose" in ctx
+        assert "summarize them naturally at the end instead of showing internal source tags" in ctx
 
     def test_no_private_data_in_knowledge_files(self):
         sources = knowledge_base.load_all()
