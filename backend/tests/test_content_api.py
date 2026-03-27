@@ -15,7 +15,7 @@ class TestContentApi:
         data = response.json()
         content = data["content"]
 
-        assert content["about_title"]["en"] == "About me"
+        assert content["about_title"]["en"] == "Brief introduction"
         assert len(content["about_paragraphs"]) == 2
         assert len(content["research_items"]) >= 4
         assert content["tools_items"][0]["href"] == "metrics.html"

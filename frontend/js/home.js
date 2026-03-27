@@ -1,12 +1,7 @@
 "use strict";
 
 (function () {
-  const {
-    BACKEND_URL,
-    getLocale,
-    setLocale,
-    localize,
-  } = window.PortfolioApp;
+  const { BACKEND_URL, getLocale, setLocale, localize } = window.PortfolioApp;
 
   const UI_TEXT = {
     en: {
@@ -26,7 +21,8 @@
       websiteRatingLabel: "Website rating",
       resumeRatingLabel: "Resume rating",
       optionalRating: "Optional",
-      commentBodyPlaceholder: "Share what feels strong, what feels unclear, or what would help you understand the profile better.",
+      commentBodyPlaceholder:
+        "Share what feels strong, what feels unclear, or what would help you understand the profile better.",
       postComment: "Post comment",
       loadingComments: "Loading comments...",
       noComments: "No comments yet. Be the first to leave one.",
@@ -62,7 +58,7 @@
       optionalRating: "可选",
       commentBodyPlaceholder: "欢迎分享你觉得清晰或需要改进的地方。",
       postComment: "提交留言",
-      loadingComments: "正在加载留言……",
+      loadingComments: "正在加载留言…",
       noComments: "还没有留言，欢迎成为第一位留言者。",
       commentsUnavailable: "当前无法加载留言。",
       pageLabel: "第 {page} / {total} 页",
@@ -77,6 +73,36 @@
       unableToPost: "暂时无法提交留言。",
       noEducation: "教育背景信息将在可用时显示。",
     },
+  };
+
+  const FALLBACK_CONTENT = {
+    hero_badge: {
+      en: "Academic profile",
+      zh: "学术主页",
+    },
+    hero_title: {
+      en: "Runyu Ma connects AI systems research with real deployment.",
+      zh: "Runyu Ma 致力于把 AI 系统研究与真实部署连接起来。",
+    },
+    hero_summary: {
+      en: "Explore research interests, education background, public work, projects, publications, and contact details.",
+      zh: "了解研究方向、教育背景、公开经历、项目、论文与联系方式。",
+    },
+    about_title: {
+      en: "Brief introduction",
+      zh: "简介",
+    },
+    about_paragraphs: [],
+    research_title: {
+      en: "Research interests",
+      zh: "研究方向",
+    },
+    research_items: [],
+    contact_title: {
+      en: "Contact",
+      zh: "联系方式",
+    },
+    contact_items: [],
   };
 
   const heroBadge = document.getElementById("hero-badge");
@@ -117,7 +143,7 @@
   const heroLinkExperience = document.getElementById("hero-link-experience");
   const heroLinkPublications = document.getElementById("hero-link-publications");
 
-  let siteContent = null;
+  let siteContent = FALLBACK_CONTENT;
   let portfolioData = {
     profile: {},
     experience: {},
@@ -187,6 +213,68 @@
     }
   }
 
+  function localizedProfileName(profile) {
+    return localize(profile.name, currentLocale()).trim();
+  }
+
+  function localizedHeadline(profile) {
+    return localize(profile.headline, currentLocale()).trim();
+  }
+
+  function formatNaturalList(items) {
+    const cleanItems = items.filter(Boolean);
+    if (cleanItems.length <= 1) {
+      return cleanItems[0] || "";
+    }
+    if (currentLocale() === "zh") {
+      return cleanItems.join("、");
+    }
+    if (cleanItems.length === 2) {
+      return `${cleanItems[0]} and ${cleanItems[1]}`;
+    }
+    return `${cleanItems.slice(0, -1).join(", ")}, and ${cleanItems[cleanItems.length - 1]}`;
+  }
+
+  function buildAboutParagraphItems(profile) {
+    const items = [];
+    const name = localizedProfileName(profile);
+    const headline = localizedHeadline(profile);
+    const educationItems = Array.isArray(profile.education) ? profile.education : [];
+    const institutions = educationItems
+      .map((item) => localize(item.institution, currentLocale()).trim())
+      .filter(Boolean);
+
+    if (name && headline) {
+      if (currentLocale() === "zh") {
+        items.push(`${name} 是一名${headline}。`);
+      } else {
+        const article = /^[aeiou]/i.test(headline) ? "an" : "a";
+        items.push(`${name} is ${article} ${headline}.`);
+      }
+    }
+
+    if (name && institutions.length) {
+      const institutionSummary = formatNaturalList(institutions);
+      if (currentLocale() === "zh") {
+        items.push(`${name} 曾就读于 ${institutionSummary}。`);
+      } else {
+        items.push(`${name} studied at ${institutionSummary}.`);
+      }
+    }
+
+    return items;
+  }
+
+  function buildHeroTitle(profile) {
+    const fallback = localize(siteContent.hero_title, currentLocale());
+    return localizedProfileName(profile) || fallback;
+  }
+
+  function buildHeroSummary(profile) {
+    const fallback = localize(siteContent.hero_summary, currentLocale());
+    return localizedHeadline(profile) || fallback;
+  }
+
   function renderEducation(target, items) {
     clearChildren(target);
     if (!items.length) {
@@ -206,7 +294,9 @@
 
       const meta = document.createElement("p");
       meta.className = "entry-meta";
-      meta.textContent = [localize(item.institution, currentLocale()), item.year].filter(Boolean).join(" • ");
+      meta.textContent = [localize(item.institution, currentLocale()), item.year]
+        .filter(Boolean)
+        .join(" - ");
 
       card.appendChild(title);
       card.appendChild(meta);
@@ -248,7 +338,7 @@
       });
     });
 
-    return contactItems.length ? contactItems : siteContent?.contact_items || [];
+    return contactItems.length ? contactItems : siteContent.contact_items || [];
   }
 
   function isExternalLink(href) {
@@ -307,24 +397,22 @@
   }
 
   function renderContent() {
-    if (!siteContent) {
-      return;
-    }
-
     const profile = portfolioData.profile || {};
-    const researchItems = Array.isArray(profile.research_interests) && profile.research_interests.length
-      ? profile.research_interests
-      : siteContent.research_items || [];
+    const researchItems =
+      Array.isArray(profile.research_interests) && profile.research_interests.length
+        ? profile.research_interests
+        : siteContent.research_items || [];
     const educationItems = Array.isArray(profile.education) ? profile.education : [];
+    const aboutItems = buildAboutParagraphItems(profile);
 
     setText(heroBadge, localize(siteContent.hero_badge, currentLocale()));
-    setText(heroTitle, localize(siteContent.hero_title, currentLocale()));
-    setText(heroSummary, localize(siteContent.hero_summary, currentLocale()));
+    setText(heroTitle, buildHeroTitle(profile));
+    setText(heroSummary, buildHeroSummary(profile));
     setText(aboutTitle, localize(siteContent.about_title, currentLocale()));
     setText(researchTitle, localize(siteContent.research_title, currentLocale()));
     setText(contactTitle, localize(siteContent.contact_title, currentLocale()));
 
-    renderParagraphs(aboutParagraphs, siteContent.about_paragraphs || []);
+    renderParagraphs(aboutParagraphs, aboutItems.length ? aboutItems : siteContent.about_paragraphs || []);
     renderTextList(researchList, researchItems);
     renderEducation(educationList, educationItems);
     renderResourceList(contactList, buildContactItems());
@@ -338,7 +426,7 @@
           capabilities,
           locale: currentLocale(),
         },
-      })
+      }),
     );
   }
 
@@ -451,14 +539,17 @@
     const [contentResult, portfolioResult] = await Promise.allSettled([loadContent(), loadPortfolio()]);
 
     if (contentResult.status === "fulfilled") {
-      siteContent = contentResult.value.content;
+      siteContent = contentResult.value.content || FALLBACK_CONTENT;
       capabilities = contentResult.value.capabilities || capabilities;
     } else {
-      throw contentResult.reason;
+      console.error(contentResult.reason);
+      siteContent = FALLBACK_CONTENT;
     }
 
     if (portfolioResult.status === "fulfilled") {
       portfolioData = portfolioResult.value;
+    } else {
+      console.error(portfolioResult.reason);
     }
 
     renderContent();
@@ -550,7 +641,7 @@
 
   loadPageData().catch((error) => {
     console.error(error);
-    renderStaticUi();
+    renderContent();
     renderComments();
   });
 })();

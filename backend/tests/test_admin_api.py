@@ -1,4 +1,4 @@
-"""Integration tests for admin content editing and happy mode endpoints."""
+"""Integration tests for admin content editing, comments reader, and happy mode endpoints."""
 
 from __future__ import annotations
 
@@ -39,6 +39,33 @@ class TestAdminSiteContent:
         assert saved["content"]["hero_title"]["en"] == "Updated English title"
         assert saved["content"]["hero_title"]["zh"] == "更新后的中文标题"
         assert saved["sync_notes"]
+
+    async def test_admin_comments_reader_returns_comments(self, client, tmp_path, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "admin_api_key", "secret-key")
+        monkeypatch.setattr(settings, "comments_file", str(tmp_path / "comments.json"))
+
+        created = await client.post(
+            "/api/comments",
+            json={
+                "author": "Visitor",
+                "website_rating": 5,
+                "resume_rating": None,
+                "body": "Clear academic homepage.",
+            },
+        )
+        assert created.status_code == 200
+
+        response = await client.get(
+            "/api/admin/comments?sort=latest&page=1",
+            headers={"X-Admin-Key": "secret-key"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total_items"] == 1
+        assert data["page_size"] == 20
+        assert data["items"][0]["body"] == "Clear academic homepage."
 
 
 class TestHappyMode:

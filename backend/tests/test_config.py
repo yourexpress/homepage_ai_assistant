@@ -63,6 +63,11 @@ class TestSettingsDefaults:
         s = Settings()
         assert s.app_version == "1.0.0"
 
+    def test_default_happy_mode_visitor_names_are_empty(self):
+        s = Settings()
+        assert s.happy_mode_visitor_name_en == ""
+        assert s.happy_mode_visitor_name_zh == ""
+
 
 class TestOriginsListProperty:
     """Verify that origins_list parses the comma-separated allowed_origins."""

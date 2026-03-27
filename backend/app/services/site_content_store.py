@@ -70,9 +70,8 @@ _DEFAULT_CONTENT: dict[str, Any] = {
                 "high-performance GPU computation."
             ),
             "zh": (
-                "我在经过数年的科研积累后，于 2025 年 12 月获得乔治梅森大学计算机科学"
-                "硕士学位。我的研究兴趣包括移动与边缘系统、安全高效的 AI 系统，以及高"
-                "性能 GPU 计算。"
+                "我在经过数年的科研积累后，于 2025 年 12 月获得 George Mason University "
+                "计算机科学硕士学位。我的研究兴趣包括移动与边缘系统、安全高效的 AI 系统，以及高性能 GPU 计算。"
             ),
         },
         {
@@ -82,8 +81,8 @@ _DEFAULT_CONTENT: dict[str, Any] = {
                 "University of Electronic Science and Technology of China (UESTC)."
             ),
             "zh": (
-                "在此之前，我曾获得乔治华盛顿大学计算机科学硕士学位，以及电子科技大学"
-                "（UESTC）信息安全学士学位。"
+                "在此之前，我曾获得 The George Washington University 计算机科学硕士学位，"
+                "以及 University of Electronic Science and Technology of China (UESTC) 信息安全学士学位。"
             ),
         },
     ],
@@ -116,14 +115,14 @@ _DEFAULT_CONTENT: dict[str, Any] = {
     "news_items": [
         {
             "en": (
-                '2025 — Our paper "Better Reliability Compression: Model Pruning with '
+                '2025 - Our paper "Better Reliability Compression: Model Pruning with '
                 'Calibrated Uncertainty Estimation for Mobile Deep Learning Applications" '
                 "was accepted at IEEE MOST 2025."
             ),
             "zh": (
-                "2025 年——我们的论文《Better Reliability Compression: Model Pruning "
-                "with Calibrated Uncertainty Estimation for Mobile Deep Learning "
-                "Applications》被 IEEE MOST 2025 录用。"
+                "2025 年，我们的论文《Better Reliability Compression: Model Pruning with "
+                "Calibrated Uncertainty Estimation for Mobile Deep Learning Applications》"
+                "被 IEEE MOST 2025 录用。"
             ),
         }
     ],
@@ -152,7 +151,7 @@ _DEFAULT_CONTENT: dict[str, Any] = {
                 "en": "Use the chat panel to ask about projects, research, and fit.",
                 "zh": "使用聊天面板了解项目、研究方向和岗位匹配度。",
             },
-            "href": "#chat-form",
+            "href": "#chat-toggle",
         },
     ],
     "contact_title": {

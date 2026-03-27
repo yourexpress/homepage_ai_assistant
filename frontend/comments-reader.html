@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="portfolio-backend-url" content="" />
+  <title>Runyu Ma | Comments Inbox</title>
+  <meta name="description" content="Protected owner-only comment reader." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="logo-mark">Runyu Ma</a>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="comments-reader.html" class="active">Comments Inbox</a>
+      <a href="manager.html">Manager</a>
+      <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="page-shell page-shell-narrow">
+    <section class="glass-card manager-hero">
+      <div class="section-head section-head-stack">
+        <div>
+          <p class="section-label">Owner Only</p>
+          <h1>Comments inbox</h1>
+        </div>
+      </div>
+      <p class="section-copy">
+        Read visitor comments in a cleaner owner-only view without the public comment form.
+      </p>
+
+      <div class="manager-auth manager-auth-wide">
+        <input
+          id="comments-admin-key-input"
+          type="password"
+          autocomplete="off"
+          placeholder="Enter admin key"
+        />
+        <button type="button" class="primary-btn" id="comments-load-btn">Load comments</button>
+        <a href="manager.html" class="ghost-btn">Back to manager</a>
+      </div>
+
+      <p class="helper-text" id="comments-admin-status">
+        This page uses the backend admin key and is meant for your private deployment only.
+      </p>
+    </section>
+
+    <section class="glass-card manager-main-card" id="comments-reader-panel" hidden>
+      <div class="section-head">
+        <div>
+          <p class="section-label">Reader</p>
+          <h2>Visitor feedback</h2>
+        </div>
+        <select id="comments-reader-sort" class="inline-select" aria-label="Sort comments">
+          <option value="latest">Latest</option>
+          <option value="likest">Most liked</option>
+        </select>
+      </div>
+
+      <div id="comments-reader-summary" class="manager-summary-list"></div>
+      <div id="comments-reader-list" class="comments-list"></div>
+
+      <div class="pager">
+        <button type="button" class="ghost-btn" id="comments-reader-prev">Previous</button>
+        <span id="comments-reader-page-label">Page 1</span>
+        <button type="button" class="ghost-btn" id="comments-reader-next">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script src="js/comments-reader.js"></script>
+</body>
+</html>
