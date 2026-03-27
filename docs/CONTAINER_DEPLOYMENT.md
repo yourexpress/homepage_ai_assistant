@@ -33,6 +33,8 @@ Create `backend/.env` from `backend/.env.example` and set at least:
 - `HAPPY_MODE_QUESTION`
 - `HAPPY_MODE_EXPECTED_ANSWER`
 - `HAPPY_MODE_SECRET`
+- `HAPPY_MODE_VISITOR_NAME_EN`
+- `HAPPY_MODE_VISITOR_NAME_ZH`
 
 Do not commit the real values.
 

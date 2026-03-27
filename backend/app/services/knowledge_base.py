@@ -98,7 +98,9 @@ def _render_profile(data: dict[str, Any]) -> str:
     for edu in data.get("education", []):
         degree = _format_localized_text(edu.get("degree"))
         institution = _format_localized_text(edu.get("institution"))
-        lines.append(f"Education: {degree} from {institution} ({edu.get('year', '')})")
+        year = edu.get("year") or ""
+        suffix = f" ({year})" if year else ""
+        lines.append(f"Education: {degree} from {institution}{suffix}")
     if loc := _format_localized_text(data.get("location_public")):
         lines.append(f"Location: {loc}")
     for field in ("research_interests", "skills"):

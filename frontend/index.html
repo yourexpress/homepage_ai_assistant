@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="portfolio-backend-url" content="" />
-  <title>Runyu Ma | AI Systems Portfolio</title>
+  <title>Runyu Ma | Academic Homepage</title>
   <meta
     name="description"
     content="Runyu Ma's academic and engineering homepage with public profile information, publications, and an AI assistant."
@@ -97,36 +97,38 @@
       </p>
 
       <form id="comment-form" class="comment-form" autocomplete="off">
-        <input id="comment-author" type="text" maxlength="40" placeholder="Your name (optional)" />
-        <div class="rating-grid">
-          <label>
-            <span id="comment-website-label">Website rating</span>
-            <select id="website-rating">
-              <option value="" id="comment-rating-optional-website">Optional</option>
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-              <option value="0">0</option>
-            </select>
-          </label>
-          <label>
-            <span id="comment-resume-label">Resume rating</span>
-            <select id="resume-rating">
-              <option value="" id="comment-rating-optional-resume">Optional</option>
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-              <option value="0">0</option>
-            </select>
-          </label>
+        <div class="comment-form-row">
+          <input id="comment-author" type="text" maxlength="40" placeholder="Your name (optional)" />
+          <div class="rating-grid">
+            <label>
+              <span id="comment-website-label">Website rating</span>
+              <select id="website-rating">
+                <option value="" id="comment-rating-optional-website">Optional</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+              </select>
+            </label>
+            <label>
+              <span id="comment-resume-label">Resume rating</span>
+              <select id="resume-rating">
+                <option value="" id="comment-rating-optional-resume">Optional</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+              </select>
+            </label>
+          </div>
         </div>
         <textarea
           id="comment-body"
-          rows="4"
+          rows="3"
           maxlength="1000"
           placeholder="Share what feels strong, what feels unclear, or what would help you understand the profile better."
           required
@@ -145,45 +147,72 @@
     </section>
   </main>
 
-  <button type="button" class="chat-toggle" id="chat-toggle" aria-expanded="false">AI Chat</button>
+  <button
+    type="button"
+    class="happy-toggle"
+    id="happy-toggle"
+    aria-expanded="false"
+    aria-label="Private entrance"
+    hidden
+  >
+    Private
+  </button>
+
+  <aside class="happy-widget" id="happy-widget" hidden>
+    <div class="happy-widget-head">
+      <div>
+        <p class="section-label" id="happy-label">Private entrance</p>
+        <h3 id="happy-title">Unlock happy personality</h3>
+      </div>
+      <div class="happy-widget-actions">
+        <span class="happy-badge" id="happy-status">Locked</span>
+        <button type="button" class="ghost-btn" id="happy-deactivate-btn" hidden>Turn off</button>
+        <button type="button" class="ghost-btn chat-close-btn" id="happy-close-btn">Close</button>
+      </div>
+    </div>
+
+    <form id="happy-code-form" class="inline-form">
+      <input
+        id="happy-code-input"
+        type="password"
+        placeholder="Enter special code"
+        autocomplete="off"
+      />
+      <button type="submit" class="primary-btn" id="happy-code-submit">Check code</button>
+    </form>
+
+    <form id="happy-answer-form" class="stacked-form" hidden>
+      <label for="happy-answer-input" id="happy-question-text">Question</label>
+      <textarea id="happy-answer-input" rows="2" placeholder="Answer here"></textarea>
+      <button type="submit" class="primary-btn" id="happy-answer-submit">Unlock</button>
+    </form>
+
+    <p class="helper-text" id="happy-message">
+      This mode only unlocks for a private visitor after the correct code and answer are provided.
+    </p>
+  </aside>
+
+  <button
+    type="button"
+    class="chat-toggle"
+    id="chat-toggle"
+    aria-expanded="false"
+    aria-label="Open AI chat"
+  >
+    AI
+  </button>
 
   <aside class="chat-widget" id="chat-widget" hidden>
+    <div class="chat-resize-handle" id="chat-resize-handle" aria-hidden="true"></div>
     <div class="chat-widget-head">
       <div>
         <p class="section-label" id="chat-widget-label">AI Chat</p>
         <h2 id="chat-widget-title">Ask the assistant</h2>
       </div>
-      <button type="button" class="ghost-btn chat-close-btn" id="chat-close-btn">Close</button>
-    </div>
-
-    <div class="happy-card" id="happy-card" hidden>
-      <div class="happy-card-head">
-        <div>
-          <p class="section-label" id="happy-label">Private entrance</p>
-          <h3 id="happy-title">Unlock happy personality</h3>
-        </div>
-        <span class="happy-badge" id="happy-status">Locked</span>
+      <div class="chat-widget-actions">
+        <button type="button" class="ghost-btn" id="chat-clear-btn">Clear session</button>
+        <button type="button" class="ghost-btn chat-close-btn" id="chat-close-btn">Close</button>
       </div>
-
-      <form id="happy-code-form" class="inline-form">
-        <input
-          id="happy-code-input"
-          type="password"
-          placeholder="Enter special code"
-          autocomplete="off"
-        />
-        <button type="submit" class="primary-btn" id="happy-code-submit">Check code</button>
-      </form>
-
-      <form id="happy-answer-form" class="stacked-form" hidden>
-        <label for="happy-answer-input" id="happy-question-text">Question</label>
-        <textarea id="happy-answer-input" rows="2" placeholder="Answer here"></textarea>
-        <button type="submit" class="primary-btn" id="happy-answer-submit">Unlock</button>
-      </form>
-
-      <p class="helper-text" id="happy-message">
-        This mode only unlocks for a private visitor after the correct code and answer are provided.
-      </p>
     </div>
 
     <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages"></div>

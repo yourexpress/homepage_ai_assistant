@@ -73,7 +73,11 @@ Checks:
 
 1. confirm `HAPPY_MODE_ENABLED=true`
 2. confirm the configured code, question, and answer values on the server
-3. confirm you are not using placeholder values from `.env.example`
+3. confirm `HAPPY_MODE_SECRET` is set to a real private signing secret
+4. confirm you are not using placeholder values from `.env.example`
+
+`HAPPY_MODE_SECRET` signs the happy-mode token after unlock. It should be a
+private random value, not the same string as the happy code.
 
 ## Metrics Look Empty
 

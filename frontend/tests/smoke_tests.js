@@ -32,6 +32,11 @@ frame.addEventListener("load", () => {
   assert(doc.querySelector('a[href="publications.html"]') !== null, "navigation includes the publications page");
   assert(doc.getElementById("chat-toggle") !== null, "index.html includes a floating chat toggle button");
   assert(doc.getElementById("chat-widget") !== null, "index.html includes a floating chat widget");
+  assert(doc.getElementById("chat-clear-btn") !== null, "index.html includes a clear-session control");
+  assert(doc.getElementById("chat-resize-handle") !== null, "index.html includes a custom chat resize handle");
+  assert(doc.getElementById("happy-toggle") !== null, "index.html includes a separate private entrance toggle");
+  assert(doc.getElementById("happy-widget") !== null, "index.html includes a separate private entrance panel");
+  assert(doc.getElementById("happy-deactivate-btn") !== null, "index.html includes a happy-mode deactivate button");
   assert(doc.getElementById("comment-form") !== null, "index.html includes a comment form");
 
   const websiteRating = doc.getElementById("website-rating");

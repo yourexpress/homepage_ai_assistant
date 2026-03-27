@@ -27,7 +27,7 @@
         navMetrics: "指标",
         pageKicker: "经历",
         pageTitle: "经历与项目",
-        pageSummary: "更清晰地展示公开的工作经历、研究重点和项目内容。",
+        pageSummary: "更清晰地展示公开的工作经历、关注方向和项目内容。",
         experienceTitle: "工作经历",
         projectsTitle: "项目",
         noExperience: "暂时没有公开的经历信息。",
@@ -132,7 +132,9 @@
     clearChildren(experienceList);
     clearChildren(projectsList);
 
-    const positions = Array.isArray(portfolioData.experience.positions) ? portfolioData.experience.positions : [];
+    const positions = Array.isArray(portfolioData.experience.positions)
+      ? portfolioData.experience.positions
+      : [];
     if (!positions.length) {
       const empty = document.createElement("p");
       empty.className = "helper-text";
@@ -144,7 +146,7 @@
         card.className = "entry-card";
 
         const title = document.createElement("h3");
-        title.textContent = `${localize(item.title, currentLocale())} • ${localize(item.organization, currentLocale())}`;
+        title.textContent = `${localize(item.title, currentLocale())} - ${localize(item.organization, currentLocale())}`;
 
         const meta = document.createElement("p");
         meta.className = "entry-meta";
@@ -191,7 +193,9 @@
 
         const tech = document.createElement("p");
         tech.className = "entry-meta";
-        const techItems = Array.isArray(item.technologies) ? item.technologies.map((value) => localize(value, currentLocale())) : [];
+        const techItems = Array.isArray(item.technologies)
+          ? item.technologies.map((value) => localize(value, currentLocale()))
+          : [];
         tech.textContent = techItems.length ? `${t("technologies")}: ${techItems.join(", ")}` : "";
 
         card.appendChild(title);
@@ -245,7 +249,9 @@
 
       const meta = document.createElement("p");
       meta.className = "entry-meta";
-      meta.textContent = [item.year, localize(item.venue, currentLocale())].filter(Boolean).join(" • ");
+      meta.textContent = [item.year, localize(item.venue, currentLocale())]
+        .filter(Boolean)
+        .join(" - ");
 
       card.appendChild(title);
       if (meta.textContent) {

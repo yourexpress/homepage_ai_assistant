@@ -1,32 +1,51 @@
 {
   "name": {
-    "en": "Alex Chen",
-    "zh": "陈致远"
+    "en": "Runyu Ma",
+    "zh": "马润宇"
   },
   "headline": {
-    "en": "Software Engineer - Distributed Systems & Backend Infrastructure",
-    "zh": "软件工程师 - 分布式系统与后端基础设施"
+    "en": "AI Systems and Machine Learning Engineer",
+    "zh": "AI 系统与机器学习工程师"
   },
   "education": [
     {
       "degree": {
-        "en": "Bachelor of Science in Computer Science",
-        "zh": "计算机科学理学学士"
+        "en": "M.S. in Computer Science",
+        "zh": "计算机科学硕士"
       },
       "institution": {
-        "en": "University of Washington",
-        "zh": "华盛顿大学"
+        "en": "George Mason University",
+        "zh": "George Mason University"
       },
-      "year": 2020
+      "year": 2025
+    },
+    {
+      "degree": {
+        "en": "M.S. in Computer Science",
+        "zh": "计算机科学硕士"
+      },
+      "institution": {
+        "en": "The George Washington University",
+        "zh": "The George Washington University"
+      },
+      "year": ""
+    },
+    {
+      "degree": {
+        "en": "B.S. in Information Security",
+        "zh": "信息安全学士"
+      },
+      "institution": {
+        "en": "University of Electronic Science and Technology of China (UESTC)",
+        "zh": "电子科技大学（UESTC）"
+      },
+      "year": ""
     }
   ],
-  "location_public": {
-    "en": "Seattle, WA area",
-    "zh": "美国华盛顿州西雅图地区"
-  },
   "links": {
-    "github": "https://github.com/yourexpress",
-    "portfolio": "https://yourexpress.github.io"
+    "github_rym_rym": "https://github.com/rym-rym",
+    "github_yourexpress": "https://github.com/yourexpress",
+    "portfolio": "https://www.runyuma.uk"
   },
   "public_contacts": [
     {
@@ -35,75 +54,30 @@
         "en": "Email",
         "zh": "邮箱"
       },
-      "value": "hello@alexchen.dev",
+      "value": "rma5@gmu.edu",
       "note": {
         "en": "Public contact email",
         "zh": "公开联系邮箱"
-      }
-    },
-    {
-      "type": "whatsapp",
-      "label": {
-        "en": "WhatsApp",
-        "zh": "WhatsApp"
-      },
-      "value": "+1 206 555 0188",
-      "note": {
-        "en": "Public WhatsApp line",
-        "zh": "公开 WhatsApp 联系方式"
-      }
-    },
-    {
-      "type": "wechat",
-      "label": {
-        "en": "WeChat",
-        "zh": "微信"
-      },
-      "value": "alexchen_public",
-      "note": {
-        "en": "Public WeChat ID",
-        "zh": "公开微信号"
-      }
-    },
-    {
-      "type": "phone",
-      "label": {
-        "en": "Phone",
-        "zh": "电话"
-      },
-      "value": "+1 206 *** 0188",
-      "note": {
-        "en": "Masked public phone number",
-        "zh": "已遮罩的公开电话号码"
       }
     }
   ],
   "research_interests": [
     {
-      "en": "Distributed systems",
-      "zh": "分布式系统"
+      "en": "Model compression, mobile and edge deep learning systems",
+      "zh": "模型压缩、移动与边缘深度学习系统"
     },
     {
-      "en": "LLM inference optimization",
-      "zh": "大语言模型推理优化"
+      "en": "Uncertainty estimation and trustworthy AI",
+      "zh": "不确定性估计与可信 AI"
     },
     {
-      "en": "Developer tooling",
-      "zh": "开发者工具"
+      "en": "Efficient deep learning, GPU scheduling, GPU resource scaling, and GPU profiling",
+      "zh": "高效深度学习、GPU 调度、GPU 资源伸缩与 GPU 性能分析"
+    },
+    {
+      "en": "Network measurement and network security",
+      "zh": "网络测量与网络安全"
     }
   ],
-  "skills": [
-    "Python",
-    {
-      "en": "Go",
-      "zh": "Go 语言"
-    },
-    "TypeScript",
-    {
-      "en": "Kubernetes",
-      "zh": "Kubernetes 容器编排"
-    },
-    "PostgreSQL",
-    "Redis"
-  ]
+  "skills": []
 }
