@@ -1,6 +1,6 @@
 # Testing Guide
 
-This project now has three different levels of verification.
+This project has three useful levels of verification.
 
 ## 1. Static Checks
 
@@ -12,15 +12,15 @@ Use these when dependencies are limited but you still want quick confidence.
 python -m compileall backend/app backend/tests
 ```
 
-### Validate knowledge files
+### Validate private knowledge files created from the templates
 
 ```bash
 python backend/scripts/validate_knowledge.py \
-  backend/knowledge/profile.json \
-  backend/knowledge/experience.json \
-  backend/knowledge/projects.json \
-  backend/knowledge/publications.json \
-  backend/knowledge/faq.json
+  my-knowledge/profile.json \
+  my-knowledge/experience.json \
+  my-knowledge/projects.json \
+  my-knowledge/publications.json \
+  my-knowledge/faq.json
 ```
 
 ## 2. Backend Test Suite
@@ -31,12 +31,16 @@ pip install -r requirements-dev.txt
 pytest tests -v
 ```
 
+A clean-container run is also a good option when you do not want to install
+Python dependencies on the host.
+
 Key integration files:
 
 - `test_chat.py`
 - `test_metrics_api.py`
 - `test_admin_api.py`
 - `test_comments_api.py`
+- `test_content_api.py`
 
 ## 3. Frontend Smoke Test
 
@@ -47,9 +51,9 @@ Open:
 This checks:
 
 - main homepage elements exist
-- manager link exists
-- comments controls exist
-- chat structure exists
+- compact feedback card exists
+- chat bubble structure exists
+- private-code dock exists
 
 ## Useful Manual Checks
 
@@ -66,20 +70,22 @@ This checks:
 1. ask an initial question
 2. ask a follow-up that depends on the first answer
 3. confirm the frontend preserved current-session history
+4. close and reopen the chat bubble to confirm the session stays intact
 
-### Comments
+### Feedback form
 
-1. post multiple comments
-2. switch sort between `latest` and `likest`
-3. vote on comments
-4. confirm 5-per-page pagination
+1. submit feedback with and without ratings
+2. confirm the compact form stays usable on desktop and mobile widths
+3. confirm no public comments pager appears on the homepage
 
 ### Happy personality
 
 1. enable happy mode in server config
-2. submit the private code
-3. answer the configured question correctly
-4. confirm chat responses return `happy_mode_active: true`
+2. open the private-code dock from the lower-left bubble
+3. submit the private code
+4. confirm the follow-up question appears inside the main chat bubble
+5. answer correctly and confirm chat responses return `happy_mode_active: true`
+6. answer incorrectly and confirm the UI replies `wrong answer, thumb down`
 
 ## Dependency Note
 

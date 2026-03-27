@@ -32,10 +32,10 @@ At the same time, the owner should be able to:
 - `frontend/index.html` is the main page.
 - The homepage shows:
   - a hero area populated from file-backed site content
-  - a session-aware chat area
-  - a visitor comments area
-- The visual design should feel clean, modern, and "AI-era" without becoming
-  dense or hard to use.
+  - a floating AI chat bubble
+  - a compact feedback card
+- The visual design should feel clean, modern, and easy to scan on desktop and
+  mobile.
 
 ### Chat
 
@@ -49,13 +49,15 @@ At the same time, the owner should be able to:
 - The frontend stores current-session history in browser session storage.
 - The frontend can clear current-session history without affecting other
   visitors.
-- Desktop or laptop visitors can adjust message bubble width up to one quarter
-  of the page width.
-- Mobile visitors do not see the bubble-width control.
+- Desktop or laptop visitors can resize the chat bubble smoothly.
+- The chat bubble must be closable and should prioritize message space over
+  oversized controls.
 
 ### Knowledge and Prompting
 
-- Answers are grounded in approved knowledge files.
+- Answers are grounded in approved runtime knowledge files.
+- The repository should document the template-based workflow rather than commit
+  real `backend/knowledge/*.json` data.
 - The assistant should not show raw internal markers like `source:profile.json`
   in visitor-facing answers.
 - If references help, the assistant may summarize them at the end in a short,
@@ -80,19 +82,16 @@ At the same time, the owner should be able to:
   the other side through the translation helper.
 - This sync behavior applies to manager edits, not arbitrary manual file edits.
 
-### Visitor Comments
+### Visitor Feedback
 
-- Visitors can post comments with:
+- Visitors can submit feedback with:
   - optional author name
-  - website look rating from 0 to 5
+  - website rating from 0 to 5
   - resume rating from 0 to 5
   - free-text body
-- Visitors can vote comments up or down.
-- Comments support sorting by:
-  - latest
-  - likest
-- Pagination size is 5 comments per page.
-- Comments are stored in `COMMENTS_FILE`.
+- The homepage does not need to show a public comments feed, sorting controls,
+  or next/previous pagination controls.
+- Feedback is stored in `COMMENTS_FILE`.
 
 ### Happy Personality
 
@@ -104,8 +103,10 @@ At the same time, the owner should be able to:
   - `HAPPY_MODE_QUESTION`
   - `HAPPY_MODE_EXPECTED_ANSWER`
   - `HAPPY_MODE_SECRET`
+- The frontend exposes a small private-code bubble near the lower-left corner.
 - If the code is correct, the backend returns the configured challenge
-  question.
+  question, and the frontend continues the flow inside the main chat bubble.
+- If the answer is wrong, the UI should reply `wrong answer, thumb down`.
 - If the answer matches the configured expected answer, the backend issues a
   signed token for that browser session.
 - The happy personality stays subject to the same privacy and safety boundaries
@@ -129,7 +130,7 @@ At the same time, the owner should be able to:
 
 ## Explicit Current Limitations
 
-- Comments and editable homepage content are file-backed, not database-backed.
+- Feedback and editable homepage content are file-backed, not database-backed.
 - Translation sync depends on LLM availability.
 - Session history is browser-session scoped, not account scoped.
 - Happy personality is only active for sessions with a valid signed token.
