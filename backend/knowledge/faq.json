@@ -2,42 +2,102 @@
   "entries": [
     {
       "question": {
-        "en": "What does Alex do?",
-        "zh": "Alex 现在做什么工作？"
+        "en": "What do you do?",
+        "zh": "你主要做什么？"
       },
       "answer": {
-        "en": "Alex is a Software Engineer focusing on distributed systems and backend infrastructure.",
-        "zh": "Alex 是一名专注于分布式系统和后端基础设施的软件工程师。"
+        "en": "I work on AI systems and machine learning infrastructure, with a focus on GPU inference optimization, LLM deployment, model compression, and trustworthy AI. My experience spans both low-level systems work and model-side methods.",
+        "zh": "我主要做 AI 系统与机器学习基础设施，重点方向包括 GPU 推理优化、大模型部署、模型压缩以及可信 AI。我的经验同时覆盖底层系统机制和模型侧方法。"
       }
     },
     {
       "question": {
-        "en": "Where did Alex study?",
-        "zh": "Alex 在哪里读书？"
+        "en": "What are your main skills?",
+        "zh": "你的主要技能是什么？"
       },
       "answer": {
-        "en": "Alex earned a Bachelor of Science in Computer Science from the University of Washington in 2020.",
-        "zh": "Alex 于 2020 年获得华盛顿大学计算机科学理学学士学位。"
+        "en": "My main skills include CUDA programming, GPU kernel optimization, TVM-based machine learning compilation, PyTorch, TensorFlow, model compression, uncertainty estimation, and deployment-oriented AI system building.",
+        "zh": "我的核心技能包括 CUDA 编程、GPU Kernel 优化、基于 TVM 的机器学习编译、PyTorch、TensorFlow、模型压缩、不确定性估计，以及面向部署的 AI 系统构建。"
       }
     },
     {
       "question": {
-        "en": "What are Alex's key skills?",
-        "zh": "Alex 的核心技能有哪些？"
+        "en": "What kind of projects have you worked on?",
+        "zh": "你做过哪些类型的项目？"
       },
       "answer": {
-        "en": "Alex works with Python, Go, TypeScript, Kubernetes, PostgreSQL, and Redis.",
-        "zh": "Alex 熟悉 Python、Go、TypeScript、Kubernetes、PostgreSQL 和 Redis。"
+        "en": "My projects include software-defined GPU scheduling, heterogeneous kernel fusion, thermal-aware inference optimization, reliability-aware model compression, real-time TTS inference pipelines, and large-scale website security measurement.",
+        "zh": "我做过的软件与研究项目包括软件定义 GPU 调度、异构 Kernel 融合、面向温控的推理优化、可靠性感知模型压缩、实时 TTS 推理流水线，以及大规模网站安全测量。"
       }
     },
     {
       "question": {
-        "en": "What are Alex's research interests?",
-        "zh": "Alex 的研究兴趣是什么？"
+        "en": "What are your research interests?",
+        "zh": "你的研究兴趣是什么？"
       },
       "answer": {
-        "en": "Distributed systems, LLM inference optimization, and developer tooling.",
-        "zh": "分布式系统、大语言模型推理优化，以及开发者工具。"
+        "en": "My research interests include efficient LLMs, safe agentic AI, trustworthy AI systems, and AI systems on edge and embedded devices.",
+        "zh": "我的研究兴趣包括高效大语言模型、安全的智能体式 AI、可信 AI 系统，以及端侧和嵌入式设备上的 AI 系统。"
+      }
+    },
+    {
+      "question": {
+        "en": "What makes your background distinctive?",
+        "zh": "你的背景有什么独特之处？"
+      },
+      "answer": {
+        "en": "Beyond my technical stack, my strongest advantage is the ability to locate, define, and solve problems in unfamiliar domains. Years of working with top professors and PhD researchers also strengthened my collaborative mindset and my ability to build mutually beneficial research and engineering relationships.",
+        "zh": "相比单纯的技术栈，我最强的优势在于能在未知领域中定位问题、定义问题并推动解决。多年与顶尖教授和博士研究人员合作的经历，也强化了我的协作意识，以及建立互利型科研与工程合作关系的能力。"
+      }
+    },
+    {
+      "question": {
+        "en": "What is your core competitive advantage?",
+        "zh": "你的核心竞争力是什么？"
+      },
+      "answer": {
+        "en": "My core competitive advantage is not just technical depth. It is the combination of end-to-end AI systems thinking, the ability to explore open-ended problems in unfamiliar areas, and a strong sense of collaboration shaped by years of working with accomplished researchers.",
+        "zh": "我的核心竞争力不只是技术深度，而是把端到端 AI 系统思维、在陌生领域探索开放问题的能力，以及多年与优秀研究者合作形成的强协作意识结合在一起。"
+      }
+    },
+    {
+      "question": {
+        "en": "How can I contact you?",
+        "zh": "我该如何联系你？"
+      },
+      "answer": {
+        "en": "You can reach me by email at runyumajob@gmail.com, on WeChat at run737852, or on WhatsApp using the nickname Runyu and the masked phone number +1 (xxx) xxx-8249. You can also connect with me through my LinkedIn or portfolio site.",
+        "zh": "你可以通过邮箱 runyumajob@gmail.com、微信 run737852，或通过 WhatsApp（昵称 Runyu，掩码手机号 +1（xxx）xxx-8249）联系我。你也可以通过我的 LinkedIn 或个人主页联系我。"
+      }
+    },
+    {
+      "question": {
+        "en": "Are you open to new opportunities?",
+        "zh": "你目前是否考虑新的机会？"
+      },
+      "answer": {
+        "en": "I am interested in opportunities related to AI systems, machine learning infrastructure, inference optimization, trustworthy AI, and deployment-focused engineering. Please reach out through my public portfolio, LinkedIn, or the contact methods listed here.",
+        "zh": "我对 AI 系统、机器学习基础设施、推理优化、可信 AI 以及面向部署的工程机会感兴趣。欢迎通过我的公开主页、LinkedIn 或这里列出的联系方式联系我。"
+      }
+    },
+    {
+      "question": {
+        "en": "Can you answer questions outside the knowledge base?",
+        "zh": "你能回答知识库之外的问题吗？"
+      },
+      "answer": {
+        "en": "If the answer is not supported by the knowledge base, I should not invent it. In that case, I will direct visitors to contact Runyu Ma through the listed contact channels.",
+        "zh": "如果问题超出知识库支持范围，我不应该编造答案。遇到这种情况，我会引导访客通过这里提供的联系方式联系 Runyu Ma。"
+      }
+    },
+    {
+      "question": {
+        "en": "Can you share private or confidential information?",
+        "zh": "你会提供私人或机密信息吗？"
+      },
+      "answer": {
+        "en": "No. I will refuse requests for illegal, private, confidential, or unsafe information.",
+        "zh": "不会。我会拒绝任何涉及违法、私人、机密或不安全信息的请求。"
       }
     }
   ]

@@ -1,109 +1,148 @@
 {
   "name": {
-    "en": "Alex Chen",
-    "zh": "陈致远"
+    "en": "Runyu Ma",
+    "zh": "马润宇"
   },
   "headline": {
-    "en": "Software Engineer - Distributed Systems & Backend Infrastructure",
-    "zh": "软件工程师 - 分布式系统与后端基础设施"
+    "en": "Researcher, AI Inference Engineer, Machine Learning Engineer, LLM Deployment Engineer, Trustworthy AI Engineer, Master of Science in Computer Science",
+    "zh": "学者、研究者、AI推理优化工程师、机器学习工程师、安全与可信AI工程师、大语言模型工程师、计算机科学硕士"
   },
   "education": [
     {
       "degree": {
-        "en": "Bachelor of Science in Computer Science",
-        "zh": "计算机科学理学学士"
+        "en": "Master of Science in Computer and Information Science",
+        "zh": "计算机与信息科学硕士"
       },
       "institution": {
-        "en": "University of Washington",
-        "zh": "华盛顿大学"
+        "en": "George Mason University",
+        "zh": "乔治梅森大学"
       },
-      "year": 2020
+      "year": 2025
+    },
+    {
+      "degree": {
+        "en": "Master of Science in Computer Science",
+        "zh": "计算机科学硕士"
+      },
+      "institution": {
+        "en": "The George Washington University",
+        "zh": "乔治华盛顿大学"
+      },
+      "year": 2019
+    },
+    {
+      "degree": {
+        "en": "Bachelor of Science in Information Security",
+        "zh": "信息安全学士"
+      },
+      "institution": {
+        "en": "University of Electronic Science and Technology of China",
+        "zh": "电子科技大学"
+      },
+      "year": 2016
     }
   ],
   "location_public": {
-    "en": "Seattle, WA area",
-    "zh": "美国华盛顿州西雅图地区"
+    "en": "Fairfax, Virginia, USA / Chengdu, Sichuan, China",
+    "zh": "美国弗吉尼亚州费尔法克斯 / 中国四川成都"
   },
   "links": {
-    "github": "https://github.com/yourexpress",
-    "portfolio": "https://yourexpress.github.io"
+    "portfolio": "https://rym-rym.github.io",
+    "scholar": "https://scholar.google.com/citations?hl=en&user=4v4Yt0UAAAAJ",
+    "linkedin": "https://www.linkedin.com/in/runyu-ma-645756138"
   },
-  "public_contacts": [
-    {
-      "type": "email",
-      "label": {
-        "en": "Email",
-        "zh": "邮箱"
-      },
-      "value": "hello@alexchen.dev",
-      "note": {
-        "en": "Public contact email",
-        "zh": "公开联系邮箱"
-      }
+  "contact": {
+    "email": {
+      "en": "runyumajob@gmail.com",
+      "zh": "runyumajob@gmail.com"
     },
-    {
-      "type": "whatsapp",
-      "label": {
-        "en": "WhatsApp",
-        "zh": "WhatsApp"
-      },
-      "value": "+1 206 555 0188",
-      "note": {
-        "en": "Public WhatsApp line",
-        "zh": "公开 WhatsApp 联系方式"
-      }
+    "wechat": {
+      "en": "run737852",
+      "zh": "run737852"
     },
-    {
-      "type": "wechat",
-      "label": {
-        "en": "WeChat",
-        "zh": "微信"
+    "whatsapp": {
+      "nickname": {
+        "en": "Runyu",
+        "zh": "Runyu"
       },
-      "value": "alexchen_public",
-      "note": {
-        "en": "Public WeChat ID",
-        "zh": "公开微信号"
-      }
-    },
-    {
-      "type": "phone",
-      "label": {
-        "en": "Phone",
-        "zh": "电话"
-      },
-      "value": "+1 206 *** 0188",
-      "note": {
-        "en": "Masked public phone number",
-        "zh": "已遮罩的公开电话号码"
+      "phone_masked": {
+        "en": "+1 (xxx) xxx-8249",
+        "zh": "+1（xxx）xxx-8249"
       }
     }
-  ],
+  },
   "research_interests": [
     {
-      "en": "Distributed systems",
-      "zh": "分布式系统"
+      "en": "Efficient LLM",
+      "zh": "高效大语言模型"
     },
     {
-      "en": "LLM inference optimization",
-      "zh": "大语言模型推理优化"
+      "en": "Safe Agentic AI",
+      "zh": "安全的智能体式 AI"
     },
     {
-      "en": "Developer tooling",
-      "zh": "开发者工具"
+      "en": "Trustworthy AI Systems",
+      "zh": "可信 AI 系统"
+    },
+    {
+      "en": "AI Systems on Device",
+      "zh": "端侧 AI 系统"
+    },
+    {
+      "en": "AI Systems on Embedded Devices",
+      "zh": "嵌入式设备上的 AI 系统"
     }
   ],
   "skills": [
+    "PyTorch",
+    "TensorFlow",
+    "CUDA",
+    "OpenCL",
+    {
+      "en": "Machine Learning Compilation",
+      "zh": "机器学习编译"
+    },
+    {
+      "en": "Computation Graph Optimization",
+      "zh": "计算图优化"
+    },
+    {
+      "en": "GPU Kernel Optimization",
+      "zh": "GPU Kernel 优化"
+    },
+    "TVM",
     "Python",
+    "C++",
+    "C",
+    "Java",
+    "PTX",
     {
-      "en": "Go",
-      "zh": "Go 语言"
+      "en": "Assembly Language",
+      "zh": "汇编语言"
     },
-    "TypeScript",
+    "SQL",
+    "JavaScript",
+    "ONNX",
+    "TensorRT",
     {
-      "en": "Kubernetes",
-      "zh": "Kubernetes 容器编排"
+      "en": "Model Compression",
+      "zh": "模型压缩"
     },
-    "PostgreSQL",
-    "Redis"
+    {
+      "en": "GPU Runtime Optimization",
+      "zh": "GPU 运行时优化"
+    },
+    {
+      "en": "Uncertainty Estimation",
+      "zh": "不确定性估计"
+    },
+    {
+      "en": "Trustworthy AI",
+      "zh": "可信 AI"
+    },
+    {
+      "en": "LLM Deployment",
+      "zh": "大模型部署"
+    }
   ]
 }

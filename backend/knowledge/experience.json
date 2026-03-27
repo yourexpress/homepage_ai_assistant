@@ -2,22 +2,62 @@
   "positions": [
     {
       "title": {
+        "en": "Machine Learning Engineer",
+        "zh": "机器学习工程师"
+      },
+      "organization": {
+        "en": "Amiggle",
+        "zh": "Amiggle"
+      },
+      "start_year": 2025,
+      "end_year": 2026,
+      "focus": {
+        "en": "Real-time TTS inference, LLM-to-speech pipeline integration, and deployment",
+        "zh": "实时 TTS 推理、LLM 到语音链路集成与部署"
+      },
+      "description": {
+        "en": "Built and optimized a real-time GPU inference pipeline for TTS models, and was responsible for the interaction path between backend services and the LLM before LLM-generated text was converted into natural speech for end users. Also deployed the inference service in a containerized form on AWS EC2.",
+        "zh": "构建并优化了面向 TTS 模型的实时 GPU 推理流水线，并负责后端服务与 LLM 之间的交互链路，再将 LLM 生成的文本转换为终端用户可听的自然语音。同时将该推理服务以容器化形式部署在 AWS EC2 上。"
+      }
+    },
+    {
+      "title": {
+        "en": "Research Assistant",
+        "zh": "科研助理"
+      },
+      "organization": {
+        "en": "George Mason University",
+        "zh": "乔治梅森大学"
+      },
+      "start_year": 2019,
+      "end_year": 2025,
+      "focus": {
+        "en": "GPU scheduling, runtime optimization, model compression, and trustworthy AI",
+        "zh": "GPU 调度、运行时优化、模型压缩与可信 AI"
+      },
+      "description": {
+        "en": "Worked on a series of research projects in AI systems and GPU runtime optimization, including software-defined GPU scheduling, heterogeneous kernel fusion with lower memory cost, thermal- and power-aware inference control, and uncertainty-calibrated model compression. This work combined low-level systems design with open-ended research exploration and long-term toolkit thinking for future industrial and LLM-oriented applications.",
+        "zh": "参与了一系列 AI 系统与 GPU 运行时优化研究，包括软件定义 GPU 调度、低内存成本的异构 Kernel 融合、面向温度与功耗的推理控制，以及带不确定性校准的模型压缩。这些工作把底层系统设计、开放问题探索，以及面向未来工业级和 LLM 场景工具链的长期思考结合在一起。"
+      }
+    },
+    {
+      "title": {
         "en": "Software Engineer",
         "zh": "软件工程师"
       },
       "organization": {
-        "en": "A technology company",
-        "zh": "一家科技公司"
+        "en": "BizMerlin (ClayHR)",
+        "zh": "BizMerlin（ClayHR）"
       },
-      "start_year": 2020,
-      "end_year": null,
+      "start_year": 2019,
+      "end_year": 2019,
       "focus": {
-        "en": "Distributed systems and backend infrastructure",
-        "zh": "分布式系统与后端基础设施"
+        "en": "Backend API development with Java and MongoDB",
+        "zh": "基于 Java 与 MongoDB 的后端 API 开发"
       },
       "description": {
-        "en": "Building and maintaining backend services at scale, with a focus on reliability and performance.",
-        "zh": "负责构建和维护可扩展的后端服务，重点关注可靠性与性能。"
+        "en": "Implemented REST APIs with Spring Boot and Maven, tested APIs with Postman, and coordinated development through Jira and pull-request workflows.",
+        "zh": "使用 Spring Boot 与 Maven 实现 REST API，使用 Postman 进行测试，并通过 Jira 与 Pull Request 流程协同推进开发。"
       }
     }
   ]

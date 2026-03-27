@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     # LLM
     openai_api_key: str = "test-key"
     openai_model: str = "gpt-4o-mini"
+    openai_base_url: str = ""
 
     # CORS
     allowed_origins: str = "https://yourexpress.github.io"

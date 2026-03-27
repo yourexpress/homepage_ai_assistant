@@ -13,12 +13,20 @@ logger = logging.getLogger("llm_client")
 _client: AsyncOpenAI | None = None
 
 
+#def _get_client() -> AsyncOpenAI:
+#    global _client
+#    if _client is None:
+#        _client = AsyncOpenAI(api_key=settings.openai_api_key)
+#    return _client
+
 def _get_client() -> AsyncOpenAI:
     global _client
     if _client is None:
-        _client = AsyncOpenAI(api_key=settings.openai_api_key)
+        kwargs: dict = {"api_key": settings.openai_api_key}
+        if settings.openai_base_url:
+            kwargs["base_url"] = settings.openai_base_url
+        _client = AsyncOpenAI(**kwargs)
     return _client
-
 
 class LLMResponse:
     def __init__(self, text: str, prompt_tokens: int, completion_tokens: int) -> None:
