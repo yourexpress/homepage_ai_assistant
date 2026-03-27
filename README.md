@@ -1,22 +1,21 @@
 # Portfolio AI Assistant
 
-A production-minded portfolio project: an AI-powered homepage that combines
-curated bilingual site content, a grounded AI assistant, visitor comments, and
-a protected manager entrance.
+A production-minded portfolio project: a bilingual homepage with a grounded AI
+assistant, a compact visitor feedback flow, a protected manager entrance, and an
+optional private happy-mode unlock.
 
 The frontend is static and can be hosted on GitHub Pages or any static host.
 The backend is a FastAPI service designed to run in a container.
 
 ## Features
 
-- session-aware portfolio chat
+- session-aware portfolio chat with a compact, resizable desktop bubble
 - bilingual English and Chinese homepage content
-- public metrics dashboard
+- compact feedback form without a public comments feed
 - protected manager entrance for homepage editing
 - automatic EN/ZH sync when content is edited through the manager flow
-- visitor comments with stars, voting, sorting, and pagination
 - protected owner-only comments inbox
-- optional happy-personality mode using private server-side secrets
+- optional happy-personality mode unlocked from a small private-code dock
 - container deployment scaffolding
 
 ## Repository Structure
@@ -63,6 +62,7 @@ backend/
       translation_service.py
       happy_auth.py
   knowledge/
+    templates/
   data/
 ```
 
@@ -76,6 +76,10 @@ cp .env.example .env
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
+
+Create your private runtime knowledge files from the templates in
+`backend/knowledge/templates/`. The repository intentionally does not ship real
+`backend/knowledge/*.json` data.
 
 ### Frontend
 
@@ -128,10 +132,10 @@ public repository.
 used to create and verify the session-bound happy-mode token after a visitor
 unlocks that mode successfully.
 
-The homepage now reads core public profile basics such as introduction, research
-interests, education, and public contacts from the knowledge base, so the
-manager dashboard is focused on lightweight presentation copy instead of manual
-profile re-entry.
+The homepage reads profile basics such as introduction, research interests,
+education, and public contacts from the runtime knowledge files when they are
+present. The contact card prefers email, LinkedIn, and GitHub values when those
+public links are provided.
 
 ## Documentation
 
@@ -139,6 +143,7 @@ profile re-entry.
 - [System Design](docs/SYSTEM_DESIGN.md)
 - [API Design](docs/API_DESIGN.md)
 - [Knowledge System](docs/KNOWLEDGE_SYSTEM.md)
+- [Knowledge Templates Guide](docs/KNOWLEDGE_TEMPLATES.md)
 - [Safety Policy](docs/SAFETY_POLICY.md)
 - [Container Deployment](docs/CONTAINER_DEPLOYMENT.md)
 - [GitHub Pages Deployment](docs/GITHUB_PAGES_DEPLOYMENT.md)

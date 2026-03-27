@@ -13,9 +13,9 @@ wiring.
 
 ## What They Cover
 
-- homepage chat container
-- comments form and pagination controls
-- manager link in navigation
+- homepage chat container and close control
+- compact feedback card without public comment pagination
+- private-code dock entry for happy mode
 - language toggle presence
 - basic accessibility structure
 

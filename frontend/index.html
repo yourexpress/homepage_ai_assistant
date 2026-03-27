@@ -80,26 +80,31 @@
       </article>
     </section>
 
-    <section class="glass-card comments-card comments-card-wide">
-      <div class="section-head">
+    <section class="glass-card feedback-card">
+      <div class="section-head section-head-stack">
         <div>
-          <p class="section-label" id="comments-kicker">Comments</p>
-          <h2 id="section-comments-title">Visitor comments</h2>
+          <p class="section-label" id="comments-kicker">Feedback</p>
+          <h2 id="section-comments-title">Share feedback</h2>
         </div>
-        <select id="comment-sort-select" class="inline-select" aria-label="Sort comments">
-          <option value="latest" id="comment-sort-latest">Latest</option>
-          <option value="likest" id="comment-sort-likest">Most liked</option>
-        </select>
+        <p class="section-copy" id="section-comments-body">
+          Leave a short note about the site or profile presentation.
+        </p>
       </div>
 
-      <p class="section-copy" id="section-comments-body">
-        Leave feedback on the website and the presentation of the profile.
-      </p>
-
-      <form id="comment-form" class="comment-form" autocomplete="off">
-        <div class="comment-form-row">
+      <form id="comment-form" class="comment-form comment-form-compact" autocomplete="off">
+        <div class="comment-form-row comment-form-row-compact">
           <input id="comment-author" type="text" maxlength="40" placeholder="Your name (optional)" />
-          <div class="rating-grid">
+          <textarea
+            id="comment-body"
+            rows="2"
+            maxlength="1000"
+            placeholder="Share what feels strong, what feels unclear, or what would help you understand the profile better."
+            required
+          ></textarea>
+        </div>
+
+        <div class="feedback-controls">
+          <div class="rating-grid rating-grid-compact">
             <label>
               <span id="comment-website-label">Website rating</span>
               <select id="website-rating">
@@ -125,25 +130,12 @@
               </select>
             </label>
           </div>
+          <div class="feedback-actions">
+            <p class="helper-text" id="comment-form-message"></p>
+            <button type="submit" class="primary-btn" id="comment-submit-btn">Send feedback</button>
+          </div>
         </div>
-        <textarea
-          id="comment-body"
-          rows="3"
-          maxlength="1000"
-          placeholder="Share what feels strong, what feels unclear, or what would help you understand the profile better."
-          required
-        ></textarea>
-        <button type="submit" class="primary-btn" id="comment-submit-btn">Post comment</button>
-        <p class="helper-text" id="comment-form-message"></p>
       </form>
-
-      <div id="comments-list" class="comments-list"></div>
-
-      <div class="pager">
-        <button type="button" class="ghost-btn" id="comments-prev-btn">Previous</button>
-        <span id="comments-page-label">Page 1</span>
-        <button type="button" class="ghost-btn" id="comments-next-btn">Next</button>
-      </div>
     </section>
   </main>
 
@@ -158,37 +150,18 @@
     Private
   </button>
 
-  <aside class="happy-widget" id="happy-widget" hidden>
-    <div class="happy-widget-head">
-      <div>
-        <p class="section-label" id="happy-label">Private entrance</p>
-        <h3 id="happy-title">Unlock happy personality</h3>
-      </div>
-      <div class="happy-widget-actions">
-        <span class="happy-badge" id="happy-status">Locked</span>
-        <button type="button" class="ghost-btn" id="happy-deactivate-btn" hidden>Turn off</button>
-        <button type="button" class="ghost-btn chat-close-btn" id="happy-close-btn">Close</button>
-      </div>
-    </div>
-
-    <form id="happy-code-form" class="inline-form">
+  <aside class="happy-dock" id="happy-dock" hidden>
+    <form id="happy-code-form" class="happy-code-form" autocomplete="off">
       <input
         id="happy-code-input"
         type="password"
-        placeholder="Enter special code"
+        placeholder="Enter happy code"
         autocomplete="off"
       />
-      <button type="submit" class="primary-btn" id="happy-code-submit">Check code</button>
+      <button type="submit" class="primary-btn" id="happy-code-submit">Unlock</button>
     </form>
-
-    <form id="happy-answer-form" class="stacked-form" hidden>
-      <label for="happy-answer-input" id="happy-question-text">Question</label>
-      <textarea id="happy-answer-input" rows="2" placeholder="Answer here"></textarea>
-      <button type="submit" class="primary-btn" id="happy-answer-submit">Unlock</button>
-    </form>
-
-    <p class="helper-text" id="happy-message">
-      This mode only unlocks for a private visitor after the correct code and answer are provided.
+    <p class="helper-text" id="happy-code-message">
+      Enter the private code here. The question will continue inside the chat bubble.
     </p>
   </aside>
 
@@ -205,13 +178,16 @@
   <aside class="chat-widget" id="chat-widget" hidden>
     <div class="chat-resize-handle" id="chat-resize-handle" aria-hidden="true"></div>
     <div class="chat-widget-head">
-      <div>
+      <div class="chat-head-copy">
         <p class="section-label" id="chat-widget-label">AI Chat</p>
-        <h2 id="chat-widget-title">Ask the assistant</h2>
+        <div class="chat-title-row">
+          <h2 id="chat-widget-title">Ask the assistant</h2>
+          <span class="chat-mode-chip" id="chat-mode-chip" hidden>Happy mode</span>
+        </div>
       </div>
       <div class="chat-widget-actions">
-        <button type="button" class="ghost-btn" id="chat-clear-btn">Clear session</button>
-        <button type="button" class="ghost-btn chat-close-btn" id="chat-close-btn">Close</button>
+        <button type="button" class="ghost-btn chat-head-btn" id="chat-clear-btn">Clear session</button>
+        <button type="button" class="ghost-btn chat-head-btn chat-close-btn" id="chat-close-btn">Close</button>
       </div>
     </div>
 
@@ -220,7 +196,7 @@
     <form id="chat-form" autocomplete="off" novalidate>
       <textarea
         id="chat-input"
-        rows="3"
+        rows="2"
         maxlength="1000"
         placeholder="Ask about projects, research, experience, or fit."
         aria-label="Your message"

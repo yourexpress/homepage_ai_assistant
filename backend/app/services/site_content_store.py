@@ -34,9 +34,9 @@ _DEFAULT_CONTENT: dict[str, Any] = {
     "hero_panel_body": {
         "en": (
             "This is the current public homepage of Runyu Ma, with AI-assisted "
-            "exploration, metrics, and visitor feedback."
+            "exploration, metrics, and a compact feedback flow."
         ),
-        "zh": "这里是 Runyu Ma 当前的公开主页，包含 AI 助手、指标面板与访客反馈。",
+        "zh": "这里是 Runyu Ma 当前的公开主页，包含 AI 助手、指标面板与简洁反馈入口。",
     },
     "section_chat_title": {
         "en": "Ask the assistant",
@@ -50,12 +50,12 @@ _DEFAULT_CONTENT: dict[str, Any] = {
         "zh": "助手会基于已批准的公开知识回答，并记住当前聊天会话中的上下文。",
     },
     "section_comments_title": {
-        "en": "Visitor comments",
-        "zh": "访客留言",
+        "en": "Share feedback",
+        "zh": "留下反馈",
     },
     "section_comments_body": {
-        "en": "Leave feedback on the website look and resume presentation.",
-        "zh": "欢迎对网站外观和简历展示留下反馈。",
+        "en": "Leave a short note about the site or profile presentation.",
+        "zh": "欢迎对网站或个人资料展示方式留下简短反馈。",
     },
     "about_title": {
         "en": "Brief introduction",
@@ -172,19 +172,8 @@ _DEFAULT_CONTENT: dict[str, Any] = {
         },
         {
             "label": {
-                "en": "GitHub (rym-rym)",
-                "zh": "GitHub（rym-rym）",
-            },
-            "value": {
-                "en": "github.com/rym-rym",
-                "zh": "github.com/rym-rym",
-            },
-            "href": "https://github.com/rym-rym",
-        },
-        {
-            "label": {
-                "en": "GitHub (yourexpress)",
-                "zh": "GitHub（yourexpress）",
+                "en": "GitHub",
+                "zh": "GitHub",
             },
             "value": {
                 "en": "github.com/yourexpress",
@@ -220,8 +209,8 @@ _DEFAULT_CONTENT: dict[str, Any] = {
                 "zh": "舒适探索",
             },
             "body": {
-                "en": "Visitors can browse, chat, and leave comments without a complicated interface.",
-                "zh": "访客可以轻松浏览、聊天和留言，而不需要面对复杂界面。",
+                "en": "Visitors can browse, chat, and leave feedback without a crowded interface.",
+                "zh": "访客可以轻松浏览、聊天和反馈，而不需要面对复杂界面。",
             },
         },
     ],

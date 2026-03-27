@@ -201,6 +201,9 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Private runtime knowledge files
+backend/knowledge/*.json
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

@@ -1,4 +1,4 @@
-"""Public site-content and visitor comments helpers."""
+"""Public site-content and homepage data helpers."""
 
 from __future__ import annotations
 

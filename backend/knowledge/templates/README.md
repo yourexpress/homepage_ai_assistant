@@ -1,9 +1,18 @@
 # Knowledge File Templates
 
-This directory contains template JSON files for the five knowledge files that
-power the AI portfolio assistant.
+This directory contains the template JSON files for the five knowledge files
+that power the AI portfolio assistant at runtime.
 
-The templates are now organized around a bilingual-friendly text shape:
+The templates are repository-safe starting points. Your completed files should
+be filled in with your own public information and then stored privately as
+runtime data, not committed back into the repo.
+
+## Text Shape
+
+Visitor-facing text may use either:
+
+- a plain string, for backward compatibility
+- a localized object with `en` and/or `zh`
 
 ```json
 {
@@ -12,61 +21,17 @@ The templates are now organized around a bilingual-friendly text shape:
 }
 ```
 
-Every field that represents visitor-facing text may use either:
+The recommended format is bilingual so the assistant can answer naturally in
+both English and Chinese.
 
-- A plain string, for backward compatibility.
-- A localized object with `en` and/or `zh`.
+## Recommended Workflow
 
-The recommended template format is bilingual so the knowledge base can answer
-in both English and Chinese.
-
----
-
-## Quick Start
-
-1. Copy the template you need from this directory.
-2. Fill in the English and Chinese placeholders with your public information.
-3. Validate the files with `backend/scripts/validate_knowledge.py`.
-4. Upload the completed files to `backend/knowledge/`.
-5. Rebuild the backend image or redeploy the service.
-
----
-
-## Text Rules
-
-Use localized objects for narrative fields such as:
-
-- `name`
-- `headline`
-- `degree`
-- `institution`
-- `location_public`
-- `title`
-- `organization`
-- `focus`
-- `description`
-- `project.name`
-- `project.description`
-- `publication.title`
-- `publication.venue`
-- `faq.question`
-- `faq.answer`
-
-Lists such as `skills`, `research_interests`, and `technologies` may contain:
-
-- Plain strings
-- Localized objects
-
-Example:
-
-```json
-"skills": [
-  "Python",
-  { "en": "Distributed systems", "zh": "分布式系统" }
-]
-```
-
----
+1. Copy the template files out of this directory.
+2. Fill in your public information in English and Chinese.
+3. Validate the completed files with `backend/scripts/validate_knowledge.py`.
+4. Place the completed files into private runtime storage such as
+   `backend/knowledge/` locally or `/app/knowledge/` in deployment.
+5. Keep the completed files out of version control.
 
 ## File Schemas
 
@@ -79,13 +44,13 @@ Required fields:
 - `name`: localized text or string
 - `headline`: localized text or string
 - `education`: array
-- `skills`: array of string/localized text
+- `skills`: array of string or localized text
 
 Optional fields:
 
 - `location_public`: localized text or string
 - `links`: object of label -> URL
-- `research_interests`: array of string/localized text
+- `research_interests`: array of string or localized text
 - `public_contacts`: array of approved public contact entries
 
 Education entry fields:
@@ -96,10 +61,13 @@ Education entry fields:
 
 Public contact entry fields:
 
-- `type`: string such as `email`, `whatsapp`, `wechat`, or `phone`
+- `type`: string such as `email`, `linkedin`, `github`, `whatsapp`, `wechat`, or `phone`
 - `label`: localized text or string shown to the visitor
 - `value`: string value to share publicly
 - `note`: optional localized text or string
+
+The homepage contact card prefers public `email`, `linkedin`, and `github`
+values when they are available.
 
 ### `experience_template.json` -> `experience.json`
 
@@ -127,7 +95,7 @@ Project entry fields:
 - `name`: localized text or string
 - `description`: localized text or string
 - `url`: string
-- `technologies`: array of string/localized text
+- `technologies`: array of string or localized text
 - `status`: string such as `active`, `completed`, or `archived`
 
 ### `publications_template.json` -> `publications.json`
@@ -154,51 +122,27 @@ FAQ entry fields:
 - `question`: localized text or string
 - `answer`: localized text or string
 
----
-
 ## Privacy Rules
 
 Never put the following information in these files:
 
-- Home or mailing address
-- Personal phone number
-- Personal email address
-- Salary or compensation details
-- Private information about other people
+- home or mailing address
+- personal phone number
+- salary or compensation details
+- private information about other people
+- secrets used for happy mode or admin access
 
-Public professional links such as GitHub, portfolio, LinkedIn, or a public
-contact form are okay.
-
----
+Public professional links such as GitHub, portfolio, and LinkedIn are okay.
 
 ## Validation
 
-Validate one or more files before deployment:
+Validate one or more completed files before deployment:
 
 ```bash
 python backend/scripts/validate_knowledge.py \
-  backend/knowledge/profile.json \
-  backend/knowledge/experience.json \
-  backend/knowledge/projects.json \
-  backend/knowledge/publications.json \
-  backend/knowledge/faq.json
+  my-knowledge/profile.json \
+  my-knowledge/experience.json \
+  my-knowledge/projects.json \
+  my-knowledge/publications.json \
+  my-knowledge/faq.json
 ```
-
-The validator checks:
-
-- JSON syntax
-- Top-level object structure
-- Required keys
-- Nested entry schemas
-- Localized `en`/`zh` objects
-- Common private-data patterns
-
----
-
-## Recommended Workflow
-
-1. Start from the template files in this directory.
-2. Fill in both English and Chinese wherever a visitor might read the text.
-3. Keep URLs and status values language-neutral.
-4. Run the validator.
-5. Copy the completed files into `backend/knowledge/`.

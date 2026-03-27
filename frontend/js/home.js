@@ -12,31 +12,18 @@
       heroLinkExperience: "Experience and projects",
       heroLinkPublications: "Publications",
       educationTitle: "Education background",
-      commentsKicker: "Comments",
-      commentsTitle: "Visitor comments",
-      commentsBody: "Leave feedback on the website and the presentation of the profile.",
-      sortLatest: "Latest",
-      sortLikest: "Most liked",
+      commentsKicker: "Feedback",
+      commentsTitle: "Share feedback",
+      commentsBody: "Leave a short note about the site or profile presentation.",
       commentAuthorPlaceholder: "Your name (optional)",
       websiteRatingLabel: "Website rating",
       resumeRatingLabel: "Resume rating",
       optionalRating: "Optional",
       commentBodyPlaceholder:
         "Share what feels strong, what feels unclear, or what would help you understand the profile better.",
-      postComment: "Post comment",
-      loadingComments: "Loading comments...",
-      noComments: "No comments yet. Be the first to leave one.",
-      commentsUnavailable: "Comments are unavailable right now.",
-      pageLabel: "Page {page} of {total}",
-      previous: "Previous",
-      next: "Next",
-      score: "Score",
-      websiteShort: "Website",
-      resumeShort: "Resume",
-      thumbsUp: "Thumbs up",
-      thumbsDown: "Thumbs down",
-      commentPosted: "Comment posted.",
-      unableToPost: "Unable to post comment right now.",
+      postComment: "Send feedback",
+      commentPosted: "Feedback sent.",
+      unableToPost: "Unable to send feedback right now.",
       noEducation: "Education details will appear here when available.",
     },
     zh: {
@@ -47,30 +34,17 @@
       heroLinkExperience: "经历与项目",
       heroLinkPublications: "论文发表",
       educationTitle: "教育背景",
-      commentsKicker: "留言",
-      commentsTitle: "访客留言",
-      commentsBody: "欢迎对网站和个人资料展示方式留下反馈。",
-      sortLatest: "最新",
-      sortLikest: "最受欢迎",
+      commentsKicker: "反馈",
+      commentsTitle: "留下反馈",
+      commentsBody: "欢迎对网站或个人资料展示方式留下简短反馈。",
       commentAuthorPlaceholder: "你的名字（可选）",
       websiteRatingLabel: "网站评分",
       resumeRatingLabel: "简历评分",
       optionalRating: "可选",
       commentBodyPlaceholder: "欢迎分享你觉得清晰或需要改进的地方。",
-      postComment: "提交留言",
-      loadingComments: "正在加载留言…",
-      noComments: "还没有留言，欢迎成为第一位留言者。",
-      commentsUnavailable: "当前无法加载留言。",
-      pageLabel: "第 {page} / {total} 页",
-      previous: "上一页",
-      next: "下一页",
-      score: "得分",
-      websiteShort: "网站",
-      resumeShort: "简历",
-      thumbsUp: "赞同",
-      thumbsDown: "不赞同",
-      commentPosted: "留言已提交。",
-      unableToPost: "暂时无法提交留言。",
+      postComment: "发送反馈",
+      commentPosted: "反馈已发送。",
+      unableToPost: "暂时无法发送反馈。",
       noEducation: "教育背景信息将在可用时显示。",
     },
   };
@@ -116,12 +90,10 @@
   const educationList = document.getElementById("education-list");
   const contactTitle = document.getElementById("contact-title");
   const contactList = document.getElementById("contact-list");
+  const feedbackCard = document.querySelector(".feedback-card");
   const commentsKicker = document.getElementById("comments-kicker");
   const sectionCommentsTitle = document.getElementById("section-comments-title");
   const sectionCommentsBody = document.getElementById("section-comments-body");
-  const commentSortSelect = document.getElementById("comment-sort-select");
-  const sortLatestOption = document.getElementById("comment-sort-latest");
-  const sortLikestOption = document.getElementById("comment-sort-likest");
   const commentAuthor = document.getElementById("comment-author");
   const websiteRatingLabel = document.getElementById("comment-website-label");
   const resumeRatingLabel = document.getElementById("comment-resume-label");
@@ -129,10 +101,6 @@
   const optionalResumeOption = document.getElementById("comment-rating-optional-resume");
   const commentBody = document.getElementById("comment-body");
   const commentSubmitBtn = document.getElementById("comment-submit-btn");
-  const commentsList = document.getElementById("comments-list");
-  const commentsPrevBtn = document.getElementById("comments-prev-btn");
-  const commentsNextBtn = document.getElementById("comments-next-btn");
-  const commentsPageLabel = document.getElementById("comments-page-label");
   const commentForm = document.getElementById("comment-form");
   const commentFormMessage = document.getElementById("comment-form-message");
   const localeButtons = Array.from(document.querySelectorAll(".lang-btn"));
@@ -154,7 +122,6 @@
     happy_mode_enabled: false,
     comments_enabled: true,
   };
-  let commentPage = 1;
 
   function currentLocale() {
     return getLocale();
@@ -184,15 +151,6 @@
     localeButtons.forEach((button) => {
       button.classList.toggle("is-active", button.dataset.locale === locale);
     });
-  }
-
-  function ratingStars(value) {
-    return `${value}/5`;
-  }
-
-  function formatDate(value) {
-    const date = new Date(value);
-    return date.toLocaleString(currentLocale() === "zh" ? "zh-CN" : "en-US");
   }
 
   function renderParagraphs(target, items) {
@@ -304,41 +262,91 @@
     });
   }
 
-  function buildContactItems() {
-    const profile = portfolioData.profile || {};
+  function makeContactItem(label, value, href) {
+    return {
+      label,
+      value,
+      href,
+    };
+  }
+
+  function normalizeProfileContacts(profile) {
     const contacts = Array.isArray(profile.public_contacts) ? profile.public_contacts : [];
     const links = profile.links && typeof profile.links === "object" ? profile.links : {};
+    const selected = {
+      email: null,
+      linkedin: null,
+      github: null,
+    };
 
-    const contactItems = contacts.map((item) => {
-      const value = typeof item.value === "string" ? item.value : "";
-      let href = "";
-      if (/^https?:/i.test(value) || /^mailto:/i.test(value)) {
-        href = value;
-      } else if (item.type === "email" && value) {
-        href = `mailto:${value}`;
+    contacts.forEach((item) => {
+      if (!item || typeof item !== "object") {
+        return;
       }
-      return {
-        label: item.label || { en: item.type || "Contact", zh: item.type || "联系方式" },
-        value,
-        href,
-      };
+      const type = String(item.type || "").toLowerCase();
+      const value = typeof item.value === "string" ? item.value : "";
+      if (!value) {
+        return;
+      }
+      if (type === "email" && !selected.email) {
+        selected.email = makeContactItem(item.label || { en: "Email", zh: "邮箱" }, value, `mailto:${value}`);
+      }
+      if (type === "linkedin" && !selected.linkedin) {
+        selected.linkedin = makeContactItem(item.label || { en: "LinkedIn", zh: "LinkedIn" }, value, value);
+      }
+      if (type === "github" && !selected.github) {
+        selected.github = makeContactItem(item.label || { en: "GitHub", zh: "GitHub" }, value, value);
+      }
     });
 
-    Object.entries(links).forEach(([label, href]) => {
+    Object.entries(links).forEach(([key, href]) => {
       if (typeof href !== "string" || !href) {
         return;
       }
-      contactItems.push({
-        label: {
-          en: label.charAt(0).toUpperCase() + label.slice(1),
-          zh: label.charAt(0).toUpperCase() + label.slice(1),
-        },
-        value: href,
-        href,
-      });
+      const normalizedKey = key.toLowerCase();
+      if (!selected.linkedin && normalizedKey.includes("linkedin")) {
+        selected.linkedin = makeContactItem({ en: "LinkedIn", zh: "LinkedIn" }, href, href);
+      }
+      if (!selected.github && normalizedKey.includes("github")) {
+        selected.github = makeContactItem({ en: "GitHub", zh: "GitHub" }, href, href);
+      }
     });
 
-    return contactItems.length ? contactItems : siteContent.contact_items || [];
+    return selected;
+  }
+
+  function classifyFallbackContact(item) {
+    const href = String(item.href || "");
+    const label = localize(item.label, "en").toLowerCase();
+    if (href.startsWith("mailto:")) {
+      return "email";
+    }
+    if (href.includes("linkedin.com") || label.includes("linkedin")) {
+      return "linkedin";
+    }
+    if (href.includes("github.com") || label.includes("github")) {
+      return "github";
+    }
+    return "";
+  }
+
+  function buildContactItems() {
+    const profile = portfolioData.profile || {};
+    const selected = normalizeProfileContacts(profile);
+    const fallbackItems = Array.isArray(siteContent.contact_items) ? siteContent.contact_items : [];
+
+    fallbackItems.forEach((item) => {
+      const kind = classifyFallbackContact(item);
+      if (kind && !selected[kind]) {
+        selected[kind] = {
+          label: item.label,
+          value: item.value,
+          href: item.href,
+        };
+      }
+    });
+
+    return [selected.email, selected.linkedin, selected.github].filter(Boolean);
   }
 
   function isExternalLink(href) {
@@ -382,15 +390,11 @@
     setText(commentsKicker, t("commentsKicker"));
     setText(sectionCommentsTitle, t("commentsTitle"));
     setText(sectionCommentsBody, t("commentsBody"));
-    setText(sortLatestOption, t("sortLatest"));
-    setText(sortLikestOption, t("sortLikest"));
     setText(websiteRatingLabel, t("websiteRatingLabel"));
     setText(resumeRatingLabel, t("resumeRatingLabel"));
     setText(optionalWebsiteOption, t("optionalRating"));
     setText(optionalResumeOption, t("optionalRating"));
     setText(commentSubmitBtn, t("postComment"));
-    setText(commentsPrevBtn, t("previous"));
-    setText(commentsNextBtn, t("next"));
 
     commentAuthor.placeholder = t("commentAuthorPlaceholder");
     commentBody.placeholder = t("commentBodyPlaceholder");
@@ -419,6 +423,10 @@
     renderStaticUi();
     setLangButtons();
 
+    if (feedbackCard) {
+      feedbackCard.hidden = capabilities.comments_enabled === false;
+    }
+
     document.dispatchEvent(
       new CustomEvent("portfolio:content-ready", {
         detail: {
@@ -428,95 +436,6 @@
         },
       }),
     );
-  }
-
-  function renderComment(comment) {
-    const article = document.createElement("article");
-    article.className = "comment-card";
-
-    const meta = document.createElement("div");
-    meta.className = "comment-meta";
-
-    const leftMeta = document.createElement("div");
-    const author = document.createElement("div");
-    author.className = "comment-author";
-    author.textContent = comment.author;
-    const time = document.createElement("div");
-    time.className = "comment-time";
-    time.textContent = formatDate(comment.created_at);
-    leftMeta.appendChild(author);
-    leftMeta.appendChild(time);
-
-    const score = document.createElement("div");
-    score.className = "comment-score";
-    score.textContent = `${t("score")}: ${comment.score}`;
-
-    meta.appendChild(leftMeta);
-    meta.appendChild(score);
-
-    const ratings = document.createElement("div");
-    ratings.className = "comment-ratings";
-    if (comment.website_rating !== null && comment.website_rating !== undefined) {
-      const website = document.createElement("span");
-      website.textContent = `${t("websiteShort")} ${ratingStars(comment.website_rating)}`;
-      ratings.appendChild(website);
-    }
-    if (comment.resume_rating !== null && comment.resume_rating !== undefined) {
-      const resume = document.createElement("span");
-      resume.textContent = `${t("resumeShort")} ${ratingStars(comment.resume_rating)}`;
-      ratings.appendChild(resume);
-    }
-
-    const body = document.createElement("p");
-    body.textContent = comment.body;
-
-    const votes = document.createElement("div");
-    votes.className = "comment-votes";
-    votes.innerHTML = `
-      <button type="button" class="vote-btn" data-id="${comment.id}" data-direction="up">${t("thumbsUp")} (${comment.upvotes})</button>
-      <button type="button" class="vote-btn" data-id="${comment.id}" data-direction="down">${t("thumbsDown")} (${comment.downvotes})</button>
-    `;
-
-    article.appendChild(meta);
-    if (ratings.childNodes.length) {
-      article.appendChild(ratings);
-    }
-    article.appendChild(body);
-    article.appendChild(votes);
-    return article;
-  }
-
-  async function fetchComments() {
-    const params = new URLSearchParams({
-      sort: commentSortSelect.value,
-      page: String(commentPage),
-    });
-    const response = await fetch(`${BACKEND_URL}/api/comments?${params.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch comments (${response.status})`);
-    }
-    return response.json();
-  }
-
-  async function renderComments() {
-    commentsList.innerHTML = `<p class="helper-text">${t("loadingComments")}</p>`;
-    try {
-      const data = await fetchComments();
-      commentsList.innerHTML = "";
-      if (!data.items.length) {
-        commentsList.innerHTML = `<p class="helper-text">${t("noComments")}</p>`;
-      } else {
-        data.items.forEach((comment) => commentsList.appendChild(renderComment(comment)));
-      }
-      commentsPageLabel.textContent = t("pageLabel")
-        .replace("{page}", String(data.page))
-        .replace("{total}", String(data.total_pages));
-      commentsPrevBtn.disabled = data.page <= 1;
-      commentsNextBtn.disabled = data.page >= data.total_pages;
-    } catch (error) {
-      commentsList.innerHTML = `<p class="helper-text">${t("commentsUnavailable")}</p>`;
-      console.error(error);
-    }
   }
 
   async function loadContent() {
@@ -553,7 +472,6 @@
     }
 
     renderContent();
-    renderComments();
   }
 
   function parseOptionalRating(selectId) {
@@ -584,24 +502,9 @@
       }
       commentForm.reset();
       commentFormMessage.textContent = t("commentPosted");
-      commentPage = 1;
-      renderComments();
     } catch (error) {
       console.error(error);
       commentFormMessage.textContent = t("unableToPost");
-    }
-  }
-
-  async function voteOnComment(commentId, direction) {
-    try {
-      await fetch(`${BACKEND_URL}/api/comments/${commentId}/vote`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ direction }),
-      });
-      renderComments();
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -609,32 +512,8 @@
     button.addEventListener("click", () => {
       setLocale(button.dataset.locale);
       renderContent();
-      renderComments();
       document.dispatchEvent(new CustomEvent("portfolio:locale-changed"));
     });
-  });
-
-  commentSortSelect.addEventListener("change", () => {
-    commentPage = 1;
-    renderComments();
-  });
-
-  commentsPrevBtn.addEventListener("click", () => {
-    commentPage = Math.max(1, commentPage - 1);
-    renderComments();
-  });
-
-  commentsNextBtn.addEventListener("click", () => {
-    commentPage += 1;
-    renderComments();
-  });
-
-  commentsList.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.matches(".vote-btn")) {
-      return;
-    }
-    voteOnComment(target.dataset.id, target.dataset.direction);
   });
 
   commentForm.addEventListener("submit", submitComment);
@@ -642,6 +521,5 @@
   loadPageData().catch((error) => {
     console.error(error);
     renderContent();
-    renderComments();
   });
 })();
