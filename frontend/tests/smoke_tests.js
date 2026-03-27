@@ -33,11 +33,15 @@ frame.addEventListener("load", () => {
   assert(doc.getElementById("chat-toggle") !== null, "index.html includes a floating chat toggle button");
   assert(doc.getElementById("chat-widget") !== null, "index.html includes a floating chat widget");
   assert(doc.getElementById("chat-clear-btn") !== null, "index.html includes a clear-session control");
+  assert(doc.getElementById("chat-close-btn") !== null, "index.html includes a close control for the chat bubble");
   assert(doc.getElementById("chat-resize-handle") !== null, "index.html includes a custom chat resize handle");
+  assert(doc.getElementById("chat-mode-chip") !== null, "index.html includes a mode chip inside the chat header");
   assert(doc.getElementById("happy-toggle") !== null, "index.html includes a separate private entrance toggle");
-  assert(doc.getElementById("happy-widget") !== null, "index.html includes a separate private entrance panel");
-  assert(doc.getElementById("happy-deactivate-btn") !== null, "index.html includes a happy-mode deactivate button");
-  assert(doc.getElementById("comment-form") !== null, "index.html includes a comment form");
+  assert(doc.getElementById("happy-dock") !== null, "index.html includes a compact private entrance dock");
+  assert(doc.getElementById("comment-form") !== null, "index.html includes a compact feedback form");
+  assert(doc.querySelector(".feedback-card") !== null, "index.html includes the compact feedback card layout");
+  assert(doc.getElementById("comments-list") === null, "index.html no longer renders a public comments list");
+  assert(doc.getElementById("comments-prev-btn") === null, "index.html no longer renders public comment pagination controls");
 
   const websiteRating = doc.getElementById("website-rating");
   const resumeRating = doc.getElementById("resume-rating");
