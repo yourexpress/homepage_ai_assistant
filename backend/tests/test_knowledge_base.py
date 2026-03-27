@@ -123,15 +123,17 @@ class TestRenderProfile:
     def test_includes_name(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
-        assert "Alex Chen" in rendered
+        assert "Runyu Ma" in rendered
 
     def test_includes_education(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
-        assert "University of Washington" in rendered
+        assert "George Mason University" in rendered
 
     def test_includes_skills(self):
-        data = knowledge_base._load_json("profile.json")
+        # Test the renderer with inline data so the test is independent of
+        # whether skills happen to be populated in the live knowledge file.
+        data = {"skills": ["Python", "Machine Learning"]}
         rendered = knowledge_base._render_profile(data)
         assert "Python" in rendered
 
@@ -141,9 +143,14 @@ class TestRenderProfile:
 
 class TestRenderExperience:
     def test_includes_position(self):
-        data = knowledge_base._load_json("experience.json")
+        # Test the renderer with inline data so the test is independent of
+        # whether positions happen to be populated in the live knowledge file.
+        data = {"positions": [
+            {"title": "Research Engineer", "organization": "George Mason University",
+             "start_year": 2024, "end_year": None, "focus": "AI research"}
+        ]}
         rendered = knowledge_base._render_experience(data)
-        assert "Software Engineer" in rendered
+        assert "Research Engineer" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_experience({}) == ""

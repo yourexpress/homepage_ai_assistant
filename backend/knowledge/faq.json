@@ -1,20 +1,28 @@
 {
   "entries": [
     {
-      "question": "What does Alex do?",
-      "answer": "Alex is a Software Engineer focusing on distributed systems and backend infrastructure."
+      "question": "Who is Runyu Ma?",
+      "answer": "Runyu Ma is a researcher and engineer specializing in AI inference optimization, machine learning, LLM deployment, and trustworthy AI. He is currently pursuing a Master of Science in Computer Science at George Mason University (2024–2025). / 马润宇是一位专注于AI推理优化、机器学习、大语言模型部署及安全可信AI领域的学者与工程师。他目前就读于乔治梅森大学计算机科学硕士项目（2024–2025年）。"
     },
     {
-      "question": "Where did Alex study?",
-      "answer": "Alex earned a Bachelor of Science in Computer Science from the University of Washington in 2020."
+      "question": "Where did Runyu Ma study?",
+      "answer": "Runyu Ma is pursuing a Master of Science in Computer Science at George Mason University (January 2024 – December 2025). / 马润宇目前就读于乔治梅森大学计算机科学硕士项目（2024年1月至2025年12月）。"
     },
     {
-      "question": "What are Alex's key skills?",
-      "answer": "Alex works with Python, Go, TypeScript, Kubernetes, PostgreSQL, and Redis."
+      "question": "Where is Runyu Ma located?",
+      "answer": "Runyu Ma is based in Fairfax, VA, U.S.A. / 马润宇目前居住在美国弗吉尼亚州费尔法克斯县。"
     },
     {
-      "question": "What are Alex's research interests?",
-      "answer": "Distributed systems, LLM inference optimization, and developer tooling."
+      "question": "What are Runyu Ma's professional interests?",
+      "answer": "Runyu Ma's professional focus includes AI inference engineering, machine learning engineering, LLM deployment, and trustworthy/safe AI research. / 马润宇的专业方向包括AI推理优化工程、机器学习工程、大语言模型部署以及安全与可信赖AI研究。"
+    },
+    {
+      "question": "What is this assistant?",
+      "answer": "This is an AI-powered bilingual portfolio assistant for Runyu Ma. It answers questions about Runyu's background, education, projects, and professional interests based on approved public information. / 这是马润宇的AI驱动双语个人作品集助手，能够根据经过审核的公开信息回答关于马润宇的背景、教育经历、项目和职业兴趣等问题。"
+    },
+    {
+      "question": "What languages does this assistant support?",
+      "answer": "This assistant supports both English and Chinese (中文), and responds bilingually when appropriate. / 本助手同时支持英文和中文，在适当情况下会以双语方式进行回复。"
     }
   ]
 }

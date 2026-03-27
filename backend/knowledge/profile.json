@@ -1,29 +1,26 @@
 {
-  "name": "Alex Chen",
-  "headline": "Software Engineer — Distributed Systems & Backend Infrastructure",
+  "name": "Runyu Ma",
+  "headline": {
+    "en": "Researcher, AI Inference Engineer, Machine Learning Engineer, LLM Deployment Engineer, Trustworthy-AI Engineer, Master of Science in Computer Science",
+    "zh": "学者，研究者，AI推理优化工程师，机器学习工程师，安全与可信赖AI工程师，大语言模型工程师，计算机科学硕士"
+  },
   "education": [
     {
-      "degree": "Bachelor of Science in Computer Science",
-      "institution": "University of Washington",
-      "year": 2020
+      "degree": "Master of Science in Computer Science",
+      "institution": "George Mason University",
+      "start_year": 2024,
+      "end_year": 2025,
+      "year": 2025
     }
   ],
-  "location_public": "Seattle, WA area",
-  "links": {
-    "github": "https://github.com/yourexpress",
-    "portfolio": "https://yourexpress.github.io"
+  "location_public": {
+    "en": "Fairfax, VA, U.S.A.",
+    "zh": "美国弗吉尼亚州费尔法克斯县"
   },
-  "research_interests": [
-    "Distributed systems",
-    "LLM inference optimization",
-    "Developer tooling"
-  ],
-  "skills": [
-    "Python",
-    "Go",
-    "TypeScript",
-    "Kubernetes",
-    "PostgreSQL",
-    "Redis"
-  ]
+  "links": {
+    "github": "https://github.com/rym-rym",
+    "portfolio": "https://rym-rym.github.io"
+  },
+  "research_interests": [],
+  "skills": []
 }
