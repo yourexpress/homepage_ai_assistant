@@ -111,6 +111,14 @@ localized objects such as:
     "github": "string - URL",
     "portfolio": "string - URL"
   },
+  "public_contacts": [
+    {
+      "type": "string",
+      "label": "string | localized object",
+      "value": "string",
+      "note": "string | localized object"
+    }
+  ],
   "research_interests": ["string | localized object"],
   "skills": ["string | localized object"]
 }

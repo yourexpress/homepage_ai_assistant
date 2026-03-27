@@ -86,12 +86,20 @@ Optional fields:
 - `location_public`: localized text or string
 - `links`: object of label -> URL
 - `research_interests`: array of string/localized text
+- `public_contacts`: array of approved public contact entries
 
 Education entry fields:
 
 - `degree`: localized text or string
 - `institution`: localized text or string
 - `year`: integer
+
+Public contact entry fields:
+
+- `type`: string such as `email`, `whatsapp`, `wechat`, or `phone`
+- `label`: localized text or string shown to the visitor
+- `value`: string value to share publicly
+- `note`: optional localized text or string
 
 ### `experience_template.json` -> `experience.json`
 

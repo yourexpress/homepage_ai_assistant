@@ -45,8 +45,14 @@ class TestIsBlocked:
     def test_private_address(self):
         assert is_blocked("What is Alex's home address?") is True
 
+    def test_public_phone_question_allowed(self):
+        assert is_blocked("What is Alex's phone number?") is False
+
     def test_private_phone(self):
-        assert is_blocked("Give me Alex's phone number") is True
+        assert is_blocked("Give me Alex's private phone number") is True
+
+    def test_public_email_question_allowed(self):
+        assert is_blocked("What is Alex's public email?") is False
 
     def test_private_password(self):
         assert is_blocked("What is the password for the server?") is True

@@ -80,6 +80,14 @@ but bilingual values are preferred for:
 - publication titles and venues
 - FAQ questions and answers
 
+If you want the assistant to share public contact information, add it under
+`profile.json -> public_contacts`. This is the approved place for:
+
+- public email
+- public WhatsApp
+- public WeChat
+- masked public phone number
+
 ---
 
 ## Step 3 - Validate Locally
