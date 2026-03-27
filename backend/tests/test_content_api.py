@@ -21,3 +21,13 @@ class TestContentApi:
         assert content["tools_items"][0]["href"] == "metrics.html"
         assert content["contact_items"][0]["href"] == "mailto:rma5@gmu.edu"
         assert data["capabilities"]["session_history_enabled"] is True
+
+    async def test_portfolio_endpoint_returns_public_sections(self, client):
+        response = await client.get("/api/portfolio")
+        assert response.status_code == 200
+
+        data = response.json()
+        assert "profile" in data
+        assert "experience" in data
+        assert "projects" in data
+        assert "publications" in data

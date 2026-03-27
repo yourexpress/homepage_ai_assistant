@@ -71,10 +71,12 @@ Optional IPv6 `AAAA` records:
 
 ## 4. Keep the backend reachable from the frontend
 
-`frontend/js/app-config.js` already uses:
+`frontend/js/app-config.js` now resolves the backend in this order:
 
+- the optional `meta[name="portfolio-backend-url"]` override in the page
+- the optional `window.PORTFOLIO_CONFIG.BACKEND_URL` runtime override
 - `http://localhost:8000` for local development
-- `https://api.runyuma.uk` for non-localhost deployments
+- `https://api.runyuma.uk` for `runyuma.uk`, `www.runyuma.uk`, and `github.io` deployments
 
 That means the frontend can move to `www.runyuma.uk` without additional runtime
 changes, as long as:
@@ -89,7 +91,7 @@ redirecting old English and Chinese Pages entry points.
 
 In `backend/.env`, make sure:
 
-- `ALLOWED_ORIGINS=https://www.runyuma.uk`
+- `ALLOWED_ORIGINS` includes `https://www.runyuma.uk`
 - `OPENAI_API_KEY` is set
 - your manager and happy-mode secrets are set
 - your private knowledge files are present on the backend server

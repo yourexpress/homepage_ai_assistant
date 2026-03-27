@@ -115,10 +115,17 @@ class SiteContentUpdateResponse(BaseModel):
     sync_notes: list[str] = Field(default_factory=list)
 
 
+class PortfolioDataResponse(BaseModel):
+    profile: dict = Field(default_factory=dict)
+    experience: dict = Field(default_factory=dict)
+    projects: dict = Field(default_factory=dict)
+    publications: dict = Field(default_factory=dict)
+
+
 class CommentCreateRequest(BaseModel):
     author: str = Field(default="Anonymous", max_length=40)
-    website_rating: int = Field(..., ge=0, le=5)
-    resume_rating: int = Field(..., ge=0, le=5)
+    website_rating: int | None = Field(default=None, ge=0, le=5)
+    resume_rating: int | None = Field(default=None, ge=0, le=5)
     body: str = Field(..., min_length=1, max_length=1000)
 
     @field_validator("author")
@@ -143,8 +150,8 @@ class CommentVoteRequest(BaseModel):
 class CommentResponse(BaseModel):
     id: str
     author: str
-    website_rating: int
-    resume_rating: int
+    website_rating: int | None
+    resume_rating: int | None
     body: str
     created_at: str
     upvotes: int
