@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -36,9 +38,39 @@ class Settings(BaseSettings):
     # Proxy
     trust_proxy_headers: bool = False
 
+    # Session-aware chat
+    max_history_messages: int = 12
+
+    # Persistent file-backed app data
+    data_dir: str = "data"
+    site_content_file: str = "data/site_content.json"
+    comments_file: str = "data/comments.json"
+
+    # Manager / admin
+    admin_api_key: str = ""
+
+    # Happy personality
+    happy_mode_enabled: bool = False
+    happy_mode_access_code: str = "replace-with-happy-code"
+    happy_mode_question: str = "Replace this question in your private server config."
+    happy_mode_expected_answer: str = "replace-with-happy-answer"
+    happy_mode_secret: str = "replace-with-random-secret"
+
     @property
     def origins_list(self) -> list[str]:
         return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+
+    @property
+    def data_dir_path(self) -> Path:
+        return Path(self.data_dir)
+
+    @property
+    def site_content_path(self) -> Path:
+        return Path(self.site_content_file)
+
+    @property
+    def comments_path(self) -> Path:
+        return Path(self.comments_file)
 
 
 settings = Settings()

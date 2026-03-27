@@ -7,7 +7,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import chat, health, metrics
+from app.api import admin, chat, comments, content, happy, health, metrics
 from app.config import settings
 from app.middleware.concurrency import ConcurrencyLimiterMiddleware
 from app.middleware.rate_limiter import RateLimiterMiddleware
@@ -29,8 +29,8 @@ def create_app() -> FastAPI:
     application.add_middleware(
         CORSMiddleware,
         allow_origins=settings.origins_list,
-        allow_methods=["GET", "POST"],
-        allow_headers=["Content-Type"],
+        allow_methods=["GET", "POST", "PUT"],
+        allow_headers=["Content-Type", "X-Admin-Key"],
     )
 
     # Rate limiter — runs before concurrency limiter
@@ -49,6 +49,10 @@ def create_app() -> FastAPI:
     application.include_router(health.router, prefix="/api")
     application.include_router(chat.router, prefix="/api")
     application.include_router(metrics.router, prefix="/api")
+    application.include_router(content.router, prefix="/api")
+    application.include_router(comments.router, prefix="/api")
+    application.include_router(happy.router, prefix="/api")
+    application.include_router(admin.router, prefix="/api")
 
     return application
 

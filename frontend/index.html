@@ -3,55 +3,238 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alex Chen · Portfolio AI Assistant</title>
-  <meta name="description"
-        content="Chat with an AI assistant to learn about Alex Chen's public background, projects, and experience." />
+  <title>Runyu Ma | AI Systems Portfolio</title>
+  <meta
+    name="description"
+    content="Explore Runyu Ma's portfolio through a bilingual AI assistant, curated homepage content, and visitor feedback."
+  />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="page-bg"></div>
+
   <header class="site-header">
-    <span class="logo">Alex Chen</span>
-    <nav>
-      <a href="index.html" class="active">Chat</a>
+    <a href="index.html" class="logo-mark">Runyu Ma</a>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Home</a>
       <a href="metrics.html">Metrics</a>
+      <a href="manager.html">Manager</a>
       <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
     </nav>
+    <div class="lang-toggle" aria-label="Language switcher">
+      <button type="button" class="lang-btn" data-locale="en">EN</button>
+      <button type="button" class="lang-btn" data-locale="zh">中文</button>
+    </div>
   </header>
 
-  <main class="page-container">
-    <div class="hero">
-      <h1>Portfolio AI Assistant</h1>
-      <p>
-        Ask me about Alex's background, projects, research interests, and
-        skills. I only discuss publicly available information.
-      </p>
-    </div>
-
-    <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages">
-      <div class="message assistant">
-        👋 Hi! I'm an AI assistant for Alex Chen's portfolio. Ask me anything
-        about his public background, projects, or experience.
+  <main class="page-shell">
+    <section class="hero-grid">
+      <div class="hero-card hero-card-main">
+        <span class="eyebrow" id="hero-badge">AI Systems Portfolio</span>
+        <h1 id="hero-title">Runyu Ma connects AI systems research with real deployment.</h1>
+        <p class="hero-summary" id="hero-summary">
+          Explore research, systems work, publications, and public contact details through a calmer bilingual portfolio experience.
+        </p>
+        <div class="spotlight-grid" id="spotlight-grid"></div>
       </div>
-    </div>
 
-    <form id="chat-form" autocomplete="off" novalidate>
-      <textarea
-        id="chat-input"
-        rows="2"
-        maxlength="1000"
-        placeholder="Ask about Alex's projects, experience, or skills…"
-        aria-label="Your message"
-      ></textarea>
-      <button type="submit" id="send-btn">Send</button>
-    </form>
+      <aside class="hero-card hero-card-side">
+        <div class="hero-panel">
+          <p class="mini-label" id="hero-panel-title">Current homepage</p>
+          <p id="hero-panel-body">
+            This is the current public homepage of Runyu Ma, with AI-assisted exploration, metrics, and visitor feedback.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <p class="mini-label" id="section-chat-title">Ask the assistant</p>
+          <p id="section-chat-body">
+            The assistant answers from approved public knowledge and can keep the current chat session in context.
+          </p>
+        </div>
+      </aside>
+    </section>
 
-    <div class="char-counter" id="char-counter">0 / 1000</div>
-    <p class="chat-disclaimer">
-      This assistant only discusses public portfolio information.
-      Rate limit: 10 messages per 10 minutes.
-    </p>
+    <section class="profile-grid">
+      <article class="glass-card profile-card profile-card-wide">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2 id="about-title">About me</h2>
+          </div>
+        </div>
+        <div id="about-paragraphs" class="rich-copy"></div>
+      </article>
+
+      <article class="glass-card profile-card">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2 id="research-title">Research interests</h2>
+          </div>
+        </div>
+        <ul id="research-list" class="detail-list"></ul>
+      </article>
+
+      <article class="glass-card profile-card">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2 id="news-title">News</h2>
+          </div>
+        </div>
+        <ul id="news-list" class="detail-list"></ul>
+        <div class="card-divider"></div>
+        <h3 id="tools-title">Tools</h3>
+        <div id="tools-list" class="resource-list"></div>
+      </article>
+
+      <article class="glass-card profile-card">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2 id="contact-title">Contact</h2>
+          </div>
+        </div>
+        <div id="contact-list" class="resource-list"></div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <section class="glass-card chat-card">
+        <div class="section-head">
+          <div>
+            <p class="section-label">AI Chat</p>
+            <h2>Portfolio conversation</h2>
+          </div>
+          <button type="button" class="ghost-btn" id="clear-history-btn">Clear session</button>
+        </div>
+
+        <div class="desktop-controls desktop-only">
+          <label for="bubble-width-range">Bubble width</label>
+          <input
+            id="bubble-width-range"
+            type="range"
+            min="18"
+            max="25"
+            step="1"
+            value="23"
+          />
+          <span id="bubble-width-value">23vw</span>
+        </div>
+
+        <div class="happy-card" id="happy-card" hidden>
+          <div class="happy-card-head">
+            <div>
+              <p class="section-label">Private entrance</p>
+              <h3>Unlock happy personality</h3>
+            </div>
+            <span class="happy-badge" id="happy-status">Locked</span>
+          </div>
+
+          <form id="happy-code-form" class="inline-form">
+            <input
+              id="happy-code-input"
+              type="password"
+              placeholder="Enter special code"
+              autocomplete="off"
+            />
+            <button type="submit" class="primary-btn">Check code</button>
+          </form>
+
+          <form id="happy-answer-form" class="stacked-form" hidden>
+            <label for="happy-answer-input" id="happy-question-text">Question</label>
+            <textarea id="happy-answer-input" rows="2" placeholder="Answer here"></textarea>
+            <button type="submit" class="primary-btn">Unlock</button>
+          </form>
+
+          <p class="helper-text" id="happy-message">
+            This mode only unlocks for a private visitor after the correct code and answer are provided.
+          </p>
+        </div>
+
+        <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages"></div>
+
+        <form id="chat-form" autocomplete="off" novalidate>
+          <textarea
+            id="chat-input"
+            rows="3"
+            maxlength="1000"
+            placeholder="Ask about projects, research, experience, or fit."
+            aria-label="Your message"
+          ></textarea>
+          <button type="submit" id="send-btn" class="primary-btn">Send</button>
+        </form>
+
+        <div class="chat-footer">
+          <div class="char-counter" id="char-counter">0 / 1000</div>
+          <p class="chat-disclaimer">
+            The assistant only discusses approved public information and keeps context only for this browser session.
+          </p>
+        </div>
+      </section>
+
+      <section class="glass-card comments-card">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Feedback</p>
+            <h2 id="section-comments-title">Visitor comments</h2>
+          </div>
+          <select id="comment-sort-select" class="inline-select" aria-label="Sort comments">
+            <option value="latest">Latest</option>
+            <option value="likest">Likest</option>
+          </select>
+        </div>
+
+        <p class="section-copy" id="section-comments-body">
+          Leave feedback on the website look and resume presentation.
+        </p>
+
+        <form id="comment-form" class="comment-form" autocomplete="off">
+          <input id="comment-author" type="text" maxlength="40" placeholder="Your name (optional)" />
+          <div class="rating-grid">
+            <label>
+              Website look
+              <select id="website-rating" required>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+              </select>
+            </label>
+            <label>
+              Resume fit
+              <select id="resume-rating" required>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+              </select>
+            </label>
+          </div>
+          <textarea
+            id="comment-body"
+            rows="4"
+            maxlength="1000"
+            placeholder="Share what felt strong, what felt unclear, or what would help you understand the profile better."
+            required
+          ></textarea>
+          <button type="submit" class="primary-btn">Post comment</button>
+          <p class="helper-text" id="comment-form-message"></p>
+        </form>
+
+        <div id="comments-list" class="comments-list"></div>
+
+        <div class="pager">
+          <button type="button" class="ghost-btn" id="comments-prev-btn">Previous</button>
+          <span id="comments-page-label">Page 1</span>
+          <button type="button" class="ghost-btn" id="comments-next-btn">Next</button>
+        </div>
+      </section>
+    </section>
   </main>
 
+  <script src="js/app-config.js"></script>
+  <script src="js/home.js"></script>
   <script src="js/chat.js"></script>
 </body>
 </html>

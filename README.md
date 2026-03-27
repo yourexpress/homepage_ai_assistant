@@ -1,75 +1,67 @@
 # Portfolio AI Assistant
 
-A production-minded portfolio project: an AI-powered chat assistant that lets
-public visitors learn about the owner's background, research, and projects.
-The static frontend is hosted on **GitHub Pages**; the backend API runs on a
-separate cloud platform.
+A production-minded portfolio project: an AI-powered homepage that combines
+curated bilingual site content, a grounded AI assistant, visitor comments, and
+a protected manager entrance.
 
----
+The frontend is static and can be hosted on GitHub Pages or any static host.
+The backend is a FastAPI service designed to run in a container.
 
 ## Features
 
-| Capability | Details |
-|---|---|
-| 🤖 Portfolio chat | Controlled LLM answers only from public portfolio context |
-| 🛡️ Content policy | Pre-filter + system prompt blocks private/unsafe requests |
-| ⏱️ Rate limiting | 10 requests / 10 min burst → 1 request / 10 min degraded |
-| 🔒 Concurrency limit | Configurable max in-flight requests (default: 10) |
-| 📏 Input validation | Per-message character limit (default: 1 000 chars) |
-| 📊 Metrics page | Public-facing throughput, latency, and token counters |
-| 🧪 Test-first | Tests written before implementation; 237 tests, all green |
-
----
+- session-aware portfolio chat
+- bilingual English and Chinese homepage content
+- public metrics dashboard
+- protected manager entrance for homepage editing
+- automatic EN/ZH sync when content is edited through the manager flow
+- visitor comments with stars, voting, sorting, and pagination
+- optional happy-personality mode using private server-side secrets
+- container deployment scaffolding
 
 ## Repository Structure
 
-```
-homepage_ai_assistant/
-├── README.md
-├── docs/
-│   ├── SYSTEM_DESIGN.md      ← architecture & design decisions
-│   ├── API_DESIGN.md         ← backend API: endpoints, schemas, pipeline
-│   ├── TEST_PLAN.md          ← test strategy
-│   ├── READING_GUIDE.md      ← how to navigate this codebase
-│   └── TROUBLESHOOTING.md    ← common failure modes + fixes
-├── frontend/                 ← GitHub Pages static site
-│   ├── index.html            ← chat UI
-│   ├── metrics.html          ← metrics dashboard
-│   ├── css/style.css
-│   └── js/
-│       ├── chat.js
-│       └── metrics.js
-└── backend/                  ← FastAPI service
-    ├── requirements.txt
-    ├── requirements-dev.txt
-    ├── .env.example
-    ├── Dockerfile
-    ├── pytest.ini
-    ├── app/
-    │   ├── main.py           ← app factory & middleware wiring
-    │   ├── config.py         ← all settings (reads .env)
-    │   ├── models.py         ← Pydantic request/response schemas
-    │   ├── api/
-    │   │   ├── chat.py       ← POST /api/chat
-    │   │   └── metrics.py    ← GET /api/metrics
-    │   ├── middleware/
-    │   │   ├── rate_limiter.py
-    │   │   └── concurrency.py
-    │   └── services/
-    │       ├── policy_guard.py
-    │       ├── llm_client.py
-    │       └── metrics_store.py
-    └── tests/
-        ├── conftest.py
-        ├── test_policy_guard.py
-        ├── test_rate_limiter.py
-        ├── test_concurrency.py
-        ├── test_metrics.py
-        ├── test_chat.py
-        └── test_metrics_api.py
-```
+```text
+frontend/
+  index.html
+  metrics.html
+  manager.html
+  css/style.css
+  js/app-config.js
+  js/home.js
+  js/chat.js
+  js/metrics.js
+  js/manager.js
 
----
+backend/
+  Dockerfile
+  .env.example
+  app/
+    main.py
+    config.py
+    models.py
+    api/
+      chat.py
+      metrics.py
+      content.py
+      comments.py
+      happy.py
+      admin.py
+      health.py
+    middleware/
+      rate_limiter.py
+      concurrency.py
+    services/
+      knowledge_base.py
+      policy_guard.py
+      llm_client.py
+      metrics_store.py
+      site_content_store.py
+      comments_store.py
+      translation_service.py
+      happy_auth.py
+  knowledge/
+  data/
+```
 
 ## Quick Start
 
@@ -77,66 +69,68 @@ homepage_ai_assistant/
 
 ```bash
 cd backend
-cp .env.example .env          # fill in OPENAI_API_KEY
+cp .env.example .env
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Tests
-
-```bash
-cd backend
-pip install -r requirements-dev.txt
-pytest tests/ -v --cov=app --cov-report=term-missing
-```
-
 ### Frontend
 
-Open `frontend/index.html` in a browser, or push the `frontend/` directory to
-GitHub Pages. Update the `BACKEND_URL` constant in `frontend/js/chat.js` and
-`frontend/js/metrics.js` to point at your deployed backend.
+Open `frontend/index.html` in a browser, or host `frontend/` on a static site
+platform. Frontend runtime configuration lives in `frontend/js/app-config.js`.
 
----
+### Containers
+
+```bash
+docker compose up --build
+```
 
 ## Deployment
 
-| Component | Platform | Notes |
-|-----------|----------|-------|
-| Frontend | GitHub Pages | Configure Pages source to `/ (root)` or `/frontend` |
-| Backend | Render / Fly.io / Railway | Deploy from `backend/Dockerfile` |
-| LLM | OpenAI API | Set `OPENAI_API_KEY` env var |
+Recommended deployment is:
 
----
+- GitHub Pages or another static host for `frontend/`
+- backend container from `backend/Dockerfile`
+- persistent mounted storage for:
+  - `backend/knowledge`
+  - `backend/data`
 
-## Configuration Reference
+For GitHub Pages with a custom domain such as `www.runyuma.uk`, see
+[docs/GITHUB_PAGES_DEPLOYMENT.md](docs/GITHUB_PAGES_DEPLOYMENT.md).
 
-All backend settings are in `backend/app/config.py` and read from `.env`:
+For container-based hosting of both frontend and backend, see
+[docs/CONTAINER_DEPLOYMENT.md](docs/CONTAINER_DEPLOYMENT.md).
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `OPENAI_API_KEY` | — | Required |
-| `OPENAI_MODEL` | `gpt-4o-mini` | Model to use |
-| `ALLOWED_ORIGINS` | `https://yourexpress.github.io` | CORS allow-list (comma-separated) |
-| `MAX_INPUT_LENGTH` | `1000` | Max chars per user message |
-| `MAX_CONCURRENT_REQUESTS` | `10` | Semaphore capacity |
-| `RATE_LIMIT_BURST` | `10` | Token bucket burst size |
-| `RATE_LIMIT_REFILL_INTERVAL` | `600` | Seconds per token refill (600 s = 10 min) |
-| `TRUST_PROXY_HEADERS` | `false` | Set `true` behind a reverse proxy |
+## Important Configuration
 
----
+Set these in `backend/.env`:
+
+- `OPENAI_API_KEY`
+- `ALLOWED_ORIGINS`
+- `ADMIN_API_KEY`
+- `SITE_CONTENT_FILE`
+- `COMMENTS_FILE`
+- `HAPPY_MODE_ENABLED`
+- `HAPPY_MODE_ACCESS_CODE`
+- `HAPPY_MODE_QUESTION`
+- `HAPPY_MODE_EXPECTED_ANSWER`
+- `HAPPY_MODE_SECRET`
+
+Real production knowledge files and happy-mode secrets should stay off the
+public repository.
 
 ## Documentation
 
-- 📋 [Engineering Requirements](docs/REQUIREMENTS.md)
-- 📐 [System Design](docs/SYSTEM_DESIGN.md)
-- 🧪 [Test Plan](docs/TEST_PLAN.md)
-- 🔬 [Testing Guide](docs/TESTING.md)
-- 📖 [Developer Reading Guide](docs/READING_GUIDE.md)
-- 🔧 [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
-- 📝 [Knowledge Templates Guide](docs/KNOWLEDGE_TEMPLATES.md) — fill in your own data offline and validate before deploying
-
----
+- [Product Requirements](docs/REQUIREMENTS.md)
+- [System Design](docs/SYSTEM_DESIGN.md)
+- [API Design](docs/API_DESIGN.md)
+- [Knowledge System](docs/KNOWLEDGE_SYSTEM.md)
+- [Safety Policy](docs/SAFETY_POLICY.md)
+- [Container Deployment](docs/CONTAINER_DEPLOYMENT.md)
+- [GitHub Pages Deployment](docs/GITHUB_PAGES_DEPLOYMENT.md)
+- [Testing Guide](docs/TESTING.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0. See [LICENSE](LICENSE).

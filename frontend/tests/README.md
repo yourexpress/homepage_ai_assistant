@@ -1,25 +1,27 @@
 # Frontend Tests
 
-This directory contains lightweight browser-based smoke tests for the
-frontend static site.
+This directory contains lightweight browser-based smoke tests for the static
+frontend.
 
 ## Running
 
-Open `smoke_tests.html` in any modern browser.  Tests run automatically
-and display pass/fail/skip results inline.
+Open `smoke_tests.html` in a modern browser. The tests run automatically and
+show pass/fail results inline.
 
-No backend server is required — the tests validate DOM structure,
-accessibility attributes, and JS constant contracts only.
+No backend is required. These tests only validate page structure and basic UI
+wiring.
+
+## What They Cover
+
+- homepage chat container
+- comments form and pagination controls
+- manager link in navigation
+- language toggle presence
+- basic accessibility structure
 
 ## Files
 
-| File              | Purpose                                      |
-|-------------------|----------------------------------------------|
-| `smoke_tests.html` | Test runner page (loads `index.html` in iframe) |
-| `smoke_tests.js`   | Test assertions for DOM structure and A11y     |
-
-## Extending
-
-1. Add new `assert()` calls in `smoke_tests.js`.
-2. Use `skip()` for tests that require backend connectivity.
-3. Keep tests side-effect-free — don't submit forms or make network requests.
+- `smoke_tests.html`
+  loads `index.html` in an iframe and runs the test script
+- `smoke_tests.js`
+  contains the actual assertions
