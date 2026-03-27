@@ -1,0 +1,10 @@
+{
+  "publications": [
+    {
+      "title": "Title of Your Paper or Article",
+      "year": 2024,
+      "venue": "Conference Name, Journal Name, or ArXiv",
+      "url": "https://arxiv.org/abs/your-paper-id"
+    }
+  ]
+}

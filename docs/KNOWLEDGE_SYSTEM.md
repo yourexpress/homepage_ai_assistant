@@ -436,3 +436,16 @@ To add or update knowledge:
 2. Run tests: `cd backend && pytest tests/test_knowledge_base.py -v`
 3. Commit and deploy. The knowledge base is loaded at startup.
 4. Optionally call `knowledge_base.reload()` to hot-reload without restart.
+
+### 10.4 Offline Template Workflow
+
+If you want to fill in your own data without editing files directly on the
+server:
+
+1. Copy a template from `backend/knowledge/templates/` to your local machine.
+2. Fill in the placeholders.
+3. Validate with `python backend/scripts/validate_knowledge.py <file>`.
+4. Upload the completed file to `backend/knowledge/` on the server.
+
+See [docs/KNOWLEDGE_TEMPLATES.md](KNOWLEDGE_TEMPLATES.md) for the full
+step-by-step guide and schema reference.

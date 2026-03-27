@@ -1,0 +1,20 @@
+{
+  "positions": [
+    {
+      "title": "Your Job Title",
+      "organization": "Company or Institution Name",
+      "start_year": 2022,
+      "end_year": null,
+      "focus": "One-line summary of your focus area",
+      "description": "One or two sentences describing your responsibilities and achievements."
+    },
+    {
+      "title": "Previous Job Title",
+      "organization": "Previous Company Name",
+      "start_year": 2020,
+      "end_year": 2022,
+      "focus": "One-line summary of your focus area",
+      "description": "One or two sentences describing your responsibilities and achievements."
+    }
+  ]
+}

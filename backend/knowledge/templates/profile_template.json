@@ -1,0 +1,25 @@
+{
+  "name": "Your Full Name",
+  "headline": "Your Professional Headline — e.g. Software Engineer — Machine Learning & Systems",
+  "education": [
+    {
+      "degree": "Bachelor/Master/PhD of Science in Your Field",
+      "institution": "Your University or College",
+      "year": 2024
+    }
+  ],
+  "location_public": "Your City, Country (general area only — no street address)",
+  "links": {
+    "github": "https://github.com/your-username",
+    "portfolio": "https://your-username.github.io"
+  },
+  "research_interests": [
+    "Your first interest",
+    "Your second interest"
+  ],
+  "skills": [
+    "Python",
+    "Your Language or Tool",
+    "Another Skill"
+  ]
+}

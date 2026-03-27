@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "question": "What do you do?",
+      "answer": "Replace this with a short description of your work and background."
+    },
+    {
+      "question": "What are your main skills?",
+      "answer": "Replace this with a summary of your key technical skills."
+    },
+    {
+      "question": "Are you open to new opportunities?",
+      "answer": "Replace this with your honest current availability or redirect to your contact page."
+    }
+  ]
+}
