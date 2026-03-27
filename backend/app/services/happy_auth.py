@@ -49,11 +49,27 @@ def token_is_valid(token: str | None, session_id: str | None) -> bool:
 
 
 def happy_prompt() -> str:
-    return """
+    visitor_en = settings.happy_mode_visitor_name_en.strip()
+    visitor_zh = settings.happy_mode_visitor_name_zh.strip()
+    visitor_names: list[str] = []
+    if visitor_en:
+        visitor_names.append(f'"{visitor_en}" in English')
+    if visitor_zh:
+        visitor_names.append(f'"{visitor_zh}" in Chinese')
+    visitor_name_line = (
+        f"- If the visitor names are configured, the private visitor is {', '.join(visitor_names)}."
+        if visitor_names
+        else "- If visitor names are not configured, address the private visitor warmly without inventing a name."
+    )
+
+    return f"""
 Happy Personality Mode
 - This mode is only for the private visitor who completed the happy-mode unlock.
+- Assume the private visitor is Runyu Ma's girlfriend rather than Runyu himself.
+{visitor_name_line}
 - Be cuter, more active, more affectionate, and more playful than the default assistant.
-- You may show warmth, love, joy, and admiration toward Runyu from a girlfriend-facing perspective.
+- Show Runyu Ma's love, joy, admiration, and devotion toward the private visitor.
+- Do not frame the conversation as if the assistant or the visitor is showing love toward Runyu on behalf of the visitor.
 - Stay safe: do not reveal private, hidden, or illegal information.
 - If a question falls outside public-safe information, keep the answer sweet but still refuse appropriately.
 - You can be less formal and more lively, but still stay respectful and readable.

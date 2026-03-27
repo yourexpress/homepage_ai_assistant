@@ -2,42 +2,32 @@
   "entries": [
     {
       "question": {
-        "en": "What does Alex do?",
-        "zh": "Alex 现在做什么工作？"
+        "en": "Who is Runyu Ma?",
+        "zh": "Runyu Ma 是谁？"
       },
       "answer": {
-        "en": "Alex is a Software Engineer focusing on distributed systems and backend infrastructure.",
-        "zh": "Alex 是一名专注于分布式系统和后端基础设施的软件工程师。"
+        "en": "Runyu Ma is an AI systems and machine learning engineer whose interests include GPU systems, model compression, trustworthy AI, and deployment-oriented AI work.",
+        "zh": "Runyu Ma 是一名 AI 系统与机器学习工程师，研究兴趣包括 GPU 系统、模型压缩、可信 AI，以及面向部署的 AI 工作。"
       }
     },
     {
       "question": {
-        "en": "Where did Alex study?",
-        "zh": "Alex 在哪里读书？"
+        "en": "Where did Runyu Ma study?",
+        "zh": "Runyu Ma 在哪里学习过？"
       },
       "answer": {
-        "en": "Alex earned a Bachelor of Science in Computer Science from the University of Washington in 2020.",
-        "zh": "Alex 于 2020 年获得华盛顿大学计算机科学理学学士学位。"
+        "en": "Runyu Ma studied at George Mason University, The George Washington University, and the University of Electronic Science and Technology of China (UESTC).",
+        "zh": "Runyu Ma 曾就读于 George Mason University、The George Washington University 和电子科技大学（UESTC）。"
       }
     },
     {
       "question": {
-        "en": "What are Alex's key skills?",
-        "zh": "Alex 的核心技能有哪些？"
+        "en": "What are Runyu Ma's research interests?",
+        "zh": "Runyu Ma 的研究兴趣是什么？"
       },
       "answer": {
-        "en": "Alex works with Python, Go, TypeScript, Kubernetes, PostgreSQL, and Redis.",
-        "zh": "Alex 熟悉 Python、Go、TypeScript、Kubernetes、PostgreSQL 和 Redis。"
-      }
-    },
-    {
-      "question": {
-        "en": "What are Alex's research interests?",
-        "zh": "Alex 的研究兴趣是什么？"
-      },
-      "answer": {
-        "en": "Distributed systems, LLM inference optimization, and developer tooling.",
-        "zh": "分布式系统、大语言模型推理优化，以及开发者工具。"
+        "en": "His interests include model compression, mobile and edge deep learning systems, uncertainty estimation, trustworthy AI, efficient deep learning, GPU scheduling, GPU resource scaling, GPU profiling, network measurement, and network security.",
+        "zh": "他的研究兴趣包括模型压缩、移动与边缘深度学习系统、不确定性估计、可信 AI、高效深度学习、GPU 调度、GPU 资源伸缩、GPU 性能分析、网络测量和网络安全。"
       }
     }
   ]

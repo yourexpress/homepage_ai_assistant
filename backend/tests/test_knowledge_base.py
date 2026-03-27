@@ -94,37 +94,35 @@ class TestRenderProfile:
     def test_includes_name_and_headline(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
-        assert "Alex Chen" in rendered
-        assert "Software Engineer" in rendered
+        assert "Runyu Ma" in rendered
+        assert "AI Systems and Machine Learning Engineer" in rendered
 
     def test_includes_public_contacts(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
         assert "Public Contacts:" in rendered
-        assert "hello@alexchen.dev" in rendered
-        assert "alexchen_public" in rendered
+        assert "rma5@gmu.edu" in rendered
+        assert "github.com/yourexpress" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_profile({}) == ""
 
 
 class TestRenderExperience:
-    def test_includes_position(self):
+    def test_empty_positions_render_as_empty_string(self):
         data = knowledge_base._load_json("experience.json")
         rendered = knowledge_base._render_experience(data)
-        assert "Software Engineer" in rendered
-        assert "A technology company" in rendered
+        assert rendered == ""
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_experience({}) == ""
 
 
 class TestRenderProjects:
-    def test_includes_project_name(self):
+    def test_empty_projects_render_as_empty_string(self):
         data = knowledge_base._load_json("projects.json")
         rendered = knowledge_base._render_projects(data)
-        assert "homepage_ai_assistant" in rendered
-        assert "OpenAI API" in rendered
+        assert rendered == ""
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_projects({}) == ""
@@ -143,7 +141,7 @@ class TestRenderFaq:
         rendered = knowledge_base._render_faq(data)
         assert "Q:" in rendered
         assert "A:" in rendered
-        assert "What does Alex do?" in rendered
+        assert "Who is Runyu Ma?" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_faq({}) == ""
@@ -180,8 +178,8 @@ class TestBuildContext:
 
     def test_contains_key_knowledge(self):
         ctx = knowledge_base.build_context()
-        assert "Alex Chen" in ctx
-        assert "homepage_ai_assistant" in ctx
+        assert "Runyu Ma" in ctx
+        assert "George Mason University" in ctx
         assert "Public Contacts:" in ctx
 
 
@@ -211,8 +209,9 @@ class TestGroundingConstraints:
 
     def test_context_discourages_raw_provenance_tags(self):
         ctx = knowledge_base.build_context()
-        assert "Do not expose raw file markers" in ctx
-        assert "instead of inline provenance tags" in ctx
+        assert "Do not expose raw internal file markers" in ctx
+        assert "Do not inline technical provenance tags into normal prose" in ctx
+        assert "summarize them naturally at the end instead of showing internal source tags" in ctx
 
     def test_no_private_data_in_knowledge_files(self):
         sources = knowledge_base.load_all()

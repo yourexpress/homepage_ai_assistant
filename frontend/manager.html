@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="portfolio-backend-url" content="" />
   <title>Runyu Ma | Manager</title>
-  <meta name="description" content="Manager entrance for editing homepage content." />
+  <meta name="description" content="Owner dashboard for homepage presentation settings." />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -16,42 +16,76 @@
     <nav class="site-nav">
       <a href="index.html">Home</a>
       <a href="metrics.html">Metrics</a>
+      <a href="comments-reader.html">Comments Inbox</a>
       <a href="manager.html" class="active">Manager</a>
       <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
 
-  <main class="page-shell page-shell-narrow">
-    <section class="glass-card manager-shell">
-      <div class="section-head">
+  <main class="page-shell page-shell-compact">
+    <section class="glass-card manager-hero">
+      <div class="section-head section-head-stack">
         <div>
-          <p class="section-label">Manager</p>
-          <h1>Homepage content editor</h1>
+          <p class="section-label">Owner Dashboard</p>
+          <h1>Homepage manager</h1>
         </div>
       </div>
       <p class="section-copy">
-        This manager edits public homepage copy through the backend, not through source files. English and Chinese fields are auto-synced on save when only one side changes.
+        Core public profile basics now come from the knowledge base automatically. This page is for lightweight presentation copy and labels, not for re-entering your profile field by field.
       </p>
 
-      <div class="manager-auth">
+      <div class="manager-auth manager-auth-wide">
         <input
           id="admin-key-input"
           type="password"
           autocomplete="off"
           placeholder="Enter admin key"
         />
-        <button type="button" class="primary-btn" id="manager-load-btn">Load content</button>
+        <button type="button" class="primary-btn" id="manager-load-btn">Load dashboard</button>
+        <a href="comments-reader.html" class="ghost-btn">Open comments inbox</a>
       </div>
 
       <p class="helper-text" id="manager-status">
         The manager entrance is protected by the backend admin key and is meant for your private deployment.
       </p>
+    </section>
 
-      <form id="manager-form" class="manager-form" hidden>
-        <div id="manager-fields" class="manager-fields"></div>
-        <button type="submit" class="primary-btn">Save homepage content</button>
-        <div id="manager-sync-notes" class="sync-notes"></div>
-      </form>
+    <section class="manager-grid">
+      <article class="glass-card manager-side-card">
+        <div class="section-head section-head-stack">
+          <div>
+            <p class="section-label">Knowledge Base</p>
+            <h2>Auto-loaded public basics</h2>
+          </div>
+        </div>
+        <p class="helper-text">
+          The homepage intro, research interests, education, and public contact methods are read from the backend knowledge files.
+        </p>
+        <div id="manager-knowledge-summary" class="manager-summary-list">
+          <div class="manager-summary-card">
+            <h3>Not loaded yet</h3>
+            <p>Load the dashboard to review the current public profile summary from the knowledge base.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="glass-card manager-main-card">
+        <div class="section-head section-head-stack">
+          <div>
+            <p class="section-label">Presentation Copy</p>
+            <h2>Editable homepage copy</h2>
+          </div>
+        </div>
+        <p class="helper-text">
+          These settings control short welcome copy and section labels. They do not replace the structured profile data from the knowledge base.
+        </p>
+
+        <form id="manager-form" class="manager-form" hidden>
+          <div id="manager-fields" class="manager-fields"></div>
+          <button type="submit" class="primary-btn">Save homepage content</button>
+          <div id="manager-sync-notes" class="sync-notes"></div>
+        </form>
+      </article>
     </section>
   </main>
 

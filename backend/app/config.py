@@ -60,6 +60,8 @@ class Settings(BaseSettings):
     happy_mode_question: str = "Replace this question in your private server config."
     happy_mode_expected_answer: str = "replace-with-happy-answer"
     happy_mode_secret: str = "replace-with-random-secret"
+    happy_mode_visitor_name_en: str = ""
+    happy_mode_visitor_name_zh: str = ""
 
     @property
     def origins_list(self) -> list[str]:
