@@ -1,0 +1,80 @@
+"""Integration tests for admin content editing and happy mode endpoints."""
+
+from __future__ import annotations
+
+from unittest.mock import AsyncMock, patch
+
+
+class TestAdminSiteContent:
+    async def test_requires_admin_key(self, client):
+        response = await client.get("/api/admin/site-content")
+        assert response.status_code in (401, 503)
+
+    async def test_load_and_update_site_content(self, client, tmp_path, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "admin_api_key", "secret-key")
+        monkeypatch.setattr(settings, "site_content_file", str(tmp_path / "site_content.json"))
+
+        load_response = await client.get(
+            "/api/admin/site-content",
+            headers={"X-Admin-Key": "secret-key"},
+        )
+        assert load_response.status_code == 200
+        content = load_response.json()["content"]
+        content["hero_title"]["en"] = "Updated English title"
+
+        with patch(
+            "app.services.translation_service.translate_text",
+            AsyncMock(return_value="更新后的中文标题"),
+        ):
+            save_response = await client.put(
+                "/api/admin/site-content",
+                headers={"X-Admin-Key": "secret-key"},
+                json={"content": content},
+            )
+
+        assert save_response.status_code == 200
+        saved = save_response.json()
+        assert saved["content"]["hero_title"]["en"] == "Updated English title"
+        assert saved["content"]["hero_title"]["zh"] == "更新后的中文标题"
+        assert saved["sync_notes"]
+
+
+class TestHappyMode:
+    async def test_wrong_code_returns_wrong_answer(self, client, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "happy_mode_enabled", True)
+        monkeypatch.setattr(settings, "happy_mode_access_code", "abc")
+
+        response = await client.post(
+            "/api/happy/challenge",
+            json={"code": "wrong", "session_id": "session-1"},
+        )
+        assert response.status_code == 200
+        assert response.json()["message"] == "wrong answer"
+
+    async def test_correct_code_and_answer_returns_token(self, client, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "happy_mode_enabled", True)
+        monkeypatch.setattr(settings, "happy_mode_access_code", "abc")
+        monkeypatch.setattr(settings, "happy_mode_question", "Do you love me?")
+        monkeypatch.setattr(settings, "happy_mode_expected_answer", "yes")
+        monkeypatch.setattr(settings, "happy_mode_secret", "secret")
+
+        challenge = await client.post(
+            "/api/happy/challenge",
+            json={"code": "abc", "session_id": "session-1"},
+        )
+        assert challenge.status_code == 200
+        assert challenge.json()["question"] == "Do you love me?"
+
+        verify = await client.post(
+            "/api/happy/verify",
+            json={"code": "abc", "answer": "yes", "session_id": "session-1"},
+        )
+        assert verify.status_code == 200
+        assert verify.json()["ok"] is True
+        assert verify.json()["token"]

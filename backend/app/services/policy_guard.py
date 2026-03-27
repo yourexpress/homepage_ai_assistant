@@ -10,8 +10,10 @@ from __future__ import annotations
 import logging
 import re
 import unicodedata
+from typing import Iterable
 
 from app.services import knowledge_base
+from app.services.happy_auth import happy_prompt
 
 logger = logging.getLogger("policy_guard")
 
@@ -127,9 +129,25 @@ def is_blocked(message: str) -> bool:
     return False
 
 
-def build_messages(user_message: str) -> list[dict[str, str]]:
-    """Return the system and user messages for the LLM call."""
-    return [
+def build_messages(
+    user_message: str,
+    *,
+    history: Iterable[dict[str, str]] | None = None,
+    happy_mode: bool = False,
+) -> list[dict[str, str]]:
+    """Return the system, optional history, and user messages for the LLM call."""
+    messages: list[dict[str, str]] = [
         {"role": "system", "content": _get_portfolio_context()},
-        {"role": "user", "content": user_message},
     ]
+    if happy_mode:
+        messages.append({"role": "system", "content": happy_prompt()})
+
+    for item in history or ():
+        role = item.get("role", "")
+        content = item.get("content", "").strip()
+        if role not in {"user", "assistant"} or not content:
+            continue
+        messages.append({"role": role, "content": content})
+
+    messages.append({"role": "user", "content": user_message})
+    return messages

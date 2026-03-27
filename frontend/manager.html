@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Runyu Ma | Manager</title>
+  <meta name="description" content="Manager entrance for editing homepage content." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="logo-mark">Runyu Ma</a>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="manager.html" class="active">Manager</a>
+      <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="page-shell page-shell-narrow">
+    <section class="glass-card manager-shell">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Manager</p>
+          <h1>Homepage content editor</h1>
+        </div>
+      </div>
+      <p class="section-copy">
+        This manager edits public homepage copy through the backend, not through source files. English and Chinese fields are auto-synced on save when only one side changes.
+      </p>
+
+      <div class="manager-auth">
+        <input
+          id="admin-key-input"
+          type="password"
+          autocomplete="off"
+          placeholder="Enter admin key"
+        />
+        <button type="button" class="primary-btn" id="manager-load-btn">Load content</button>
+      </div>
+
+      <p class="helper-text" id="manager-status">
+        The manager entrance is protected by the backend admin key and is meant for your private deployment.
+      </p>
+
+      <form id="manager-form" class="manager-form" hidden>
+        <div id="manager-fields" class="manager-fields"></div>
+        <button type="submit" class="primary-btn">Save homepage content</button>
+        <div id="manager-sync-notes" class="sync-notes"></div>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script src="js/manager.js"></script>
+</body>
+</html>
