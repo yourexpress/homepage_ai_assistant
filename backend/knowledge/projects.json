@@ -1,10 +1,23 @@
 {
   "projects": [
     {
-      "name": "homepage_ai_assistant",
-      "description": "AI-powered portfolio chat assistant with safety controls, rate limiting, and public metrics.",
+      "name": {
+        "en": "homepage_ai_assistant",
+        "zh": "主页 AI 助手"
+      },
+      "description": {
+        "en": "AI-powered portfolio chat assistant with safety controls, rate limiting, and public metrics.",
+        "zh": "一个面向个人主页的 AI 对话助手，包含安全控制、限流机制和公开指标面板。"
+      },
       "url": "https://github.com/yourexpress/homepage_ai_assistant",
-      "technologies": ["Python", "FastAPI", "OpenAI API"],
+      "technologies": [
+        "Python",
+        "FastAPI",
+        {
+          "en": "OpenAI API",
+          "zh": "OpenAI 接口"
+        }
+      ],
       "status": "active"
     }
   ]

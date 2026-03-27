@@ -1,12 +1,24 @@
 {
   "positions": [
     {
-      "title": "Software Engineer",
-      "organization": "A technology company",
+      "title": {
+        "en": "Software Engineer",
+        "zh": "软件工程师"
+      },
+      "organization": {
+        "en": "A technology company",
+        "zh": "一家科技公司"
+      },
       "start_year": 2020,
       "end_year": null,
-      "focus": "Distributed systems and backend infrastructure",
-      "description": "Building and maintaining backend services at scale, with a focus on reliability and performance."
+      "focus": {
+        "en": "Distributed systems and backend infrastructure",
+        "zh": "分布式系统与后端基础设施"
+      },
+      "description": {
+        "en": "Building and maintaining backend services at scale, with a focus on reliability and performance.",
+        "zh": "负责构建和维护可扩展的后端服务，重点关注可靠性与性能。"
+      }
     }
   ]
 }

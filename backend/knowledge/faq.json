@@ -1,20 +1,44 @@
 {
   "entries": [
     {
-      "question": "What does Alex do?",
-      "answer": "Alex is a Software Engineer focusing on distributed systems and backend infrastructure."
+      "question": {
+        "en": "What does Alex do?",
+        "zh": "Alex 现在做什么工作？"
+      },
+      "answer": {
+        "en": "Alex is a Software Engineer focusing on distributed systems and backend infrastructure.",
+        "zh": "Alex 是一名专注于分布式系统和后端基础设施的软件工程师。"
+      }
     },
     {
-      "question": "Where did Alex study?",
-      "answer": "Alex earned a Bachelor of Science in Computer Science from the University of Washington in 2020."
+      "question": {
+        "en": "Where did Alex study?",
+        "zh": "Alex 在哪里读书？"
+      },
+      "answer": {
+        "en": "Alex earned a Bachelor of Science in Computer Science from the University of Washington in 2020.",
+        "zh": "Alex 于 2020 年获得华盛顿大学计算机科学理学学士学位。"
+      }
     },
     {
-      "question": "What are Alex's key skills?",
-      "answer": "Alex works with Python, Go, TypeScript, Kubernetes, PostgreSQL, and Redis."
+      "question": {
+        "en": "What are Alex's key skills?",
+        "zh": "Alex 的核心技能有哪些？"
+      },
+      "answer": {
+        "en": "Alex works with Python, Go, TypeScript, Kubernetes, PostgreSQL, and Redis.",
+        "zh": "Alex 熟悉 Python、Go、TypeScript、Kubernetes、PostgreSQL 和 Redis。"
+      }
     },
     {
-      "question": "What are Alex's research interests?",
-      "answer": "Distributed systems, LLM inference optimization, and developer tooling."
+      "question": {
+        "en": "What are Alex's research interests?",
+        "zh": "Alex 的研究兴趣是什么？"
+      },
+      "answer": {
+        "en": "Distributed systems, LLM inference optimization, and developer tooling.",
+        "zh": "分布式系统、大语言模型推理优化，以及开发者工具。"
+      }
     }
   ]
 }

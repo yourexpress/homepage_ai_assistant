@@ -1,204 +1,196 @@
 # Knowledge File Templates
 
 This directory contains template JSON files for the five knowledge files that
-power the AI portfolio assistant. Fill in the templates with your own public
-information, then copy the completed files to `backend/knowledge/` on your
-server.
+power the AI portfolio assistant.
+
+The templates are now organized around a bilingual-friendly text shape:
+
+```json
+{
+  "en": "English text",
+  "zh": "中文内容"
+}
+```
+
+Every field that represents visitor-facing text may use either:
+
+- A plain string, for backward compatibility.
+- A localized object with `en` and/or `zh`.
+
+The recommended template format is bilingual so the knowledge base can answer
+in both English and Chinese.
 
 ---
 
 ## Quick Start
 
-1. Copy the template you need from this directory to a local folder.
-2. Fill in every placeholder value with your real public information.
-3. Validate the files with the CLI validator (see below).
-4. Upload the completed files to `backend/knowledge/` on your server.
-5. Rebuild the Docker image so the new files are baked in.
+1. Copy the template you need from this directory.
+2. Fill in the English and Chinese placeholders with your public information.
+3. Validate the files with `backend/scripts/validate_knowledge.py`.
+4. Upload the completed files to `backend/knowledge/`.
+5. Rebuild the backend image or redeploy the service.
 
 ---
 
-## File Descriptions and Schemas
+## Text Rules
 
-### `profile_template.json` → `profile.json`
+Use localized objects for narrative fields such as:
 
-Top-level personal profile — loaded first into the system prompt.
+- `name`
+- `headline`
+- `degree`
+- `institution`
+- `location_public`
+- `title`
+- `organization`
+- `focus`
+- `description`
+- `project.name`
+- `project.description`
+- `publication.title`
+- `publication.venue`
+- `faq.question`
+- `faq.answer`
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `name` | string | ✅ | Your full public name |
-| `headline` | string | ✅ | Short professional headline |
-| `education` | array | ✅ | List of education entries (see below) |
-| `location_public` | string | — | General location only — never a street address |
-| `links` | object | — | Map of label → URL for public links |
-| `research_interests` | array of string | — | Topics you research or study |
-| `skills` | array of string | ✅ | Your technical skills |
+Lists such as `skills`, `research_interests`, and `technologies` may contain:
 
-**Education entry fields:**
+- Plain strings
+- Localized objects
 
-| Field | Type | Required |
-|---|---|---|
-| `degree` | string | ✅ |
-| `institution` | string | ✅ |
-| `year` | integer | ✅ |
-
----
-
-### `experience_template.json` → `experience.json`
-
-Work or research positions.
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `positions` | array | ✅ | List of position entries (see below) |
-
-**Position entry fields:**
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `title` | string | ✅ | Job or role title |
-| `organization` | string | ✅ | Employer or institution name |
-| `start_year` | integer | ✅ | Year you started |
-| `end_year` | integer or null | — | Year you finished; `null` means current |
-| `focus` | string | — | One-line focus area |
-| `description` | string | — | Short description of responsibilities |
-
----
-
-### `projects_template.json` → `projects.json`
-
-Public projects you want the AI to know about.
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `projects` | array | ✅ | List of project entries (see below) |
-
-**Project entry fields:**
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `name` | string | ✅ | Project name |
-| `description` | string | ✅ | What the project does |
-| `url` | string | — | Public URL (GitHub, demo, etc.) |
-| `technologies` | array of string | — | Languages and tools used |
-| `status` | string | — | `"active"`, `"completed"`, or `"archived"` |
-
----
-
-### `publications_template.json` → `publications.json`
-
-Papers, articles, or other research output. Use an empty `publications` list
-if you have none:
+Example:
 
 ```json
-{ "publications": [] }
+"skills": [
+  "Python",
+  { "en": "Distributed systems", "zh": "分布式系统" }
+]
 ```
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `publications` | array | ✅ | List of publication entries (see below) |
-
-**Publication entry fields:**
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `title` | string | ✅ | Paper or article title |
-| `year` | integer | ✅ | Publication year |
-| `venue` | string | — | Conference, journal, or "ArXiv" |
-| `url` | string | — | Link to the paper |
 
 ---
 
-### `faq_template.json` → `faq.json`
+## File Schemas
 
-Pre-approved question and answer pairs. These are injected verbatim, so write
-answers in the voice you want the assistant to use.
+### `profile_template.json` -> `profile.json`
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `entries` | array | ✅ | List of Q&A entries (see below) |
+Top-level personal profile loaded first into the system prompt.
 
-**FAQ entry fields:**
+Required fields:
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `question` | string | ✅ | A question a visitor might ask |
-| `answer` | string | ✅ | The approved answer |
+- `name`: localized text or string
+- `headline`: localized text or string
+- `education`: array
+- `skills`: array of string/localized text
+
+Optional fields:
+
+- `location_public`: localized text or string
+- `links`: object of label -> URL
+- `research_interests`: array of string/localized text
+
+Education entry fields:
+
+- `degree`: localized text or string
+- `institution`: localized text or string
+- `year`: integer
+
+### `experience_template.json` -> `experience.json`
+
+Required fields:
+
+- `positions`: array
+
+Position entry fields:
+
+- `title`: localized text or string
+- `organization`: localized text or string
+- `start_year`: integer
+- `end_year`: integer or `null`
+- `focus`: localized text or string
+- `description`: localized text or string
+
+### `projects_template.json` -> `projects.json`
+
+Required fields:
+
+- `projects`: array
+
+Project entry fields:
+
+- `name`: localized text or string
+- `description`: localized text or string
+- `url`: string
+- `technologies`: array of string/localized text
+- `status`: string such as `active`, `completed`, or `archived`
+
+### `publications_template.json` -> `publications.json`
+
+Required fields:
+
+- `publications`: array
+
+Publication entry fields:
+
+- `title`: localized text or string
+- `year`: integer
+- `venue`: localized text or string
+- `url`: string
+
+### `faq_template.json` -> `faq.json`
+
+Required fields:
+
+- `entries`: array
+
+FAQ entry fields:
+
+- `question`: localized text or string
+- `answer`: localized text or string
 
 ---
 
 ## Privacy Rules
 
-> **Never commit personal contact details to this repository.**
-
-The following information must **never** appear in these files:
+Never put the following information in these files:
 
 - Home or mailing address
-- Personal phone numbers
-- Personal email addresses (`@gmail.com`, `@yahoo.com`, etc.)
+- Personal phone number
+- Personal email address
 - Salary or compensation details
-- Any information about other private individuals
+- Private information about other people
 
-Public professional links (GitHub, LinkedIn, portfolio URL) are safe to include.
+Public professional links such as GitHub, portfolio, LinkedIn, or a public
+contact form are okay.
 
 ---
 
-## Validating Your Files
+## Validation
 
-Use the CLI validator in `backend/scripts/validate_knowledge.py` to check your
-files before deployment:
+Validate one or more files before deployment:
 
 ```bash
-# Validate all five files at once
 python backend/scripts/validate_knowledge.py \
-    backend/knowledge/profile.json \
-    backend/knowledge/experience.json \
-    backend/knowledge/projects.json \
-    backend/knowledge/publications.json \
-    backend/knowledge/faq.json
-
-# Validate a single file
-python backend/scripts/validate_knowledge.py backend/knowledge/profile.json
+  backend/knowledge/profile.json \
+  backend/knowledge/experience.json \
+  backend/knowledge/projects.json \
+  backend/knowledge/publications.json \
+  backend/knowledge/faq.json
 ```
 
 The validator checks:
 
-- The file is valid JSON.
-- The top-level structure is a JSON object (not an array or primitive).
-- Required top-level keys are present.
-- Required keys inside nested entries are present.
-- Values are the expected types (string, integer, list, etc.).
-
-Exit code is `0` on success and `1` if any file has errors.
+- JSON syntax
+- Top-level object structure
+- Required keys
+- Nested entry schemas
+- Localized `en`/`zh` objects
+- Common private-data patterns
 
 ---
 
-## Uploading to Your Server
+## Recommended Workflow
 
-After filling in the templates and passing validation:
-
-```bash
-# Copy files to the server (adjust host/path as needed)
-scp backend/knowledge/profile.json user@your-server:~/homepage_ai_assistant/backend/knowledge/
-scp backend/knowledge/experience.json user@your-server:~/homepage_ai_assistant/backend/knowledge/
-scp backend/knowledge/projects.json user@your-server:~/homepage_ai_assistant/backend/knowledge/
-scp backend/knowledge/publications.json user@your-server:~/homepage_ai_assistant/backend/knowledge/
-scp backend/knowledge/faq.json user@your-server:~/homepage_ai_assistant/backend/knowledge/
-
-# Rebuild and restart the Docker container so the new files are baked in
-sudo docker stop homepage-ai-backend && sudo docker rm homepage-ai-backend
-sudo docker build -t homepage-ai-backend ./backend
-sudo docker run -d \
-  --name homepage-ai-backend \
-  -p 8000:8000 \
-  --env-file backend/.env \
-  --restart unless-stopped \
-  homepage-ai-backend
-```
-
-Verify the assistant is answering with your information:
-
-```bash
-curl -s -X POST https://your-api-domain/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Who are you?"}' | python3 -m json.tool
-```
+1. Start from the template files in this directory.
+2. Fill in both English and Chinese wherever a visitor might read the text.
+3. Keep URLs and status values language-neutral.
+4. Run the validator.
+5. Copy the completed files into `backend/knowledge/`.

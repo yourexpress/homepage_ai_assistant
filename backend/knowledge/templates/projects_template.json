@@ -1,17 +1,45 @@
 {
   "projects": [
     {
-      "name": "Your Project Name",
-      "description": "A short description of what this project does and why it matters.",
+      "name": {
+        "en": "Your Project Name",
+        "zh": "你的项目名称"
+      },
+      "description": {
+        "en": "A short description of what this project does and why it matters.",
+        "zh": "简要说明这个项目的作用以及为什么它重要。"
+      },
       "url": "https://github.com/your-username/your-project",
-      "technologies": ["Python", "Your Tech", "Another Tool"],
+      "technologies": [
+        "Python",
+        {
+          "en": "Your Tech",
+          "zh": "你的技术栈"
+        },
+        {
+          "en": "Another Tool",
+          "zh": "另一项工具"
+        }
+      ],
       "status": "active"
     },
     {
-      "name": "Another Project Name",
-      "description": "A short description of this project.",
+      "name": {
+        "en": "Another Project Name",
+        "zh": "另一个项目名称"
+      },
+      "description": {
+        "en": "A short description of this project.",
+        "zh": "这个项目的简短描述。"
+      },
       "url": "https://github.com/your-username/another-project",
-      "technologies": ["JavaScript", "React"],
+      "technologies": [
+        "JavaScript",
+        {
+          "en": "React",
+          "zh": "React"
+        }
+      ],
       "status": "completed"
     }
   ]

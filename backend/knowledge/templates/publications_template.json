@@ -1,9 +1,15 @@
 {
   "publications": [
     {
-      "title": "Title of Your Paper or Article",
+      "title": {
+        "en": "Title of Your Paper or Article",
+        "zh": "你的论文或文章标题"
+      },
       "year": 2024,
-      "venue": "Conference Name, Journal Name, or ArXiv",
+      "venue": {
+        "en": "Conference Name, Journal Name, or ArXiv",
+        "zh": "会议名称、期刊名称或 ArXiv"
+      },
       "url": "https://arxiv.org/abs/your-paper-id"
     }
   ]
