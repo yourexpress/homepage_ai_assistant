@@ -79,9 +79,10 @@
   const HAPPY_PENDING_CODE_KEY = "portfolio_happy_pending_code";
   const HAPPY_PENDING_QUESTION_KEY = "portfolio_happy_pending_question";
   const CHAT_MIN_WIDTH = 340;
-  const CHAT_MIN_HEIGHT = 380;
+  const CHAT_MIN_HEIGHT = 360;
 
   const chatToggle = document.getElementById("chat-toggle");
+  const chatBackdrop = document.getElementById("chat-backdrop");
   const chatWidget = document.getElementById("chat-widget");
   const chatResizeHandle = document.getElementById("chat-resize-handle");
   const chatCloseBtn = document.getElementById("chat-close-btn");
@@ -111,6 +112,7 @@
   let happyPendingQuestion = sessionStorage.getItem(HAPPY_PENDING_QUESTION_KEY) || "";
   let happyPendingFeedback = "";
   let resizeState = null;
+  let lastChatScrollTop = 0;
 
   function currentLocale() {
     return getLocale();
@@ -144,6 +146,9 @@
   function setChatWidgetOpen(open) {
     sessionStorage.setItem(CHAT_OPEN_KEY, open ? "true" : "false");
     chatWidget.hidden = !open;
+    if (chatBackdrop) {
+      chatBackdrop.hidden = !open;
+    }
     chatToggle.classList.toggle("is-hidden", open);
     chatToggle.setAttribute("aria-expanded", open ? "true" : "false");
     if (open) {
@@ -252,6 +257,15 @@
       history.forEach((item) => appendMessage(item.role, item.content, item));
     }
     renderPendingHappyMessages();
+    updateClearButtonVisibility();
+  }
+
+  function updateClearButtonVisibility() {
+    const currentTop = chatWindow.scrollTop;
+    const nearTop = currentTop < 28;
+    const isScrollingDown = currentTop > lastChatScrollTop;
+    chatClearBtn.classList.toggle("is-hidden", !nearTop && isScrollingDown);
+    lastChatScrollTop = currentTop;
   }
 
   function updateHappyDockMessage(text) {
@@ -300,7 +314,8 @@
     chatToggle.setAttribute("aria-label", t("chatToggleLabel"));
     chatLabel.textContent = t("chatLabel");
     chatTitle.textContent = t("chatTitle");
-    chatCloseBtn.textContent = t("close");
+    chatCloseBtn.setAttribute("aria-label", t("close"));
+    chatCloseBtn.setAttribute("title", t("close"));
     chatClearBtn.textContent = t("clearHistory");
     sendBtn.textContent = t("send");
     updateChatInputPlaceholder();
@@ -580,12 +595,16 @@
 
   chatToggle.addEventListener("click", () => setChatWidgetOpen(true));
   chatCloseBtn.addEventListener("click", () => setChatWidgetOpen(false));
+  if (chatBackdrop) {
+    chatBackdrop.addEventListener("click", () => setChatWidgetOpen(false));
+  }
   chatClearBtn.addEventListener("click", clearSessionContext);
   chatResizeHandle.addEventListener("pointerdown", startResize);
 
   happyToggle.addEventListener("click", () => setHappyDockOpen(happyDock.hidden));
 
   chatInput.addEventListener("input", updateCharCounter);
+  chatWindow.addEventListener("scroll", updateClearButtonVisibility, { passive: true });
   chatInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();

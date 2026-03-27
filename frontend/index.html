@@ -9,7 +9,7 @@
     name="description"
     content="Runyu Ma's academic and engineering homepage with public profile information, publications, and an AI assistant."
   />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=20260327b" />
 </head>
 <body data-page="home">
   <div class="page-bg"></div>
@@ -170,10 +170,13 @@
     class="chat-toggle"
     id="chat-toggle"
     aria-expanded="false"
+    aria-controls="chat-widget"
     aria-label="Open AI chat"
   >
     AI
   </button>
+
+  <div class="chat-backdrop" id="chat-backdrop" hidden aria-hidden="true"></div>
 
   <aside class="chat-widget" id="chat-widget" hidden>
     <div class="chat-resize-handle" id="chat-resize-handle" aria-hidden="true"></div>
@@ -186,12 +189,22 @@
         </div>
       </div>
       <div class="chat-widget-actions">
-        <button type="button" class="ghost-btn chat-head-btn" id="chat-clear-btn">Clear session</button>
-        <button type="button" class="ghost-btn chat-head-btn chat-close-btn" id="chat-close-btn">Close</button>
+        <button
+          type="button"
+          class="ghost-btn chat-head-btn chat-close-btn"
+          id="chat-close-btn"
+          aria-label="Close AI chat"
+          title="Close chat"
+        >
+          <span aria-hidden="true">✕</span>
+        </button>
       </div>
     </div>
 
-    <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages"></div>
+    <div class="chat-history-shell">
+      <button type="button" class="ghost-btn chat-clear-floating" id="chat-clear-btn">Clear</button>
+      <div id="chat-window" role="log" aria-live="polite" aria-label="Chat messages"></div>
+    </div>
 
     <form id="chat-form" autocomplete="off" novalidate>
       <textarea
@@ -212,8 +225,8 @@
     </div>
   </aside>
 
-  <script src="js/app-config.js"></script>
-  <script src="js/home.js"></script>
-  <script src="js/chat.js"></script>
+  <script src="js/app-config.js?v=20260327b"></script>
+  <script src="js/home.js?v=20260327b"></script>
+  <script src="js/chat.js?v=20260327b"></script>
 </body>
 </html>
