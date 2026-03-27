@@ -28,6 +28,56 @@
     "github": "https://github.com/your-username",
     "portfolio": "https://your-username.github.io"
   },
+  "public_contacts": [
+    {
+      "type": "email",
+      "label": {
+        "en": "Email",
+        "zh": "邮箱"
+      },
+      "value": "public@example.com",
+      "note": {
+        "en": "Only include this if you want the assistant to share it publicly",
+        "zh": "只有在你希望助手公开展示时才填写"
+      }
+    },
+    {
+      "type": "whatsapp",
+      "label": {
+        "en": "WhatsApp",
+        "zh": "WhatsApp"
+      },
+      "value": "+00 000 000 0000",
+      "note": {
+        "en": "Optional public WhatsApp number",
+        "zh": "可选的公开 WhatsApp 号码"
+      }
+    },
+    {
+      "type": "wechat",
+      "label": {
+        "en": "WeChat",
+        "zh": "微信"
+      },
+      "value": "your_public_wechat_id",
+      "note": {
+        "en": "Optional public WeChat ID",
+        "zh": "可选的公开微信号"
+      }
+    },
+    {
+      "type": "phone",
+      "label": {
+        "en": "Phone",
+        "zh": "电话"
+      },
+      "value": "+00 000 *** 0000",
+      "note": {
+        "en": "Use a masked number if you do not want to expose the full number",
+        "zh": "如果不想公开完整号码，请使用遮罩号码"
+      }
+    }
+  ],
   "research_interests": [
     {
       "en": "Your first interest",

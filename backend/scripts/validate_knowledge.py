@@ -55,12 +55,20 @@ _PROFILE_SCHEMA: list[SchemaEntry] = [
     ("location_public", _LOCALIZED_TEXT, False),
     ("links", dict, False),
     ("research_interests", _LOCALIZED_TEXT_LIST, False),
+    ("public_contacts", list, False),
 ]
 
 _EDUCATION_ENTRY_SCHEMA: list[SchemaEntry] = [
     ("degree", _LOCALIZED_TEXT, True),
     ("institution", _LOCALIZED_TEXT, True),
     ("year", int, True),
+]
+
+_PUBLIC_CONTACT_ENTRY_SCHEMA: list[SchemaEntry] = [
+    ("type", str, True),
+    ("label", _LOCALIZED_TEXT, True),
+    ("value", str, True),
+    ("note", _LOCALIZED_TEXT, False),
 ]
 
 _EXPERIENCE_SCHEMA: list[SchemaEntry] = [
@@ -227,6 +235,8 @@ def _check_private_data(data: Any, path: str) -> list[str]:
                 )
     elif isinstance(data, dict):
         for key, value in data.items():
+            if key == "public_contacts":
+                continue
             errors.extend(_check_private_data(value, f"{path}.{key}"))
     elif isinstance(data, list):
         for idx, item in enumerate(data):
@@ -281,6 +291,23 @@ def validate_file(path: Path) -> list[str]:
                 errors.append(f"{path}: links keys must be str, got {type(label).__name__}")
             if not isinstance(url, str):
                 errors.append(f"{path}: links['{label}'] must be str, got {type(url).__name__}")
+
+    if filename == "profile.json" and "public_contacts" in data:
+        contacts = data["public_contacts"]
+        if isinstance(contacts, list):
+            for idx, contact in enumerate(contacts):
+                if not isinstance(contact, dict):
+                    errors.append(
+                        f"{path}: public_contacts[{idx}] must be a JSON object, got {type(contact).__name__}"
+                    )
+                    continue
+                errors.extend(
+                    _check_schema(
+                        contact,
+                        _PUBLIC_CONTACT_ENTRY_SCHEMA,
+                        f"{path} public_contacts[{idx}]",
+                    )
+                )
 
     errors.extend(_check_private_data(data, str(path)))
     return errors

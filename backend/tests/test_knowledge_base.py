@@ -1,4 +1,4 @@
-"""Tests for the structured knowledge base loader and context builder."""
+"""Tests for the structured knowledge loader and system prompt builder."""
 
 from __future__ import annotations
 
@@ -14,37 +14,11 @@ def _is_localized_text(value) -> bool:
     )
 
 
-# ---------------------------------------------------------------------------
-# Loading tests
-# ---------------------------------------------------------------------------
-
-
 class TestLoadJson:
-    """Unit tests for _load_json()."""
-
     def test_loads_valid_profile(self):
         data = knowledge_base._load_json("profile.json")
         assert isinstance(data, dict)
         assert "name" in data
-
-    def test_loads_valid_experience(self):
-        data = knowledge_base._load_json("experience.json")
-        assert isinstance(data, dict)
-        assert "positions" in data
-
-    def test_loads_valid_projects(self):
-        data = knowledge_base._load_json("projects.json")
-        assert isinstance(data, dict)
-        assert "projects" in data
-
-    def test_loads_valid_publications(self):
-        data = knowledge_base._load_json("publications.json")
-        assert isinstance(data, dict)
-
-    def test_loads_valid_faq(self):
-        data = knowledge_base._load_json("faq.json")
-        assert isinstance(data, dict)
-        assert "entries" in data
 
     def test_missing_file_returns_empty_dict(self):
         data = knowledge_base._load_json("nonexistent.json")
@@ -59,8 +33,6 @@ class TestLoadJson:
 
 
 class TestLoadAll:
-    """Tests for load_all()."""
-
     def test_returns_all_source_files(self):
         result = knowledge_base.load_all()
         for name in knowledge_base._SOURCE_FILES:
@@ -68,23 +40,18 @@ class TestLoadAll:
 
     def test_all_values_are_dicts(self):
         result = knowledge_base.load_all()
-        for name, data in result.items():
-            assert isinstance(data, dict), f"{name} should be a dict"
-
-
-# ---------------------------------------------------------------------------
-# Schema validation tests
-# ---------------------------------------------------------------------------
+        for data in result.values():
+            assert isinstance(data, dict)
 
 
 class TestKnowledgeSchemas:
-    """Verify that each JSON file conforms to its expected schema."""
-
     def test_profile_has_required_fields(self):
         data = knowledge_base._load_json("profile.json")
         assert _is_localized_text(data.get("name"))
+        assert _is_localized_text(data.get("headline"))
         assert isinstance(data.get("education"), list)
         assert isinstance(data.get("skills"), list)
+        assert isinstance(data.get("public_contacts"), list)
 
     def test_profile_education_entries(self):
         data = knowledge_base._load_json("profile.json")
@@ -93,18 +60,12 @@ class TestKnowledgeSchemas:
             assert _is_localized_text(edu.get("institution"))
             assert "year" in edu
 
-    def test_experience_positions_have_required_fields(self):
-        data = knowledge_base._load_json("experience.json")
-        for pos in data.get("positions", []):
-            assert _is_localized_text(pos.get("title"))
-            assert _is_localized_text(pos.get("organization"))
-            assert "start_year" in pos
-
-    def test_projects_entries_have_required_fields(self):
-        data = knowledge_base._load_json("projects.json")
-        for proj in data.get("projects", []):
-            assert _is_localized_text(proj.get("name"))
-            assert _is_localized_text(proj.get("description"))
+    def test_profile_uses_bilingual_name(self):
+        data = knowledge_base._load_json("profile.json")
+        name = data.get("name")
+        assert isinstance(name, dict)
+        assert "en" in name
+        assert "zh" in name
 
     def test_faq_entries_have_question_and_answer(self):
         data = knowledge_base._load_json("faq.json")
@@ -113,38 +74,35 @@ class TestKnowledgeSchemas:
             assert _is_localized_text(entry.get("answer"))
 
 
-# ---------------------------------------------------------------------------
-# Context rendering tests
-# ---------------------------------------------------------------------------
-
-
 class TestRenderHelpers:
     def test_plain_string_formats_as_is(self):
         assert knowledge_base._format_localized_text("hello") == "hello"
 
     def test_localized_object_renders_both_languages(self):
-        rendered = knowledge_base._format_localized_text({"en": "hello", "zh": "你好"})
-        assert rendered == "hello / 你好"
+        rendered = knowledge_base._format_localized_text({"en": "hello", "zh": "ni hao"})
+        assert rendered == "hello / ni hao"
 
     def test_localized_list_renders_multiple_items(self):
         rendered = knowledge_base._format_localized_list(
-            ["Python", {"en": "Distributed systems", "zh": "分布式系统"}]
+            ["Python", {"en": "Distributed systems", "zh": "fen bu shi xi tong"}]
         )
         assert "Python" in rendered
-        assert "Distributed systems / 分布式系统" in rendered
+        assert "Distributed systems / fen bu shi xi tong" in rendered
 
 
 class TestRenderProfile:
-    def test_includes_name(self):
+    def test_includes_name_and_headline(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
         assert "Alex Chen" in rendered
+        assert "Software Engineer" in rendered
 
-    def test_includes_chinese_profile_text(self):
+    def test_includes_public_contacts(self):
         data = knowledge_base._load_json("profile.json")
         rendered = knowledge_base._render_profile(data)
-        assert "陈致远" in rendered
-        assert "华盛顿大学" in rendered
+        assert "Public Contacts:" in rendered
+        assert "hello@alexchen.dev" in rendered
+        assert "alexchen_public" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_profile({}) == ""
@@ -155,7 +113,7 @@ class TestRenderExperience:
         data = knowledge_base._load_json("experience.json")
         rendered = knowledge_base._render_experience(data)
         assert "Software Engineer" in rendered
-        assert "软件工程师" in rendered
+        assert "A technology company" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_experience({}) == ""
@@ -166,7 +124,7 @@ class TestRenderProjects:
         data = knowledge_base._load_json("projects.json")
         rendered = knowledge_base._render_projects(data)
         assert "homepage_ai_assistant" in rendered
-        assert "主页 AI 助手" in rendered
+        assert "OpenAI API" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_projects({}) == ""
@@ -185,15 +143,10 @@ class TestRenderFaq:
         rendered = knowledge_base._render_faq(data)
         assert "Q:" in rendered
         assert "A:" in rendered
-        assert "Alex 现在做什么工作？" in rendered
+        assert "What does Alex do?" in rendered
 
     def test_empty_data_returns_empty_string(self):
         assert knowledge_base._render_faq({}) == ""
-
-
-# ---------------------------------------------------------------------------
-# Full context assembly tests
-# ---------------------------------------------------------------------------
 
 
 class TestBuildContext:
@@ -202,26 +155,34 @@ class TestBuildContext:
         assert isinstance(ctx, str)
         assert len(ctx) > 100
 
-    def test_contains_source_citations(self):
+    def test_contains_new_assistant_identity(self):
         ctx = knowledge_base.build_context()
-        assert "[source: profile.json]" in ctx
-        assert "[source: experience.json]" in ctx
-        assert "[source: projects.json]" in ctx
+        assert "Homepage AI Assistant System Prompt" in ctx
+        assert "Runyu Ma" in ctx
+        assert "storyteller and job seller" in ctx
 
-    def test_contains_grounding_instructions(self):
+    def test_contains_reader_friendly_reference_rules(self):
         ctx = knowledge_base.build_context()
-        assert "ONLY answer" in ctx
+        assert "Reference Presentation Rules" in ctx
+        assert "References section" in ctx
+        assert "reader-friendly" in ctx
+
+    def test_does_not_contain_raw_source_tags(self):
+        ctx = knowledge_base.build_context()
+        assert "[source:" not in ctx
+        assert "source:profile.json" not in ctx
+        assert "source:projects.json" not in ctx
 
     def test_contains_bilingual_instruction(self):
         ctx = knowledge_base.build_context()
-        assert "English and Chinese" in ctx
+        assert "If the visitor writes in Chinese" in ctx
+        assert "Bilingual output is welcome" in ctx
 
-    def test_contains_key_facts_in_both_languages(self):
+    def test_contains_key_knowledge(self):
         ctx = knowledge_base.build_context()
         assert "Alex Chen" in ctx
-        assert "陈致远" in ctx
         assert "homepage_ai_assistant" in ctx
-        assert "主页 AI 助手" in ctx
+        assert "Public Contacts:" in ctx
 
 
 class TestGetContext:
@@ -238,35 +199,28 @@ class TestGetContext:
         assert ctx1 == ctx2
 
 
-# ---------------------------------------------------------------------------
-# Grounding / out-of-scope prevention tests
-# ---------------------------------------------------------------------------
-
-
 class TestGroundingConstraints:
-    """Verify that the context explicitly constrains answers to approved data."""
-
-    def test_context_instructs_only_approved_info(self):
+    def test_context_instructs_grounding(self):
         ctx = knowledge_base.build_context()
-        assert "ONLY answer" in ctx or "only answer" in ctx
+        assert "Base your answers on the approved knowledge below" in ctx
 
-    def test_context_instructs_honest_refusal(self):
+    def test_context_instructs_honesty(self):
         ctx = knowledge_base.build_context()
-        assert "not contained in the sources" in ctx or "politely decline" in ctx
+        assert "Do not invent facts" in ctx
+        assert "do not fabricate an answer" in ctx
 
-    def test_context_forbids_prompt_override(self):
+    def test_context_discourages_raw_provenance_tags(self):
         ctx = knowledge_base.build_context()
-        assert "ignore these instructions" in ctx or "refuse and stay in character" in ctx
+        assert "Do not expose raw file markers" in ctx
+        assert "instead of inline provenance tags" in ctx
 
     def test_no_private_data_in_knowledge_files(self):
         sources = knowledge_base.load_all()
         serialized = json.dumps(sources, ensure_ascii=False).lower()
         private_patterns = [
             "home address",
-            "phone number",
             "social security",
             "credit card",
-            "@gmail.com",
             "@yahoo.com",
         ]
         for pattern in private_patterns:

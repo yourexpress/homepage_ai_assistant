@@ -28,6 +28,56 @@
     "github": "https://github.com/yourexpress",
     "portfolio": "https://yourexpress.github.io"
   },
+  "public_contacts": [
+    {
+      "type": "email",
+      "label": {
+        "en": "Email",
+        "zh": "邮箱"
+      },
+      "value": "hello@alexchen.dev",
+      "note": {
+        "en": "Public contact email",
+        "zh": "公开联系邮箱"
+      }
+    },
+    {
+      "type": "whatsapp",
+      "label": {
+        "en": "WhatsApp",
+        "zh": "WhatsApp"
+      },
+      "value": "+1 206 555 0188",
+      "note": {
+        "en": "Public WhatsApp line",
+        "zh": "公开 WhatsApp 联系方式"
+      }
+    },
+    {
+      "type": "wechat",
+      "label": {
+        "en": "WeChat",
+        "zh": "微信"
+      },
+      "value": "alexchen_public",
+      "note": {
+        "en": "Public WeChat ID",
+        "zh": "公开微信号"
+      }
+    },
+    {
+      "type": "phone",
+      "label": {
+        "en": "Phone",
+        "zh": "电话"
+      },
+      "value": "+1 206 *** 0188",
+      "note": {
+        "en": "Masked public phone number",
+        "zh": "已遮罩的公开电话号码"
+      }
+    }
+  ],
   "research_interests": [
     {
       "en": "Distributed systems",

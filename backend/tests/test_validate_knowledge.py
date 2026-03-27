@@ -281,6 +281,51 @@ class TestPrivateDataDetection:
         )
         assert validate_file(path) == []
 
+    def test_public_contacts_allow_public_email_and_masked_phone(self, tmp_path: Path) -> None:
+        path = _write(
+            tmp_path,
+            "profile.json",
+            {
+                "name": "Jane Doe",
+                "headline": "Engineer",
+                "education": [{"degree": "BSc", "institution": "MIT", "year": 2022}],
+                "skills": ["Python"],
+                "public_contacts": [
+                    {
+                        "type": "email",
+                        "label": "Email",
+                        "value": "jane@gmail.com",
+                    },
+                    {
+                        "type": "phone",
+                        "label": "Phone",
+                        "value": "+1 555 *** 4567",
+                    },
+                ],
+            },
+        )
+        assert validate_file(path) == []
+
+    def test_public_contacts_require_label(self, tmp_path: Path) -> None:
+        path = _write(
+            tmp_path,
+            "profile.json",
+            {
+                "name": "Jane Doe",
+                "headline": "Engineer",
+                "education": [{"degree": "BSc", "institution": "MIT", "year": 2022}],
+                "skills": ["Python"],
+                "public_contacts": [
+                    {
+                        "type": "email",
+                        "value": "jane@gmail.com",
+                    }
+                ],
+            },
+        )
+        errors = validate_file(path)
+        assert any("missing required key 'label'" in error for error in errors)
+
 
 class TestMainExitCodes:
     """main() should return 0 on success and 1 on failure."""
