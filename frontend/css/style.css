@@ -1115,3 +1115,8 @@ select:focus {
     max-width: 88%;
   }
 }
+
+.chat-widget[hidden],
+.happy-dock[hidden] {
+  display: none !important;
+}
