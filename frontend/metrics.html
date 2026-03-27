@@ -3,34 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alex Chen · Assistant Metrics</title>
-  <meta name="description"
-        content="Public operational metrics for the Portfolio AI Assistant." />
+  <title>Runyu Ma | Assistant Metrics</title>
+  <meta name="description" content="Public operational metrics for the portfolio assistant." />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="page-bg"></div>
+
   <header class="site-header">
-    <span class="logo">Alex Chen</span>
-    <nav>
-      <a href="index.html">Chat</a>
+    <a href="index.html" class="logo-mark">Runyu Ma</a>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
       <a href="metrics.html" class="active">Metrics</a>
+      <a href="manager.html">Manager</a>
       <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
 
-  <main class="page-container">
-    <div class="hero">
-      <h1>Operational Metrics</h1>
-      <p>Live counters from the assistant backend. Resets on each deployment.</p>
-    </div>
+  <main class="page-shell page-shell-narrow">
+    <section class="glass-card metrics-shell">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Operations</p>
+          <h1>Assistant metrics</h1>
+        </div>
+      </div>
+      <p class="section-copy">
+        These counters help you see how the assistant is being used. They reset when the backend restarts unless you wire in persistent telemetry.
+      </p>
 
-    <div id="metrics-root">
-      <p class="metrics-refresh-note">Loading…</p>
-    </div>
+      <div id="metrics-root">
+        <p class="metrics-refresh-note">Loading...</p>
+      </div>
 
-    <p class="metrics-refresh-note" id="refresh-note"></p>
+      <p class="metrics-refresh-note" id="refresh-note"></p>
+    </section>
   </main>
 
+  <script src="js/app-config.js"></script>
   <script src="js/metrics.js"></script>
 </body>
 </html>

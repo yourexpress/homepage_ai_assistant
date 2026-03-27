@@ -8,7 +8,7 @@ import time
 from fastapi import APIRouter, HTTPException
 
 from app.models import ChatRequest, ChatResponse
-from app.services import llm_client, policy_guard
+from app.services import happy_auth, llm_client, policy_guard
 from app.services.metrics_store import metrics
 
 logger = logging.getLogger("chat")
@@ -36,7 +36,13 @@ async def chat(request: ChatRequest) -> ChatResponse:
         )
 
     # Build prompt
-    messages = policy_guard.build_messages(request.message)
+    happy_mode_active = happy_auth.token_is_valid(request.happy_token, request.session_id)
+    history = [item.model_dump() for item in request.history]
+    messages = policy_guard.build_messages(
+        request.message,
+        history=history,
+        happy_mode=happy_mode_active,
+    )
 
     # Call LLM
     metrics.record_llm_request()
@@ -58,4 +64,4 @@ async def chat(request: ChatRequest) -> ChatResponse:
     )
     logger.info("LLM response latency=%.2fs tokens=%d", latency, result.completion_tokens)
 
-    return ChatResponse(reply=result.text)
+    return ChatResponse(reply=result.text, happy_mode_active=happy_mode_active)

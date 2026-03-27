@@ -1,0 +1,276 @@
+"""File-backed homepage content storage."""
+
+from __future__ import annotations
+
+import json
+import threading
+from copy import deepcopy
+from pathlib import Path
+from typing import Any
+
+from app.config import settings
+from app.services import translation_service
+
+_DEFAULT_CONTENT: dict[str, Any] = {
+    "hero_badge": {
+        "en": "AI Systems Portfolio",
+        "zh": "AI 系统主页",
+    },
+    "hero_title": {
+        "en": "Runyu Ma connects AI systems research with real deployment.",
+        "zh": "Runyu Ma 致力于把 AI 系统研究与真实部署连接起来。",
+    },
+    "hero_summary": {
+        "en": (
+            "Explore research, systems work, publications, and public contact details "
+            "through a calmer bilingual portfolio experience."
+        ),
+        "zh": "通过一个更平稳的中英双语主页，了解他的研究、系统工作、论文与公开联系方式。",
+    },
+    "hero_panel_title": {
+        "en": "Current homepage",
+        "zh": "当前主页",
+    },
+    "hero_panel_body": {
+        "en": (
+            "This is the current public homepage of Runyu Ma, with AI-assisted "
+            "exploration, metrics, and visitor feedback."
+        ),
+        "zh": "这里是 Runyu Ma 当前的公开主页，包含 AI 助手、指标面板与访客反馈。",
+    },
+    "section_chat_title": {
+        "en": "Ask the assistant",
+        "zh": "和助手交流",
+    },
+    "section_chat_body": {
+        "en": (
+            "The assistant answers from approved public knowledge and can keep the "
+            "current chat session in context."
+        ),
+        "zh": "助手会基于已批准的公开知识回答，并记住当前聊天会话中的上下文。",
+    },
+    "section_comments_title": {
+        "en": "Visitor comments",
+        "zh": "访客留言",
+    },
+    "section_comments_body": {
+        "en": "Leave feedback on the website look and resume presentation.",
+        "zh": "欢迎对网站外观和简历展示留下反馈。",
+    },
+    "about_title": {
+        "en": "About me",
+        "zh": "关于我",
+    },
+    "about_paragraphs": [
+        {
+            "en": (
+                "I earned my M.S. in Computer Science at George Mason University in "
+                "December 2025 after several years of research. My research interests "
+                "include mobile and edge systems, safe and efficient AI systems, and "
+                "high-performance GPU computation."
+            ),
+            "zh": (
+                "我在经过数年的科研积累后，于 2025 年 12 月获得乔治梅森大学计算机科学"
+                "硕士学位。我的研究兴趣包括移动与边缘系统、安全高效的 AI 系统，以及高"
+                "性能 GPU 计算。"
+            ),
+        },
+        {
+            "en": (
+                "Previously, I received an M.S. in Computer Science from The George "
+                "Washington University and a B.S. in Information Security from the "
+                "University of Electronic Science and Technology of China (UESTC)."
+            ),
+            "zh": (
+                "在此之前，我曾获得乔治华盛顿大学计算机科学硕士学位，以及电子科技大学"
+                "（UESTC）信息安全学士学位。"
+            ),
+        },
+    ],
+    "research_title": {
+        "en": "Research interests",
+        "zh": "研究方向",
+    },
+    "research_items": [
+        {
+            "en": "Model compression, mobile and edge deep learning systems",
+            "zh": "模型压缩、移动与边缘深度学习系统",
+        },
+        {
+            "en": "Uncertainty estimation and trustworthy AI",
+            "zh": "不确定性估计与可信 AI",
+        },
+        {
+            "en": "Efficient deep learning, GPU scheduling, GPU resource scaling, and GPU profiling",
+            "zh": "高效深度学习、GPU 调度、GPU 资源伸缩与 GPU 性能分析",
+        },
+        {
+            "en": "Network measurement and network security",
+            "zh": "网络测量与网络安全",
+        },
+    ],
+    "news_title": {
+        "en": "News",
+        "zh": "近况",
+    },
+    "news_items": [
+        {
+            "en": (
+                '2025 — Our paper "Better Reliability Compression: Model Pruning with '
+                'Calibrated Uncertainty Estimation for Mobile Deep Learning Applications" '
+                "was accepted at IEEE MOST 2025."
+            ),
+            "zh": (
+                "2025 年——我们的论文《Better Reliability Compression: Model Pruning "
+                "with Calibrated Uncertainty Estimation for Mobile Deep Learning "
+                "Applications》被 IEEE MOST 2025 录用。"
+            ),
+        }
+    ],
+    "tools_title": {
+        "en": "Tools",
+        "zh": "工具",
+    },
+    "tools_items": [
+        {
+            "label": {
+                "en": "Metrics Dashboard",
+                "zh": "指标面板",
+            },
+            "description": {
+                "en": "Operational metrics for the assistant.",
+                "zh": "查看助手的运行指标。",
+            },
+            "href": "metrics.html",
+        },
+        {
+            "label": {
+                "en": "AI Chat",
+                "zh": "AI 对话",
+            },
+            "description": {
+                "en": "Use the chat panel to ask about projects, research, and fit.",
+                "zh": "使用聊天面板了解项目、研究方向和岗位匹配度。",
+            },
+            "href": "#chat-form",
+        },
+    ],
+    "contact_title": {
+        "en": "Contact",
+        "zh": "联系方式",
+    },
+    "contact_items": [
+        {
+            "label": {
+                "en": "Email",
+                "zh": "邮箱",
+            },
+            "value": {
+                "en": "rma5@gmu.edu",
+                "zh": "rma5@gmu.edu",
+            },
+            "href": "mailto:rma5@gmu.edu",
+        },
+        {
+            "label": {
+                "en": "GitHub (rym-rym)",
+                "zh": "GitHub（rym-rym）",
+            },
+            "value": {
+                "en": "github.com/rym-rym",
+                "zh": "github.com/rym-rym",
+            },
+            "href": "https://github.com/rym-rym",
+        },
+        {
+            "label": {
+                "en": "GitHub (yourexpress)",
+                "zh": "GitHub（yourexpress）",
+            },
+            "value": {
+                "en": "github.com/yourexpress",
+                "zh": "github.com/yourexpress",
+            },
+            "href": "https://github.com/yourexpress",
+        },
+    ],
+    "spotlights": [
+        {
+            "title": {
+                "en": "Research to deployment",
+                "zh": "从科研到部署",
+            },
+            "body": {
+                "en": "A background that connects open-ended systems research with practical implementation.",
+                "zh": "能够把开放性的系统研究问题转化为可落地的工程实现。",
+            },
+        },
+        {
+            "title": {
+                "en": "Bilingual by design",
+                "zh": "天然支持双语",
+            },
+            "body": {
+                "en": "English and Chinese homepage content can be maintained from one manager flow.",
+                "zh": "中英文主页内容可以通过同一个管理入口维护。",
+            },
+        },
+        {
+            "title": {
+                "en": "Calm exploration",
+                "zh": "舒适探索",
+            },
+            "body": {
+                "en": "Visitors can browse, chat, and leave comments without a complicated interface.",
+                "zh": "访客可以轻松浏览、聊天和留言，而不需要面对复杂界面。",
+            },
+        },
+    ],
+}
+
+
+class SiteContentStore:
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+
+    @property
+    def path(self) -> Path:
+        return settings.site_content_path
+
+    def _ensure_parent(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+
+    def _write(self, content: dict[str, Any]) -> None:
+        self._ensure_parent()
+        with open(self.path, "w", encoding="utf-8") as fh:
+            json.dump(content, fh, ensure_ascii=False, indent=2)
+
+    def load(self) -> dict[str, Any]:
+        with self._lock:
+            return self._load_unlocked()
+
+    async def update(self, new_content: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
+        with self._lock:
+            old_content = self._load_unlocked()
+            synced_content, notes = await translation_service.sync_bilingual_content(
+                old_content,
+                new_content,
+            )
+            self._write(synced_content)
+            return synced_content, notes
+
+    def _load_unlocked(self) -> dict[str, Any]:
+        if not self.path.exists():
+            content = deepcopy(_DEFAULT_CONTENT)
+            self._write(content)
+            return content
+        with open(self.path, encoding="utf-8") as fh:
+            data = json.load(fh)
+        if not isinstance(data, dict):
+            content = deepcopy(_DEFAULT_CONTENT)
+            self._write(content)
+            return content
+        return data
+
+
+site_content_store = SiteContentStore()
