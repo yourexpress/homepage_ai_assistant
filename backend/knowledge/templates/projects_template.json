@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "name": "Your Project Name",
+      "description": "A short description of what this project does and why it matters.",
+      "url": "https://github.com/your-username/your-project",
+      "technologies": ["Python", "Your Tech", "Another Tool"],
+      "status": "active"
+    },
+    {
+      "name": "Another Project Name",
+      "description": "A short description of this project.",
+      "url": "https://github.com/your-username/another-project",
+      "technologies": ["JavaScript", "React"],
+      "status": "completed"
+    }
+  ]
+}

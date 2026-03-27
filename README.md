@@ -133,6 +133,7 @@ All backend settings are in `backend/app/config.py` and read from `.env`:
 - 🔬 [Testing Guide](docs/TESTING.md)
 - 📖 [Developer Reading Guide](docs/READING_GUIDE.md)
 - 🔧 [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
+- 📝 [Knowledge Templates Guide](docs/KNOWLEDGE_TEMPLATES.md) — fill in your own data offline and validate before deploying
 
 ---
 
