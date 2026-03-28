@@ -212,7 +212,8 @@
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   /**
@@ -255,7 +256,7 @@
         continue;
       }
 
-      const ulMatch = raw.match(/^[\s]*[-*]\s+(.*)/);
+      const ulMatch = raw.match(/^[\s]*-\s+(.*)/);
       const olMatch = raw.match(/^[\s]*\d+\.\s+(.*)/);
 
       if (ulMatch) {
@@ -265,6 +266,17 @@
           inList = "ul";
         }
         out.push("<li>" + inlineFormat(ulMatch[1]) + "</li>");
+        continue;
+      }
+
+      const starListMatch = raw.match(/^[\s]*\*\s+(.*)/);
+      if (starListMatch) {
+        if (inList !== "ul") {
+          closePendingList();
+          out.push("<ul>");
+          inList = "ul";
+        }
+        out.push("<li>" + inlineFormat(starListMatch[1]) + "</li>");
         continue;
       }
       if (olMatch) {
@@ -300,9 +312,9 @@
    */
   function inlineFormat(text) {
     return text
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      .replace(/`([^`]+?)`/g, "<code>$1</code>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
   }
 
   function appendMessage(role, text, extra = {}) {
