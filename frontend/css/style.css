@@ -677,15 +677,18 @@ h3 {
 }
 
 .chat-widget #chat-window {
-  flex: 1;
-  min-height: 220px;
+  flex: 1 1 0;
+  min-height: 0;
   max-height: none;
 }
 
 .chat-history-shell {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
-  flex: 1;
+  flex: 1 1 0;
+  overflow: hidden;
 }
 
 .chat-clear-floating {
@@ -728,6 +731,7 @@ h3 {
 
 .message.assistant {
   align-self: start;
+  white-space: normal;
   background: var(--assistant-bubble);
   border: 1px solid rgba(17, 32, 79, 0.08);
   border-bottom-left-radius: 8px;
@@ -747,8 +751,53 @@ h3 {
 }
 
 .message.error {
+  white-space: normal;
   color: var(--danger);
   border: 1px solid rgba(214, 66, 82, 0.2);
+}
+
+.message p {
+  margin: 0 0 0.4em;
+}
+
+.message p:last-child {
+  margin-bottom: 0;
+}
+
+.message ul,
+.message ol {
+  margin: 0.3em 0;
+  padding-left: 1.4em;
+}
+
+.message li {
+  margin-bottom: 0.15em;
+}
+
+.message code {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(17, 32, 79, 0.06);
+  font-size: 0.82em;
+}
+
+.message pre {
+  margin: 0.4em 0;
+  padding: 0.5em 0.6em;
+  border-radius: 6px;
+  background: rgba(17, 32, 79, 0.06);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message pre code {
+  padding: 0;
+  background: none;
+}
+
+.message strong {
+  font-weight: 600;
 }
 
 #chat-form,

@@ -202,6 +202,109 @@
     }
   }
 
+  /**
+   * Escape HTML special characters to prevent XSS when rendering markdown.
+   * @param {string} str - Raw string to escape.
+   * @returns {string} HTML-safe string.
+   */
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /**
+   * Convert a limited subset of markdown to HTML.
+   * Handles: bold, italic, inline code, code blocks, unordered/ordered lists,
+   * and paragraphs. Input is HTML-escaped first to prevent injection.
+   * @param {string} src - Raw markdown text.
+   * @returns {string} Sanitised HTML string.
+   */
+  function renderMarkdown(src) {
+    const safe = escapeHtml(src);
+    const lines = safe.split("\n");
+    const out = [];
+    let inList = "";
+    let inCode = false;
+    let codeBlock = [];
+
+    function closePendingList() {
+      if (inList === "ul") out.push("</ul>");
+      if (inList === "ol") out.push("</ol>");
+      inList = "";
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i];
+
+      if (/^```/.test(raw)) {
+        if (inCode) {
+          out.push("<pre><code>" + codeBlock.join("\n") + "</code></pre>");
+          codeBlock = [];
+          inCode = false;
+        } else {
+          closePendingList();
+          inCode = true;
+        }
+        continue;
+      }
+      if (inCode) {
+        codeBlock.push(raw);
+        continue;
+      }
+
+      const ulMatch = raw.match(/^[\s]*[-*]\s+(.*)/);
+      const olMatch = raw.match(/^[\s]*\d+\.\s+(.*)/);
+
+      if (ulMatch) {
+        if (inList !== "ul") {
+          closePendingList();
+          out.push("<ul>");
+          inList = "ul";
+        }
+        out.push("<li>" + inlineFormat(ulMatch[1]) + "</li>");
+        continue;
+      }
+      if (olMatch) {
+        if (inList !== "ol") {
+          closePendingList();
+          out.push("<ol>");
+          inList = "ol";
+        }
+        out.push("<li>" + inlineFormat(olMatch[1]) + "</li>");
+        continue;
+      }
+
+      closePendingList();
+
+      if (raw.trim() === "") {
+        continue;
+      }
+      out.push("<p>" + inlineFormat(raw) + "</p>");
+    }
+
+    if (inCode && codeBlock.length) {
+      out.push("<pre><code>" + codeBlock.join("\n") + "</code></pre>");
+    }
+    closePendingList();
+    return out.join("");
+  }
+
+  /**
+   * Apply inline markdown formatting (bold, italic, inline code).
+   * Operates on already HTML-escaped text.
+   * @param {string} text - HTML-escaped line.
+   * @returns {string} Line with inline HTML formatting.
+   */
+  function inlineFormat(text) {
+    return text
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  }
+
   function appendMessage(role, text, extra = {}) {
     const el = document.createElement("div");
     el.classList.add("message", role);
@@ -211,7 +314,11 @@
     if (extra.temporary) {
       el.dataset.temporary = "true";
     }
-    el.textContent = text;
+    if (role === "assistant" || role === "error") {
+      el.innerHTML = renderMarkdown(text);
+    } else {
+      el.textContent = text;
+    }
     chatWindow.appendChild(el);
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return el;
