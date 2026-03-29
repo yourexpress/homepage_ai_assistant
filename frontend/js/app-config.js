@@ -35,7 +35,10 @@
     if (["localhost", "127.0.0.1"].includes(hostname)) {
       return "http://localhost:8000";
     }
-    if (hostname === "runyuma.uk" || hostname === "www.runyuma.uk" || hostname.endsWith("github.io")) {
+    if (hostname === "runyuma.uk" || hostname === "www.runyuma.uk") {
+      return "";
+    }
+    if (hostname.endsWith("github.io")) {
       return "https://api.runyuma.uk";
     }
     if (hostname.startsWith("www.")) {

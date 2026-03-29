@@ -8,6 +8,10 @@ This project can run as two containers:
 If you want to host the frontend on GitHub Pages instead, see
 `docs/GITHUB_PAGES_DEPLOYMENT.md`.
 
+If you want the whole site to be hosted from your own server under one domain,
+see `docs/SERVER_DEPLOYMENT.md`. That is the recommended deployment path for
+the current product shape.
+
 ## Why this setup
 
 - real knowledge files stay on the server instead of the public repository
@@ -68,6 +72,12 @@ Then open:
 
 - frontend: `http://localhost:8080`
 - backend API: `http://localhost:8000/api/health`
+
+For production-style same-host deployment, use:
+
+```bash
+docker compose -f docker-compose.server.yml up -d --build
+```
 
 ## 5. Production notes
 
