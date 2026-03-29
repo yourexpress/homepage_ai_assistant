@@ -16,7 +16,7 @@ The backend is a FastAPI service designed to run in a container.
 - automatic EN/ZH sync when content is edited through the manager flow
 - protected owner-only comments inbox
 - optional happy-personality mode unlocked from a small private-code dock
-- container deployment scaffolding
+- container deployment scaffolding.
 
 ## Repository Structure
 
