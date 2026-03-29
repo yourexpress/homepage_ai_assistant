@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="portfolio-backend-url" content="" />
+  <meta name="robots" content="noindex,nofollow" />
   <title>Runyu Ma | Manager</title>
   <meta name="description" content="Owner dashboard for homepage presentation settings." />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=20260328-manager-layout" />
 </head>
-<body>
+<body class="manager-page">
   <div class="page-bg"></div>
 
   <header class="site-header">
@@ -31,7 +32,7 @@
         </div>
       </div>
       <p class="section-copy">
-        Core public profile basics now come from the knowledge base automatically. This page is for lightweight presentation copy and labels, not for re-entering your profile field by field.
+        Review the public profile as grouped sections, then update only the lightweight homepage presentation copy. Structured profile content still comes from the knowledge base.
       </p>
 
       <div class="manager-auth manager-auth-wide">
@@ -55,17 +56,14 @@
         <div class="section-head section-head-stack">
           <div>
             <p class="section-label">Knowledge Base</p>
-            <h2>Auto-loaded public basics</h2>
+            <h2>Grouped profile snapshot</h2>
           </div>
         </div>
         <p class="helper-text">
-          The homepage intro, research interests, education, and public contact methods are read from the backend knowledge files.
+          Public basics, experience, projects, publications, and contacts are grouped here like profile sections. Each group can be folded to keep the page dense.
         </p>
         <div id="manager-knowledge-summary" class="manager-summary-list">
-          <div class="manager-summary-card">
-            <h3>Not loaded yet</h3>
-            <p>Load the dashboard to review the current public profile summary from the knowledge base.</p>
-          </div>
+          <p class="manager-empty-state">Load the dashboard to review the current public profile summary from the knowledge base.</p>
         </div>
       </article>
 
@@ -73,11 +71,11 @@
         <div class="section-head section-head-stack">
           <div>
             <p class="section-label">Presentation Copy</p>
-            <h2>Editable homepage copy</h2>
+            <h2>Editable presentation groups</h2>
           </div>
         </div>
         <p class="helper-text">
-          These settings control short welcome copy and section labels. They do not replace the structured profile data from the knowledge base.
+          These settings control welcome copy and section labels. They stay separate from the structured profile data and are grouped into collapsible editor sections.
         </p>
 
         <form id="manager-form" class="manager-form" hidden>
@@ -89,7 +87,7 @@
     </section>
   </main>
 
-  <script src="js/app-config.js"></script>
-  <script src="js/manager.js"></script>
+  <script src="js/app-config.js?v=20260328-manager-layout"></script>
+  <script src="js/manager.js?v=20260328-manager-layout"></script>
 </body>
 </html>
