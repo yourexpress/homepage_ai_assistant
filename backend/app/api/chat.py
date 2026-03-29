@@ -49,6 +49,9 @@ async def chat(request: ChatRequest) -> ChatResponse:
     start = time.monotonic()
     try:
         result = await llm_client.complete(messages)
+    except RuntimeError as exc:
+        logger.warning("LLM configuration error: %s", exc)
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
         logger.exception("LLM call failed: %s", exc)
         raise HTTPException(

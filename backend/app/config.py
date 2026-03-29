@@ -15,9 +15,14 @@ class Settings(BaseSettings):
     )
 
     # LLM
+    llm_provider: str = "auto"
     openai_api_key: str = "test-key"
     openai_model: str = "gpt-4o-mini"
     openai_base_url: str = ""
+    anthropic_api_key: str = ""
+    anthropic_model: str = ""
+    llm_temperature: float = 0.7
+    llm_max_tokens: int = 512
 
     # CORS
     allowed_origins: str = (
