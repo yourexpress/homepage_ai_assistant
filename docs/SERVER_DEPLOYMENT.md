@@ -74,6 +74,12 @@ From the repository root:
 docker compose -f docker-compose.server.yml up -d --build
 ```
 
+If your server uses the older standalone Compose binary, use:
+
+```bash
+docker-compose -f docker-compose.server.yml up -d --build
+```
+
 That publishes:
 
 - `http://your-server/`
@@ -123,6 +129,12 @@ After code changes:
 
 ```bash
 docker compose -f docker-compose.server.yml up -d --build
+```
+
+Older Docker setups may require:
+
+```bash
+docker-compose -f docker-compose.server.yml up -d --build
 ```
 
 Because nginx serves the checked-out `frontend/` directory directly, static

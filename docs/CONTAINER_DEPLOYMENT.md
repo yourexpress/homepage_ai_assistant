@@ -79,6 +79,12 @@ For production-style same-host deployment, use:
 docker compose -f docker-compose.server.yml up -d --build
 ```
 
+On servers that still use the standalone Compose binary, run:
+
+```bash
+docker-compose -f docker-compose.server.yml up -d --build
+```
+
 ## 5. Production notes
 
 - This implementation uses file-backed comments and content storage, so it is best suited to a single backend instance.
