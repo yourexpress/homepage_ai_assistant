@@ -5,9 +5,6 @@ This project can run as two containers:
 - `backend`: FastAPI API on port `8000`
 - `frontend`: static site served by nginx on port `8080`
 
-If you want to host the frontend on GitHub Pages instead, see
-`docs/GITHUB_PAGES_DEPLOYMENT.md`.
-
 If you want the whole site to be hosted from your own server under one domain,
 see `docs/SERVER_DEPLOYMENT.md`. That is the recommended deployment path for
 the current product shape.

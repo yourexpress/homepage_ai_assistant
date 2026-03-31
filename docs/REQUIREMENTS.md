@@ -114,7 +114,8 @@ At the same time, the owner should be able to:
 
 ### Deployment
 
-- The system must support a GitHub Pages deployment for the static frontend.
+- The system must support a single-server deployment where nginx serves the
+  static frontend and proxies API requests to the backend container.
 - The system must support a two-container deployment:
   - static frontend container
   - backend API container

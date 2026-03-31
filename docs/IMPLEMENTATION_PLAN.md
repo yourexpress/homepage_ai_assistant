@@ -15,6 +15,9 @@ the current implementation state and the most likely next improvements.
 - visitor comments with voting, sorting, and pagination
 - optional happy-personality flow with private server-side secrets
 - container deployment scaffolding
+- manager profile overrides for homepage personal information (name, headline,
+  about paragraphs, education, research interests, contact items) with
+  LinkedIn-style grouped sections and array add/remove controls
 
 ## Current Architecture Decisions
 

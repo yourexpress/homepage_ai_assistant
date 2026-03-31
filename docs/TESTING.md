@@ -65,6 +65,16 @@ This checks:
 4. edit only English or only Chinese for a field
 5. save and confirm sync notes are returned
 
+### Manager profile overrides
+
+1. load the dashboard with a valid admin key
+2. scroll to the profile override sections (About, Education, Research, Contact)
+3. enter values for name, headline, and add education/research/contact items
+4. save and confirm the homepage shows the overrides instead of knowledge-base data
+5. clear an override field and save — confirm the homepage falls back to the knowledge-base value
+6. confirm pressing Enter in the admin key input triggers the dashboard load
+7. refresh the manager page — confirm the admin key input is empty
+
 ### Chat session memory
 
 1. ask an initial question

@@ -38,9 +38,6 @@
     if (hostname === "runyuma.uk" || hostname === "www.runyuma.uk") {
       return "";
     }
-    if (hostname.endsWith("github.io")) {
-      return "https://api.runyuma.uk";
-    }
     if (hostname.startsWith("www.")) {
       return `${protocol}//api.${hostname.slice(4)}`;
     }

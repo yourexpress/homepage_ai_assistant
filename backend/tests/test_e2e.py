@@ -114,7 +114,7 @@ class TestEndToEndCORS:
 
     @pytest.mark.skip(reason="TODO: requires Origin header injection in test client")
     async def test_allowed_origin_receives_cors_headers(self, client):
-        # TODO: Send request with Origin: https://yourexpress.github.io
+        # TODO: Send request with Origin: https://www.runyuma.uk
         # Assert Access-Control-Allow-Origin header is present
         pass
 

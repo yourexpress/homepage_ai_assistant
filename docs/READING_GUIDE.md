@@ -79,7 +79,7 @@ backend/
 
 ## Important Current Assumptions
 
-- The frontend is static and can be hosted on GitHub Pages or any static host.
+- The frontend is static and can be hosted behind a reverse proxy or any static host.
 - The backend is a single FastAPI service.
 - Editable site content and comments are file-backed, so single-instance
   backend deployment is the intended production model right now.

@@ -214,6 +214,12 @@ _DEFAULT_CONTENT: dict[str, Any] = {
             },
         },
     ],
+    "profile_name": {"en": "", "zh": ""},
+    "profile_headline": {"en": "", "zh": ""},
+    "profile_about_paragraphs": [],
+    "profile_education": [],
+    "profile_research_interests": [],
+    "profile_contact_items": [],
 }
 
 

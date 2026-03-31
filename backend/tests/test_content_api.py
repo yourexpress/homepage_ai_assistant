@@ -29,6 +29,22 @@ class TestContentApi:
         assert content["contact_items"][0]["href"] == "mailto:rma5@gmu.edu"
         assert data["capabilities"]["session_history_enabled"] is True
 
+    async def test_content_includes_profile_override_fields(self, client, tmp_path, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "site_content_file", str(tmp_path / "site_content.json"))
+
+        response = await client.get("/api/content")
+        assert response.status_code == 200
+
+        content = response.json()["content"]
+        assert content["profile_name"] == {"en": "", "zh": ""}
+        assert content["profile_headline"] == {"en": "", "zh": ""}
+        assert content["profile_about_paragraphs"] == []
+        assert content["profile_education"] == []
+        assert content["profile_research_interests"] == []
+        assert content["profile_contact_items"] == []
+
     async def test_portfolio_endpoint_handles_missing_private_knowledge(self, client, tmp_path, monkeypatch):
         monkeypatch.setattr(knowledge_base, "_KNOWLEDGE_DIR", tmp_path)
         knowledge_base._cached_context = None
