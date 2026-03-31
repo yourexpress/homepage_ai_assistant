@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="portfolio-backend-url" content="" />
+  <title>Runyu Ma | Homepage (Beta)</title>
+  <meta
+    name="description"
+    content="Runyu Ma's professional homepage — researcher, AI inference engineer, and machine learning practitioner."
+  />
+  <link rel="stylesheet" href="css/beta.css?v=20260331" />
+</head>
+<body>
+  <header class="beta-header">
+    <a href="beta.html" class="beta-logo">Runyu Ma</a>
+    <nav class="beta-nav">
+      <a href="index.html" class="beta-nav-back" id="nav-stable">← Current Homepage</a>
+      <a href="experience.html" id="nav-experience">Experience</a>
+      <a href="publications.html" id="nav-publications">Publications</a>
+      <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="beta-lang-toggle" aria-label="Language switcher">
+      <button type="button" class="beta-lang-btn" data-locale="en">EN</button>
+      <button type="button" class="beta-lang-btn" data-locale="zh">中文</button>
+    </div>
+  </header>
+
+  <main class="beta-main">
+    <!-- ===== PART 1: Personal Information Zone ===== -->
+    <section class="profile-zone">
+
+      <!-- Hero: Name + Title + Value Statement -->
+      <div class="profile-hero">
+        <span class="profile-badge" id="profile-badge">Academic Profile</span>
+        <h1 class="profile-name" id="profile-name">Runyu Ma</h1>
+        <p class="profile-headline" id="profile-headline">
+          Researcher, AI Inference Engineer, Machine Learning Engineer
+        </p>
+        <div class="profile-quick-links">
+          <a href="experience.html" class="quick-link-btn" id="link-experience">
+            <span class="quick-link-icon">💼</span> Experience &amp; Projects
+          </a>
+          <a href="publications.html" class="quick-link-btn" id="link-publications">
+            <span class="quick-link-icon">📄</span> Publications
+          </a>
+          <a class="quick-link-btn" id="link-resume" href="#" hidden>
+            <span class="quick-link-icon">📋</span> Resume
+          </a>
+        </div>
+      </div>
+
+      <!-- Bio Summary -->
+      <div class="profile-card" id="card-about">
+        <h2 class="card-title" id="about-title">About</h2>
+        <div class="card-body" id="about-paragraphs"></div>
+      </div>
+
+      <!-- Education -->
+      <div class="profile-card" id="card-education">
+        <h2 class="card-title" id="education-title">Education</h2>
+        <div class="card-body" id="education-list"></div>
+      </div>
+
+      <!-- Skills / Research Interests -->
+      <div class="profile-card" id="card-skills">
+        <h2 class="card-title" id="skills-title">Skills &amp; Research Interests</h2>
+        <div class="card-body">
+          <div class="skill-tags" id="skills-list"></div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="profile-card" id="card-contact">
+        <h2 class="card-title" id="contact-title">Contact</h2>
+        <div class="card-body" id="contact-list"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ===== PART 2: Sticky Chat Zone ===== -->
+  <section class="chat-zone" id="chat-zone">
+    <div class="chat-zone-header">
+      <div class="chat-zone-title-row">
+        <h2 class="chat-zone-title" id="chat-zone-title">Ask the AI Assistant</h2>
+        <button type="button" class="chat-zone-collapse" id="chat-collapse-btn"
+                aria-label="Toggle chat" aria-expanded="true">
+          <span class="collapse-icon" id="collapse-icon">▼</span>
+        </button>
+      </div>
+      <p class="chat-zone-subtitle" id="chat-zone-subtitle">
+        Ask about my research, experience, projects, or anything on this site.
+      </p>
+    </div>
+
+    <div class="chat-zone-body" id="chat-zone-body">
+      <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"></div>
+
+      <div class="chat-suggestions" id="chat-suggestions">
+        <button type="button" class="suggestion-btn" data-question="What are your main research interests?">What are your research interests?</button>
+        <button type="button" class="suggestion-btn" data-question="Tell me about your work experience.">Work experience</button>
+        <button type="button" class="suggestion-btn" data-question="What projects have you worked on?">Projects</button>
+        <button type="button" class="suggestion-btn" data-question="What is your education background?">Education</button>
+        <button type="button" class="suggestion-btn" data-question="How can I contact you?">Contact info</button>
+      </div>
+
+      <form class="chat-input-form" id="chat-form" autocomplete="off" novalidate>
+        <textarea
+          id="chat-input"
+          class="chat-input"
+          rows="1"
+          maxlength="1000"
+          placeholder="Ask about projects, research, experience, or fit..."
+          aria-label="Your message"
+        ></textarea>
+        <button type="submit" class="chat-send-btn" id="send-btn" aria-label="Send message">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+
+      <div class="chat-footer">
+        <span class="chat-char-count" id="chat-char-count">0 / 1000</span>
+        <span class="chat-disclaimer" id="chat-disclaimer">Context kept for this session only.</span>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/app-config.js?v=20260331"></script>
+  <script src="js/beta-home.js?v=20260331"></script>
+  <script src="js/beta-chat.js?v=20260331"></script>
+</body>
+</html>
