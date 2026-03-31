@@ -286,14 +286,22 @@
       });
       const span = item.querySelector(".manager-array-item-head span");
       if (span) {
-        const label = span.textContent.replace(/\d+$/, String(newIndex + 1));
-        span.textContent = label;
+        span.textContent = span.textContent.replace(/\d+/, String(newIndex + 1));
       }
     });
   }
 
   function escapeAttr(value) {
     return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function parseFieldValue(raw) {
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      return "";
+    }
+    const num = Number(trimmed);
+    return isNaN(num) ? trimmed : num;
   }
 
   function collectArrayField(arrayName) {
@@ -312,8 +320,7 @@
         }
         items[index][field][lang] = el.value;
       } else if (field) {
-        const val = el.value.trim();
-        items[index][field] = val ? (isNaN(Number(val)) ? val : Number(val)) : "";
+        items[index][field] = parseFieldValue(el.value);
       } else if (lang) {
         items[index][lang] = el.value;
       }
