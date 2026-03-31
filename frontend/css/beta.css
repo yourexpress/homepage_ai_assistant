@@ -163,7 +163,7 @@ button, input, textarea, select { font: inherit; }
 }
 
 .profile-row-bottom {
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 /* --- Hero --- */
@@ -289,7 +289,7 @@ button, input, textarea, select { font: inherit; }
   font-family: var(--beta-font-display);
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--beta-text);
+  color: var(--beta-text-secondary);
   margin: 0 0 16px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -633,6 +633,10 @@ a.contact-value:hover {
   }
 
   .profile-row-mid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-row-bottom {
     grid-template-columns: 1fr;
   }
 
