@@ -133,18 +133,12 @@
       }
       if (inCode) { codeBlock.push(raw); continue; }
 
-      var ulMatch = raw.match(/^[\s]*-\s+(.*)/);
+      var ulMatch = raw.match(/^[\s]*[-*]\s+(.*)/);
       var olMatch = raw.match(/^[\s]*\d+\.\s+(.*)/);
-      var starListMatch = raw.match(/^[\s]*\*\s+(.*)/);
 
       if (ulMatch) {
         if (inList !== "ul") { closePendingList(); out.push("<ul>"); inList = "ul"; }
         out.push("<li>" + inlineFormat(ulMatch[1]) + "</li>");
-        continue;
-      }
-      if (starListMatch) {
-        if (inList !== "ul") { closePendingList(); out.push("<ul>"); inList = "ul"; }
-        out.push("<li>" + inlineFormat(starListMatch[1]) + "</li>");
         continue;
       }
       if (olMatch) {
