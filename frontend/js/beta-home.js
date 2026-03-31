@@ -248,6 +248,7 @@
     return [selected.email, selected.linkedin, selected.github].filter(Boolean);
   }
 
+  /** Return up to 4 experience entries for the highlights section. */
   function buildExperienceItems() {
     var exp = portfolioData.experience || {};
     var entries = exp.entries || exp.items || [];
@@ -403,6 +404,7 @@
       entry.className = "exp-entry";
 
       var h3 = document.createElement("h3");
+      /* Priority: company > organization > title (first non-empty wins). */
       h3.textContent = localize(item.company || item.organization || item.title, currentLocale());
       entry.appendChild(h3);
 

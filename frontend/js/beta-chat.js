@@ -173,7 +173,10 @@
     sessionStorage.setItem(BETA_CHAT_HISTORY_KEY, JSON.stringify(trimmed));
   }
 
-  /* ---- Show/hide messages area ---- */
+  /**
+   * Show the messages area when there is content to display.
+   * Checks both history (persisted) and DOM children (transient typing indicator).
+   */
   function updateMessagesVisibility() {
     if (chatZoneBody) {
       if (history.length > 0 || chatMessages.children.length > 0) {
