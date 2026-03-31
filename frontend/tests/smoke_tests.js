@@ -19,7 +19,7 @@ function renderResults() {
 }
 
 let framesLoaded = 0;
-const totalFrames = 2;
+const totalFrames = 3;
 
 function onFrameReady() {
   framesLoaded += 1;
@@ -40,6 +40,7 @@ frame.addEventListener("load", () => {
   assert(doc.getElementById("contact-list") !== null, "index.html includes a contact section");
   assert(doc.querySelector('a[href="experience.html"]') !== null, "navigation includes the experience page");
   assert(doc.querySelector('a[href="publications.html"]') !== null, "navigation includes the publications page");
+  assert(doc.querySelector('a[href="beta.html"]') !== null, "index.html includes a Beta Homepage link in navigation");
   assert(doc.getElementById("chat-toggle") !== null, "index.html includes a floating chat toggle button");
   assert(doc.getElementById("chat-widget") !== null, "index.html includes a floating chat widget");
   assert(doc.getElementById("chat-clear-btn") !== null, "index.html includes a clear-session control");
@@ -77,6 +78,40 @@ managerFrame.addEventListener("load", () => {
   assert(doc.getElementById("profile-education-section") !== null, "manager.html includes Education override section");
   assert(doc.getElementById("profile-research-section") !== null, "manager.html includes Research override section");
   assert(doc.getElementById("profile-contact-section") !== null, "manager.html includes Contact override section");
+
+  onFrameReady();
+});
+
+const betaFrame = document.getElementById("test-frame-beta");
+
+betaFrame.addEventListener("load", () => {
+  const doc = betaFrame.contentDocument;
+
+  /* Part 1: Personal Information Zone */
+  assert(doc.getElementById("profile-name") !== null, "beta.html includes a profile name heading");
+  assert(doc.getElementById("profile-headline") !== null, "beta.html includes a profile headline");
+  assert(doc.getElementById("profile-badge") !== null, "beta.html includes a profile badge");
+  assert(doc.getElementById("about-paragraphs") !== null, "beta.html includes an about paragraphs area");
+  assert(doc.getElementById("education-list") !== null, "beta.html includes an education list");
+  assert(doc.getElementById("skills-list") !== null, "beta.html includes a skills/research list");
+  assert(doc.getElementById("contact-list") !== null, "beta.html includes a contact list");
+  assert(doc.querySelector('a[href="experience.html"]') !== null, "beta.html links to experience page");
+  assert(doc.querySelector('a[href="publications.html"]') !== null, "beta.html links to publications page");
+  assert(doc.querySelector('a[href="index.html"]') !== null, "beta.html links back to current homepage");
+
+  /* Part 2: Sticky Chat Zone */
+  assert(doc.getElementById("chat-zone") !== null, "beta.html includes a sticky chat zone");
+  assert(doc.getElementById("chat-messages") !== null, "beta.html includes a chat messages container");
+  assert(doc.getElementById("chat-form") !== null, "beta.html includes a chat input form");
+  assert(doc.getElementById("chat-input") !== null, "beta.html includes a chat input textarea");
+  assert(doc.getElementById("send-btn") !== null, "beta.html includes a send button");
+  assert(doc.getElementById("chat-suggestions") !== null, "beta.html includes suggestion buttons container");
+  assert(doc.querySelectorAll(".suggestion-btn").length >= 3, "beta.html includes at least 3 suggestion buttons");
+  assert(doc.getElementById("chat-collapse-btn") !== null, "beta.html includes a chat collapse toggle");
+
+  /* Responsive meta */
+  const viewport = doc.querySelector('meta[name="viewport"]');
+  assert(viewport !== null, "beta.html includes viewport meta tag");
 
   onFrameReady();
 });

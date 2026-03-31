@@ -1,0 +1,367 @@
+"use strict";
+
+/**
+ * Beta Homepage – Sticky Chat Zone
+ *
+ * Provides an inline ChatGPT-style chat panel anchored at the bottom
+ * of the viewport. Compatible with the existing POST /api/chat backend.
+ *
+ * Inputs:  User text via chat input, suggestion buttons.
+ * Outputs: Rendered assistant messages in the chat panel.
+ *
+ * Failure modes:
+ *   - Backend unreachable → shows connection error message
+ *   - Rate limited        → shows unavailable message
+ */
+(function () {
+  var PortfolioApp = window.PortfolioApp;
+  var BACKEND_URL = PortfolioApp.BACKEND_URL;
+  var MAX_INPUT_LENGTH = PortfolioApp.MAX_INPUT_LENGTH;
+  var MAX_HISTORY_MESSAGES = PortfolioApp.MAX_HISTORY_MESSAGES;
+  var STORAGE_KEYS = PortfolioApp.STORAGE_KEYS;
+  var getLocale = PortfolioApp.getLocale;
+  var getSessionId = PortfolioApp.getSessionId;
+
+  var UI_TEXT = {
+    en: {
+      greeting: "Hello! I\u2019m the AI assistant for this homepage. Ask me about research, projects, experience, or anything you see here.",
+      thinking: "Thinking\u2026",
+      unavailable: "The assistant is unavailable right now. Please try again.",
+      unreachable: "Unable to reach the assistant. Please check your connection.",
+      placeholder: "Ask about projects, research, experience, or fit\u2026",
+      disclaimer: "Context kept for this session only.",
+      suggestResearch: "What are your research interests?",
+      suggestExperience: "Work experience",
+      suggestProjects: "Projects",
+      suggestEducation: "Education",
+      suggestContact: "Contact info",
+    },
+    zh: {
+      greeting: "\u4f60\u597d\uff01\u6211\u662f\u672c\u7ad9\u7684 AI \u52a9\u624b\u3002\u53ef\u4ee5\u5411\u6211\u8be2\u95ee\u7814\u7a76\u65b9\u5411\u3001\u9879\u76ee\u3001\u7ecf\u5386\u6216\u672c\u7ad9\u4efb\u4f55\u5185\u5bb9\u3002",
+      thinking: "\u6b63\u5728\u601d\u8003\u2026",
+      unavailable: "\u52a9\u624b\u6682\u65f6\u4e0d\u53ef\u7528\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002",
+      unreachable: "\u6682\u65f6\u65e0\u6cd5\u8fde\u63a5\u52a9\u624b\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u3002",
+      placeholder: "\u6b22\u8fce\u8be2\u95ee\u9879\u76ee\u3001\u7814\u7a76\u65b9\u5411\u3001\u7ecf\u5386\u6216\u5c97\u4f4d\u5339\u914d\u5ea6\u2026",
+      disclaimer: "\u52a9\u624b\u53ea\u4f1a\u5728\u5f53\u524d\u4f1a\u8bdd\u4e2d\u4fdd\u7559\u4e0a\u4e0b\u6587\u3002",
+      suggestResearch: "\u4f60\u7684\u7814\u7a76\u65b9\u5411\u662f\u4ec0\u4e48\uff1f",
+      suggestExperience: "\u5de5\u4f5c\u7ecf\u5386",
+      suggestProjects: "\u9879\u76ee",
+      suggestEducation: "\u6559\u80b2\u80cc\u666f",
+      suggestContact: "\u8054\u7cfb\u65b9\u5f0f",
+    },
+  };
+
+  var BETA_CHAT_HISTORY_KEY = "beta_chat_history";
+  var history = [];
+  var isWaiting = false;
+
+  /* ---- DOM refs ---- */
+  var chatMessages = document.getElementById("chat-messages");
+  var chatForm = document.getElementById("chat-form");
+  var chatInput = document.getElementById("chat-input");
+  var sendBtn = document.getElementById("send-btn");
+  var charCount = document.getElementById("chat-char-count");
+  var chatDisclaimer = document.getElementById("chat-disclaimer");
+  var chatSuggestions = document.getElementById("chat-suggestions");
+  var suggestionButtons = chatSuggestions ? Array.from(chatSuggestions.querySelectorAll(".suggestion-btn")) : [];
+
+  /* ---- Helpers ---- */
+  function currentLocale() { return getLocale(); }
+  function t(key) { return UI_TEXT[currentLocale()][key] || UI_TEXT.en[key] || ""; }
+
+  /**
+   * Escape HTML special characters to prevent XSS when rendering markdown.
+   * @param {string} str - Raw string.
+   * @returns {string} HTML-safe string.
+   */
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  /**
+   * Apply inline markdown formatting (bold, italic, inline code).
+   * Operates on already HTML-escaped text.
+   * @param {string} text - Escaped line.
+   * @returns {string} Line with inline HTML formatting.
+   */
+  function inlineFormat(text) {
+    return text
+      .replace(/`([^`]+?)`/g, "<code>$1</code>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+
+  /**
+   * Convert a limited subset of markdown to sanitised HTML.
+   * Handles: bold, italic, inline code, code blocks, lists, paragraphs.
+   * Input is HTML-escaped first to prevent injection.
+   * @param {string} src - Raw markdown text.
+   * @returns {string} Sanitised HTML string.
+   */
+  function renderMarkdown(src) {
+    var safe = escapeHtml(src);
+    var lines = safe.split("\n");
+    var out = [];
+    var inList = "";
+    var inCode = false;
+    var codeBlock = [];
+
+    function closePendingList() {
+      if (inList === "ul") { out.push("</ul>"); }
+      if (inList === "ol") { out.push("</ol>"); }
+      inList = "";
+    }
+
+    for (var i = 0; i < lines.length; i++) {
+      var raw = lines[i];
+
+      if (/^```/.test(raw)) {
+        if (inCode) {
+          out.push("<pre><code>" + codeBlock.join("\n") + "</code></pre>");
+          codeBlock = [];
+          inCode = false;
+        } else {
+          closePendingList();
+          inCode = true;
+        }
+        continue;
+      }
+      if (inCode) { codeBlock.push(raw); continue; }
+
+      var ulMatch = raw.match(/^[\s]*-\s+(.*)/);
+      var olMatch = raw.match(/^[\s]*\d+\.\s+(.*)/);
+      var starListMatch = raw.match(/^[\s]*\*\s+(.*)/);
+
+      if (ulMatch) {
+        if (inList !== "ul") { closePendingList(); out.push("<ul>"); inList = "ul"; }
+        out.push("<li>" + inlineFormat(ulMatch[1]) + "</li>");
+        continue;
+      }
+      if (starListMatch) {
+        if (inList !== "ul") { closePendingList(); out.push("<ul>"); inList = "ul"; }
+        out.push("<li>" + inlineFormat(starListMatch[1]) + "</li>");
+        continue;
+      }
+      if (olMatch) {
+        if (inList !== "ol") { closePendingList(); out.push("<ol>"); inList = "ol"; }
+        out.push("<li>" + inlineFormat(olMatch[1]) + "</li>");
+        continue;
+      }
+
+      closePendingList();
+      if (raw.trim() === "") { continue; }
+      out.push("<p>" + inlineFormat(raw) + "</p>");
+    }
+
+    if (inCode && codeBlock.length) {
+      out.push("<pre><code>" + codeBlock.join("\n") + "</code></pre>");
+    }
+    closePendingList();
+    return out.join("");
+  }
+
+  /* ---- History persistence ---- */
+  function loadHistory() {
+    try {
+      var raw = sessionStorage.getItem(BETA_CHAT_HISTORY_KEY);
+      history = raw ? JSON.parse(raw) : [];
+    } catch (_e) {
+      history = [];
+    }
+  }
+
+  function saveHistory() {
+    var trimmed = history.slice(-MAX_HISTORY_MESSAGES);
+    sessionStorage.setItem(BETA_CHAT_HISTORY_KEY, JSON.stringify(trimmed));
+  }
+
+  /* ---- Message rendering ---- */
+  function appendMessage(role, text, options) {
+    options = options || {};
+    var wrapper = document.createElement("div");
+    wrapper.className = "chat-msg " + role + "-msg";
+
+    var bubble = document.createElement("div");
+    bubble.className = "msg-bubble";
+
+    if (options.temporary) {
+      wrapper.dataset.temporary = "true";
+    }
+
+    if (role === "typing") {
+      bubble.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+    } else if (role === "assistant" || role === "error") {
+      bubble.innerHTML = renderMarkdown(text);
+    } else {
+      bubble.textContent = text;
+    }
+
+    wrapper.appendChild(bubble);
+    chatMessages.appendChild(wrapper);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return wrapper;
+  }
+
+  function removeElement(el) {
+    if (el && el.parentNode) { el.parentNode.removeChild(el); }
+  }
+
+  function renderHistory() {
+    if (!chatMessages) { return; }
+    chatMessages.innerHTML = "";
+    if (!history.length) {
+      appendMessage("assistant", t("greeting"));
+    } else {
+      history.forEach(function (item) {
+        appendMessage(item.role, item.content, item);
+      });
+    }
+  }
+
+  /* ---- Chat submission ---- */
+  function setBusy(busy) {
+    isWaiting = busy;
+    if (sendBtn) { sendBtn.disabled = busy; }
+  }
+
+  function updateCharCounter() {
+    if (!charCount || !chatInput) { return; }
+    charCount.textContent = chatInput.value.length + " / " + MAX_INPUT_LENGTH;
+  }
+
+  function submitMessage(text) {
+    if (isWaiting || !text) { return; }
+
+    appendMessage("user", text);
+    history.push({ role: "user", content: text });
+    saveHistory();
+    chatInput.value = "";
+    updateCharCounter();
+
+    var typingEl = appendMessage("typing", t("thinking"));
+    setBusy(true);
+
+    fetch(BACKEND_URL + "/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        history: history.slice(0, -1),
+        session_id: getSessionId(),
+        happy_token: null,
+      }),
+    })
+      .then(function (response) {
+        removeElement(typingEl);
+        if (!response.ok) {
+          appendMessage("error", t("unavailable"));
+          history.pop();
+          saveHistory();
+          return;
+        }
+        return response.json().then(function (data) {
+          history.push({ role: "assistant", content: data.reply, blocked: data.blocked });
+          saveHistory();
+          appendMessage("assistant", data.reply, { blocked: data.blocked });
+
+          if (chatSuggestions && history.length > 1) {
+            chatSuggestions.style.display = "none";
+          }
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+        removeElement(typingEl);
+        appendMessage("error", t("unreachable"));
+        history.pop();
+        saveHistory();
+      })
+      .finally(function () {
+        setBusy(false);
+        if (chatInput) { chatInput.focus(); }
+      });
+  }
+
+  function onFormSubmit(event) {
+    event.preventDefault();
+    var message = chatInput.value.trim();
+    if (message) { submitMessage(message); }
+  }
+
+  /* ---- Events ---- */
+  if (chatForm) {
+    chatForm.addEventListener("submit", onFormSubmit);
+  }
+
+  if (chatInput) {
+    chatInput.addEventListener("input", updateCharCounter);
+    chatInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        onFormSubmit(event);
+      }
+    });
+  }
+
+  /* Suggestion buttons */
+  suggestionButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var question = btn.getAttribute("data-question") || btn.textContent;
+      submitMessage(question);
+    });
+  });
+
+  /* Locale change re-renders the greeting and suggestion text */
+  function applyLocaleText() {
+    if (chatInput) { chatInput.placeholder = t("placeholder"); }
+    if (chatDisclaimer) { chatDisclaimer.textContent = t("disclaimer"); }
+
+    /* Update suggestion button labels */
+    var keys = ["suggestResearch", "suggestExperience", "suggestProjects", "suggestEducation", "suggestContact"];
+    suggestionButtons.forEach(function (btn, i) {
+      if (keys[i]) { btn.textContent = t(keys[i]); }
+    });
+
+    /* Update suggestion button data-question for localized questions */
+    var questions = {
+      en: [
+        "What are your main research interests?",
+        "Tell me about your work experience.",
+        "What projects have you worked on?",
+        "What is your education background?",
+        "How can I contact you?",
+      ],
+      zh: [
+        "\u4f60\u7684\u4e3b\u8981\u7814\u7a76\u65b9\u5411\u662f\u4ec0\u4e48\uff1f",
+        "\u8bf7\u4ecb\u7ecd\u4f60\u7684\u5de5\u4f5c\u7ecf\u5386\u3002",
+        "\u4f60\u505a\u8fc7\u54ea\u4e9b\u9879\u76ee\uff1f",
+        "\u4f60\u7684\u6559\u80b2\u80cc\u666f\u662f\u4ec0\u4e48\uff1f",
+        "\u5982\u4f55\u8054\u7cfb\u4f60\uff1f",
+      ],
+    };
+    var locale = currentLocale();
+    var localeQuestions = questions[locale] || questions.en;
+    suggestionButtons.forEach(function (btn, i) {
+      if (localeQuestions[i]) { btn.setAttribute("data-question", localeQuestions[i]); }
+    });
+  }
+
+  /* Listen for locale changes triggered by beta-home.js */
+  document.querySelectorAll(".beta-lang-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyLocaleText();
+      if (!history.length) { renderHistory(); }
+    });
+  });
+
+  /* ---- Init ---- */
+  loadHistory();
+  renderHistory();
+  updateCharCounter();
+  applyLocaleText();
+})();
