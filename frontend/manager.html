@@ -31,7 +31,7 @@
         </div>
       </div>
       <p class="section-copy">
-        Core public profile basics now come from the knowledge base automatically. This page is for lightweight presentation copy and labels, not for re-entering your profile field by field.
+        Edit presentation copy and override profile information displayed on the homepage. Profile overrides take precedence over the knowledge base when non-empty.
       </p>
 
       <div class="manager-auth manager-auth-wide">
@@ -82,6 +82,49 @@
 
         <form id="manager-form" class="manager-form" hidden>
           <div id="manager-fields" class="manager-fields"></div>
+
+          <div id="manager-profile-overrides" class="manager-fields">
+            <div class="manager-section-head">
+              <h3>Profile overrides</h3>
+              <p>Override personal information on the homepage. Leave fields empty to use knowledge-base values.</p>
+            </div>
+
+            <section id="profile-about-section" class="manager-section">
+              <div class="manager-section-head">
+                <h3>About</h3>
+                <p>Name, headline, and about paragraphs.</p>
+              </div>
+              <div id="profile-about-fields"></div>
+            </section>
+
+            <section id="profile-education-section" class="manager-section">
+              <div class="manager-section-head">
+                <h3>Education</h3>
+                <p>Degree, institution, and year for each entry.</p>
+              </div>
+              <div id="profile-education-fields"></div>
+              <button type="button" class="manager-add-btn" data-add="education">+ Add education</button>
+            </section>
+
+            <section id="profile-research-section" class="manager-section">
+              <div class="manager-section-head">
+                <h3>Research interests</h3>
+                <p>Each interest shown on the homepage.</p>
+              </div>
+              <div id="profile-research-fields"></div>
+              <button type="button" class="manager-add-btn" data-add="research">+ Add interest</button>
+            </section>
+
+            <section id="profile-contact-section" class="manager-section">
+              <div class="manager-section-head">
+                <h3>Contact</h3>
+                <p>Contact methods with label, display value, and link.</p>
+              </div>
+              <div id="profile-contact-fields"></div>
+              <button type="button" class="manager-add-btn" data-add="contact">+ Add contact</button>
+            </section>
+          </div>
+
           <button type="submit" class="primary-btn">Save homepage content</button>
           <div id="manager-sync-notes" class="sync-notes"></div>
         </form>

@@ -13,6 +13,11 @@
   const managerSyncNotes = document.getElementById("manager-sync-notes");
   const managerKnowledgeSummary = document.getElementById("manager-knowledge-summary");
 
+  const profileAboutFields = document.getElementById("profile-about-fields");
+  const profileEducationFields = document.getElementById("profile-education-fields");
+  const profileResearchFields = document.getElementById("profile-research-fields");
+  const profileContactFields = document.getElementById("profile-contact-fields");
+
   const fieldGroups = [
     {
       title: "Hero copy",
@@ -96,6 +101,224 @@
     managerFields.querySelectorAll("[data-path]").forEach((field) => {
       field.value = resolvePath(content, field.dataset.path) || "";
     });
+
+    renderProfileOverrides(content);
+  }
+
+  function renderProfileOverrides(content) {
+    renderAboutOverrides(content);
+    renderEducationOverrides(content);
+    renderResearchOverrides(content);
+    renderContactOverrides(content);
+  }
+
+  function renderAboutOverrides(content) {
+    const name = content.profile_name || { en: "", zh: "" };
+    const headline = content.profile_headline || { en: "", zh: "" };
+    const paragraphs = Array.isArray(content.profile_about_paragraphs)
+      ? content.profile_about_paragraphs
+      : [];
+
+    profileAboutFields.innerHTML = "";
+
+    const nameGroup = document.createElement("div");
+    nameGroup.innerHTML = buildLocalizedRow("profile_name", "Name", 1);
+    profileAboutFields.appendChild(nameGroup.firstElementChild);
+
+    const headlineGroup = document.createElement("div");
+    headlineGroup.innerHTML = buildLocalizedRow("profile_headline", "Headline", 2);
+    profileAboutFields.appendChild(headlineGroup.firstElementChild);
+
+    paragraphs.forEach((item, index) => {
+      appendAboutParagraphItem(index, item);
+    });
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "manager-add-btn";
+    addBtn.textContent = "+ Add paragraph";
+    addBtn.addEventListener("click", () => {
+      const index = profileAboutFields.querySelectorAll(".manager-array-item").length;
+      appendAboutParagraphItem(index, { en: "", zh: "" });
+    });
+    profileAboutFields.appendChild(addBtn);
+
+    profileAboutFields.querySelectorAll("[data-path]").forEach((field) => {
+      field.value = resolvePath(content, field.dataset.path) || "";
+    });
+  }
+
+  function appendAboutParagraphItem(index, item) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "manager-array-item";
+    wrapper.innerHTML = `
+      <div class="manager-array-item-head">
+        <span>Paragraph ${index + 1}</span>
+        <button type="button" class="manager-remove-btn" title="Remove">×</button>
+      </div>
+      <div class="manager-row">
+        <label>English<textarea data-array="profile_about_paragraphs" data-index="${index}" data-lang="en" rows="3">${escapeAttr(item.en || "")}</textarea></label>
+        <label>Chinese<textarea data-array="profile_about_paragraphs" data-index="${index}" data-lang="zh" rows="3">${escapeAttr(item.zh || "")}</textarea></label>
+      </div>
+    `;
+    wrapper.querySelector(".manager-remove-btn").addEventListener("click", () => {
+      wrapper.remove();
+      reindexArrayItems(profileAboutFields, "profile_about_paragraphs");
+    });
+    const addBtn = profileAboutFields.querySelector(".manager-add-btn");
+    if (addBtn) {
+      profileAboutFields.insertBefore(wrapper, addBtn);
+    } else {
+      profileAboutFields.appendChild(wrapper);
+    }
+  }
+
+  function renderEducationOverrides(content) {
+    const items = Array.isArray(content.profile_education) ? content.profile_education : [];
+    profileEducationFields.innerHTML = "";
+    items.forEach((item, index) => {
+      appendEducationItem(index, item);
+    });
+  }
+
+  function appendEducationItem(index, item) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "manager-array-item";
+    const degree = item.degree || { en: "", zh: "" };
+    const institution = item.institution || { en: "", zh: "" };
+    const year = item.year || "";
+    wrapper.innerHTML = `
+      <div class="manager-array-item-head">
+        <span>Education ${index + 1}</span>
+        <button type="button" class="manager-remove-btn" title="Remove">×</button>
+      </div>
+      <div class="manager-row">
+        <label>Degree (EN)<textarea data-array="profile_education" data-index="${index}" data-field="degree" data-lang="en" rows="1">${escapeAttr(degree.en || "")}</textarea></label>
+        <label>Degree (ZH)<textarea data-array="profile_education" data-index="${index}" data-field="degree" data-lang="zh" rows="1">${escapeAttr(degree.zh || "")}</textarea></label>
+      </div>
+      <div class="manager-row">
+        <label>Institution (EN)<textarea data-array="profile_education" data-index="${index}" data-field="institution" data-lang="en" rows="1">${escapeAttr(institution.en || "")}</textarea></label>
+        <label>Institution (ZH)<textarea data-array="profile_education" data-index="${index}" data-field="institution" data-lang="zh" rows="1">${escapeAttr(institution.zh || "")}</textarea></label>
+      </div>
+      <div class="manager-row">
+        <label>Year<input type="number" data-array="profile_education" data-index="${index}" data-field="year" value="${escapeAttr(String(year))}" /></label>
+        <label></label>
+      </div>
+    `;
+    wrapper.querySelector(".manager-remove-btn").addEventListener("click", () => {
+      wrapper.remove();
+      reindexArrayItems(profileEducationFields, "profile_education");
+    });
+    profileEducationFields.appendChild(wrapper);
+  }
+
+  function renderResearchOverrides(content) {
+    const items = Array.isArray(content.profile_research_interests) ? content.profile_research_interests : [];
+    profileResearchFields.innerHTML = "";
+    items.forEach((item, index) => {
+      appendResearchItem(index, item);
+    });
+  }
+
+  function appendResearchItem(index, item) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "manager-array-item";
+    wrapper.innerHTML = `
+      <div class="manager-array-item-head">
+        <span>Interest ${index + 1}</span>
+        <button type="button" class="manager-remove-btn" title="Remove">×</button>
+      </div>
+      <div class="manager-row">
+        <label>English<textarea data-array="profile_research_interests" data-index="${index}" data-lang="en" rows="2">${escapeAttr(item.en || "")}</textarea></label>
+        <label>Chinese<textarea data-array="profile_research_interests" data-index="${index}" data-lang="zh" rows="2">${escapeAttr(item.zh || "")}</textarea></label>
+      </div>
+    `;
+    wrapper.querySelector(".manager-remove-btn").addEventListener("click", () => {
+      wrapper.remove();
+      reindexArrayItems(profileResearchFields, "profile_research_interests");
+    });
+    profileResearchFields.appendChild(wrapper);
+  }
+
+  function renderContactOverrides(content) {
+    const items = Array.isArray(content.profile_contact_items) ? content.profile_contact_items : [];
+    profileContactFields.innerHTML = "";
+    items.forEach((item, index) => {
+      appendContactItem(index, item);
+    });
+  }
+
+  function appendContactItem(index, item) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "manager-array-item";
+    const label = item.label || { en: "", zh: "" };
+    const value = item.value || { en: "", zh: "" };
+    const href = item.href || "";
+    wrapper.innerHTML = `
+      <div class="manager-array-item-head">
+        <span>Contact ${index + 1}</span>
+        <button type="button" class="manager-remove-btn" title="Remove">×</button>
+      </div>
+      <div class="manager-row">
+        <label>Label (EN)<textarea data-array="profile_contact_items" data-index="${index}" data-field="label" data-lang="en" rows="1">${escapeAttr(label.en || "")}</textarea></label>
+        <label>Label (ZH)<textarea data-array="profile_contact_items" data-index="${index}" data-field="label" data-lang="zh" rows="1">${escapeAttr(label.zh || "")}</textarea></label>
+      </div>
+      <div class="manager-row">
+        <label>Value (EN)<textarea data-array="profile_contact_items" data-index="${index}" data-field="value" data-lang="en" rows="1">${escapeAttr(value.en || "")}</textarea></label>
+        <label>Value (ZH)<textarea data-array="profile_contact_items" data-index="${index}" data-field="value" data-lang="zh" rows="1">${escapeAttr(value.zh || "")}</textarea></label>
+      </div>
+      <div class="manager-row">
+        <label>Link (href)<input type="text" data-array="profile_contact_items" data-index="${index}" data-field="href" value="${escapeAttr(href)}" placeholder="https:// or mailto:" /></label>
+        <label></label>
+      </div>
+    `;
+    wrapper.querySelector(".manager-remove-btn").addEventListener("click", () => {
+      wrapper.remove();
+      reindexArrayItems(profileContactFields, "profile_contact_items");
+    });
+    profileContactFields.appendChild(wrapper);
+  }
+
+  function reindexArrayItems(container, arrayName) {
+    container.querySelectorAll(".manager-array-item").forEach((item, newIndex) => {
+      item.querySelectorAll(`[data-array="${arrayName}"]`).forEach((field) => {
+        field.dataset.index = String(newIndex);
+      });
+      const span = item.querySelector(".manager-array-item-head span");
+      if (span) {
+        const label = span.textContent.replace(/\d+$/, String(newIndex + 1));
+        span.textContent = label;
+      }
+    });
+  }
+
+  function escapeAttr(value) {
+    return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function collectArrayField(arrayName) {
+    const items = [];
+    const elements = managerForm.querySelectorAll(`[data-array="${arrayName}"]`);
+    elements.forEach((el) => {
+      const index = parseInt(el.dataset.index, 10);
+      if (!items[index]) {
+        items[index] = {};
+      }
+      const field = el.dataset.field;
+      const lang = el.dataset.lang;
+      if (field && lang) {
+        if (!items[index][field]) {
+          items[index][field] = {};
+        }
+        items[index][field][lang] = el.value;
+      } else if (field) {
+        const val = el.value.trim();
+        items[index][field] = val ? (isNaN(Number(val)) ? val : Number(val)) : "";
+      } else if (lang) {
+        items[index][lang] = el.value;
+      }
+    });
+    return items.filter(Boolean);
   }
 
   function resolvePath(root, path) {
@@ -127,6 +350,13 @@
     managerFields.querySelectorAll("[data-path]").forEach((field) => {
       assignPath(content, field.dataset.path, field.value);
     });
+    profileAboutFields.querySelectorAll("[data-path]").forEach((field) => {
+      assignPath(content, field.dataset.path, field.value);
+    });
+    content.profile_about_paragraphs = collectArrayField("profile_about_paragraphs");
+    content.profile_education = collectArrayField("profile_education");
+    content.profile_research_interests = collectArrayField("profile_research_interests");
+    content.profile_contact_items = collectArrayField("profile_contact_items");
     return content;
   }
 
@@ -235,7 +465,32 @@
     }
   }
 
-  adminKeyInput.value = sessionStorage.getItem(ADMIN_KEY_STORAGE) || "";
+  function handleAddButtons() {
+    document.querySelectorAll("[data-add]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const type = btn.dataset.add;
+        if (type === "education") {
+          const index = profileEducationFields.querySelectorAll(".manager-array-item").length;
+          appendEducationItem(index, {});
+        } else if (type === "research") {
+          const index = profileResearchFields.querySelectorAll(".manager-array-item").length;
+          appendResearchItem(index, { en: "", zh: "" });
+        } else if (type === "contact") {
+          const index = profileContactFields.querySelectorAll(".manager-array-item").length;
+          appendContactItem(index, {});
+        }
+      });
+    });
+  }
+
+  adminKeyInput.value = "";
   managerLoadBtn.addEventListener("click", loadDashboard);
+  adminKeyInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      loadDashboard();
+    }
+  });
   managerForm.addEventListener("submit", saveContent);
+  handleAddButtons();
 })();

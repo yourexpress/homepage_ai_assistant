@@ -223,12 +223,28 @@
     return items;
   }
 
+  function hasOverride(value) {
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+    if (value && typeof value === "object") {
+      return Boolean((value.en && value.en.trim()) || (value.zh && value.zh.trim()));
+    }
+    return false;
+  }
+
   function buildHeroTitle(profile) {
+    if (hasOverride(siteContent.profile_name)) {
+      return localize(siteContent.profile_name, currentLocale());
+    }
     const fallback = localize(siteContent.hero_title, currentLocale());
     return localizedProfileName(profile) || fallback;
   }
 
   function buildHeroSummary(profile) {
+    if (hasOverride(siteContent.profile_headline)) {
+      return localize(siteContent.profile_headline, currentLocale());
+    }
     const fallback = localize(siteContent.hero_summary, currentLocale());
     return localizedHeadline(profile) || fallback;
   }
@@ -331,6 +347,9 @@
   }
 
   function buildContactItems() {
+    if (hasOverride(siteContent.profile_contact_items)) {
+      return siteContent.profile_contact_items;
+    }
     const profile = portfolioData.profile || {};
     const selected = normalizeProfileContacts(profile);
     const fallbackItems = Array.isArray(siteContent.contact_items) ? siteContent.contact_items : [];
@@ -402,12 +421,25 @@
 
   function renderContent() {
     const profile = portfolioData.profile || {};
-    const researchItems =
-      Array.isArray(profile.research_interests) && profile.research_interests.length
+
+    const researchOverride = hasOverride(siteContent.profile_research_interests)
+      ? siteContent.profile_research_interests
+      : null;
+    const researchItems = researchOverride
+      || (Array.isArray(profile.research_interests) && profile.research_interests.length
         ? profile.research_interests
-        : siteContent.research_items || [];
-    const educationItems = Array.isArray(profile.education) ? profile.education : [];
-    const aboutItems = buildAboutParagraphItems(profile);
+        : siteContent.research_items || []);
+
+    const educationOverride = hasOverride(siteContent.profile_education)
+      ? siteContent.profile_education
+      : null;
+    const educationItems = educationOverride
+      || (Array.isArray(profile.education) ? profile.education : []);
+
+    const aboutOverride = hasOverride(siteContent.profile_about_paragraphs)
+      ? siteContent.profile_about_paragraphs
+      : null;
+    const aboutItems = aboutOverride || buildAboutParagraphItems(profile);
 
     setText(heroBadge, localize(siteContent.hero_badge, currentLocale()));
     setText(heroTitle, buildHeroTitle(profile));
