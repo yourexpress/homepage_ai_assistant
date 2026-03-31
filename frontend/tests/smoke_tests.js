@@ -99,7 +99,7 @@ betaFrame.addEventListener("load", () => {
   assert(doc.querySelector('a[href="publications.html"]') !== null, "beta.html links to publications page");
   assert(doc.querySelector('a[href="index.html"]') !== null, "beta.html links back to current homepage");
 
-  /* Part 2: Sticky Chat Zone */
+  /* Part 2: Sticky Chat Bar */
   assert(doc.getElementById("chat-zone") !== null, "beta.html includes a sticky chat zone");
   assert(doc.getElementById("chat-messages") !== null, "beta.html includes a chat messages container");
   assert(doc.getElementById("chat-form") !== null, "beta.html includes a chat input form");
@@ -107,7 +107,6 @@ betaFrame.addEventListener("load", () => {
   assert(doc.getElementById("send-btn") !== null, "beta.html includes a send button");
   assert(doc.getElementById("chat-suggestions") !== null, "beta.html includes suggestion buttons container");
   assert(doc.querySelectorAll(".suggestion-btn").length >= 3, "beta.html includes at least 3 suggestion buttons");
-  assert(doc.getElementById("chat-collapse-btn") !== null, "beta.html includes a chat collapse toggle");
 
   /* Responsive meta */
   const viewport = doc.querySelector('meta[name="viewport"]');

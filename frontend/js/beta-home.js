@@ -4,11 +4,12 @@
  * Beta Homepage – Personal Information Zone
  *
  * Loads profile data from the backend (knowledge base + admin overrides)
- * and renders the personal information section.
+ * and renders the personal information section with a wide grid layout.
  *
  * Inputs:  GET /api/content (site content + overrides)
  *          GET /api/portfolio (knowledge base data)
- * Outputs: Rendered profile hero, about, education, skills, contact cards.
+ * Outputs: Rendered profile hero, sidebar (bio + contact), education,
+ *          skills, and experience cards.
  *
  * Failure modes:
  *   - Backend unreachable → falls back to hardcoded defaults
@@ -24,32 +25,32 @@
   var UI_TEXT = {
     en: {
       badge: "Academic Profile",
-      aboutTitle: "About",
+      aboutTitle: "Bio Summary",
       educationTitle: "Education",
-      skillsTitle: "Skills & Research Interests",
-      contactTitle: "Contact",
-      linkExperience: "Experience & Projects",
+      skillsTitle: "Skills",
+      contactTitle: "Contact Info",
+      experienceTitle: "Experience Highlights",
+      linkExperience: "View Experience",
       linkPublications: "Publications",
       linkResume: "Resume",
-      chatTitle: "Ask the AI Assistant",
-      chatSubtitle: "Ask about my research, experience, projects, or anything on this site.",
       noEducation: "Education details will appear when available.",
+      noExperience: "Experience details will appear when available.",
       stableNav: "\u2190 Current Homepage",
       navExperience: "Experience",
       navPublications: "Publications",
     },
     zh: {
       badge: "\u5b66\u672f\u4e3b\u9875",
-      aboutTitle: "\u7b80\u4ecb",
+      aboutTitle: "\u4e2a\u4eba\u7b80\u4ecb",
       educationTitle: "\u6559\u80b2\u80cc\u666f",
-      skillsTitle: "\u6280\u80fd\u4e0e\u7814\u7a76\u65b9\u5411",
+      skillsTitle: "\u6280\u80fd",
       contactTitle: "\u8054\u7cfb\u65b9\u5f0f",
-      linkExperience: "\u7ecf\u5386\u4e0e\u9879\u76ee",
+      experienceTitle: "\u7ecf\u5386\u4eae\u70b9",
+      linkExperience: "\u67e5\u770b\u7ecf\u5386",
       linkPublications: "\u8bba\u6587\u53d1\u8868",
       linkResume: "\u7b80\u5386",
-      chatTitle: "\u548c AI \u52a9\u624b\u4ea4\u6d41",
-      chatSubtitle: "\u6b22\u8fce\u8be2\u95ee\u7814\u7a76\u65b9\u5411\u3001\u7ecf\u5386\u3001\u9879\u76ee\u6216\u8005\u672c\u7ad9\u4efb\u4f55\u5185\u5bb9\u3002",
       noEducation: "\u6559\u80b2\u80cc\u666f\u4fe1\u606f\u5c06\u5728\u53ef\u7528\u65f6\u663e\u793a\u3002",
+      noExperience: "\u7ecf\u5386\u4fe1\u606f\u5c06\u5728\u53ef\u7528\u65f6\u663e\u793a\u3002",
       stableNav: "\u2190 \u5f53\u524d\u4e3b\u9875",
       navExperience: "\u7ecf\u5386",
       navPublications: "\u8bba\u6587",
@@ -81,6 +82,7 @@
   var profileBadge = document.getElementById("profile-badge");
   var profileName = document.getElementById("profile-name");
   var profileHeadline = document.getElementById("profile-headline");
+  var profileDescription = document.getElementById("profile-description");
   var aboutTitle = document.getElementById("about-title");
   var aboutParagraphs = document.getElementById("about-paragraphs");
   var educationTitle = document.getElementById("education-title");
@@ -89,10 +91,10 @@
   var skillsList = document.getElementById("skills-list");
   var contactTitle = document.getElementById("contact-title");
   var contactList = document.getElementById("contact-list");
+  var experienceTitle = document.getElementById("experience-title");
+  var experienceList = document.getElementById("experience-list");
   var linkExperience = document.getElementById("link-experience");
   var linkPublications = document.getElementById("link-publications");
-  var chatZoneTitle = document.getElementById("chat-zone-title");
-  var chatZoneSubtitle = document.getElementById("chat-zone-subtitle");
   var navStable = document.getElementById("nav-stable");
   var navExperience = document.getElementById("nav-experience");
   var navPublications = document.getElementById("nav-publications");
@@ -163,6 +165,12 @@
     return result;
   }
 
+  function buildDescriptionItems() {
+    var summary = siteContent.hero_summary || {};
+    var text = localize(summary, currentLocale());
+    return text ? [text] : [];
+  }
+
   function buildEducation(profile) {
     if (hasOverride(siteContent.profile_education)) {
       return siteContent.profile_education;
@@ -171,6 +179,9 @@
   }
 
   function buildSkills(profile) {
+    if (Array.isArray(profile.skills) && profile.skills.length) {
+      return profile.skills;
+    }
     if (hasOverride(siteContent.profile_research_interests)) {
       return siteContent.profile_research_interests;
     }
@@ -237,6 +248,14 @@
     return [selected.email, selected.linkedin, selected.github].filter(Boolean);
   }
 
+  /** Return up to 4 experience entries for the highlights section. */
+  function buildExperienceItems() {
+    var exp = portfolioData.experience || {};
+    var entries = exp.entries || exp.items || [];
+    if (!Array.isArray(entries)) { return []; }
+    return entries.slice(0, 4);
+  }
+
   /* ---- Render ---- */
   function renderContent() {
     var profile = portfolioData.profile || {};
@@ -248,27 +267,35 @@
     setText(educationTitle, t("educationTitle"));
     setText(skillsTitle, t("skillsTitle"));
     setText(contactTitle, t("contactTitle"));
-    setText(chatZoneTitle, t("chatTitle"));
-    setText(chatZoneSubtitle, t("chatSubtitle"));
+    setText(experienceTitle, t("experienceTitle"));
     setText(navStable, t("stableNav"));
     setText(navExperience, t("navExperience"));
     setText(navPublications, t("navPublications"));
 
     if (linkExperience) {
-      var expSpan = linkExperience.querySelector("span");
-      var expText = linkExperience.lastChild;
-      if (expText && expText.nodeType === 3) { expText.textContent = " " + t("linkExperience"); }
+      linkExperience.textContent = t("linkExperience");
     }
     if (linkPublications) {
-      var pubText = linkPublications.lastChild;
-      if (pubText && pubText.nodeType === 3) { pubText.textContent = " " + t("linkPublications"); }
+      linkPublications.textContent = t("linkPublications");
     }
 
+    renderDescription(profileDescription, buildDescriptionItems());
     renderAbout(aboutParagraphs, buildAboutItems(profile));
     renderEducation(educationList, buildEducation(profile));
     renderSkills(skillsList, buildSkills(profile));
     renderContacts(contactList, buildContactItems(profile));
+    renderExperience(experienceList, buildExperienceItems());
     setLangButtons();
+  }
+
+  function renderDescription(target, items) {
+    if (!target) { return; }
+    clearChildren(target);
+    (items || []).forEach(function (item) {
+      var p = document.createElement("p");
+      p.textContent = typeof item === "string" ? item : localize(item, currentLocale());
+      target.appendChild(p);
+    });
   }
 
   function renderAbout(target, items) {
@@ -297,20 +324,22 @@
       info.className = "edu-info";
 
       var h3 = document.createElement("h3");
-      h3.textContent = localize(item.degree, currentLocale());
+      h3.textContent = localize(item.institution, currentLocale());
 
-      var inst = document.createElement("p");
-      inst.textContent = localize(item.institution, currentLocale());
+      var degree = document.createElement("p");
+      degree.textContent = localize(item.degree, currentLocale());
 
       info.appendChild(h3);
-      info.appendChild(inst);
+      info.appendChild(degree);
 
-      var year = document.createElement("span");
-      year.className = "edu-year";
-      year.textContent = item.year || "";
+      if (item.description) {
+        var desc = document.createElement("p");
+        desc.className = "edu-description";
+        desc.textContent = localize(item.description, currentLocale());
+        info.appendChild(desc);
+      }
 
       entry.appendChild(info);
-      entry.appendChild(year);
       target.appendChild(entry);
     });
   }
@@ -333,7 +362,7 @@
 
       var label = document.createElement("span");
       label.className = "contact-label";
-      label.textContent = localize(item.label, currentLocale());
+      label.textContent = localize(item.label, currentLocale()) + " \u00b7";
 
       var valueText = localize(item.value || item.description, currentLocale());
       var href = item.href || "";
@@ -358,6 +387,42 @@
       }
 
       target.appendChild(row);
+    });
+  }
+
+  function renderExperience(target, items) {
+    if (!target) { return; }
+    clearChildren(target);
+    if (!items || !items.length) {
+      var empty = document.createElement("p");
+      empty.textContent = t("noExperience");
+      target.appendChild(empty);
+      return;
+    }
+    items.forEach(function (item) {
+      var entry = document.createElement("div");
+      entry.className = "exp-entry";
+
+      var h3 = document.createElement("h3");
+      /* Priority: company > organization > title (first non-empty wins). */
+      h3.textContent = localize(item.company || item.organization || item.title, currentLocale());
+      entry.appendChild(h3);
+
+      if (item.role || item.position) {
+        var role = document.createElement("p");
+        role.className = "exp-role";
+        role.textContent = localize(item.role || item.position, currentLocale());
+        entry.appendChild(role);
+      }
+
+      if (item.description || item.summary) {
+        var desc = document.createElement("p");
+        desc.className = "exp-desc";
+        desc.textContent = localize(item.description || item.summary, currentLocale());
+        entry.appendChild(desc);
+      }
+
+      target.appendChild(entry);
     });
   }
 
@@ -410,18 +475,6 @@
       renderContent();
     });
   });
-
-  /* ---- Chat collapse toggle ---- */
-  var chatZone = document.getElementById("chat-zone");
-  var collapseBtn = document.getElementById("chat-collapse-btn");
-
-  if (collapseBtn && chatZone) {
-    collapseBtn.addEventListener("click", function () {
-      chatZone.classList.toggle("is-collapsed");
-      var expanded = !chatZone.classList.contains("is-collapsed");
-      collapseBtn.setAttribute("aria-expanded", String(expanded));
-    });
-  }
 
   /* ---- Init ---- */
   loadPageData().catch(function (err) {
