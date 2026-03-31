@@ -1,10 +1,11 @@
 "use strict";
 
 /**
- * Beta Homepage – Sticky Chat Zone
+ * Beta Homepage – Compact Sticky Chat Bar
  *
- * Provides an inline ChatGPT-style chat panel anchored at the bottom
- * of the viewport. Compatible with the existing POST /api/chat backend.
+ * Provides a compact chat bar anchored at the bottom of the viewport
+ * with suggestion chips and inline message display.
+ * Compatible with the existing POST /api/chat backend.
  *
  * Inputs:  User text via chat input, suggestion buttons.
  * Outputs: Rendered assistant messages in the chat panel.
@@ -28,26 +29,23 @@
       thinking: "Thinking\u2026",
       unavailable: "The assistant is unavailable right now. Please try again.",
       unreachable: "Unable to reach the assistant. Please check your connection.",
-      placeholder: "Ask about projects, research, experience, or fit\u2026",
+      placeholder: "Ask about experience, publications, projects, or resume\u2026",
       disclaimer: "Context kept for this session only.",
-      suggestResearch: "What are your research interests?",
-      suggestExperience: "Work experience",
-      suggestProjects: "Projects",
-      suggestEducation: "Education",
-      suggestContact: "Contact info",
+      suggestResearch: "Ask about research focus",
+      suggestProjects: "What projects is he building now?",
+      suggestPublications: "Summarize publications",
+      suggestFit: "How does this fit ML infra roles?",
     },
     zh: {
       greeting: "\u4f60\u597d\uff01\u6211\u662f\u672c\u7ad9\u7684 AI \u52a9\u624b\u3002\u53ef\u4ee5\u5411\u6211\u8be2\u95ee\u7814\u7a76\u65b9\u5411\u3001\u9879\u76ee\u3001\u7ecf\u5386\u6216\u672c\u7ad9\u4efb\u4f55\u5185\u5bb9\u3002",
       thinking: "\u6b63\u5728\u601d\u8003\u2026",
       unavailable: "\u52a9\u624b\u6682\u65f6\u4e0d\u53ef\u7528\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002",
       unreachable: "\u6682\u65f6\u65e0\u6cd5\u8fde\u63a5\u52a9\u624b\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u3002",
-      placeholder: "\u6b22\u8fce\u8be2\u95ee\u9879\u76ee\u3001\u7814\u7a76\u65b9\u5411\u3001\u7ecf\u5386\u6216\u5c97\u4f4d\u5339\u914d\u5ea6\u2026",
-      disclaimer: "\u52a9\u624b\u53ea\u4f1a\u5728\u5f53\u524d\u4f1a\u8bdd\u4e2d\u4fdd\u7559\u4e0a\u4e0b\u6587\u3002",
-      suggestResearch: "\u4f60\u7684\u7814\u7a76\u65b9\u5411\u662f\u4ec0\u4e48\uff1f",
-      suggestExperience: "\u5de5\u4f5c\u7ecf\u5386",
-      suggestProjects: "\u9879\u76ee",
-      suggestEducation: "\u6559\u80b2\u80cc\u666f",
-      suggestContact: "\u8054\u7cfb\u65b9\u5f0f",
+      placeholder: "\u8be2\u95ee\u7ecf\u5386\u3001\u8bba\u6587\u3001\u9879\u76ee\u6216\u7b80\u5386\u2026",
+      suggestResearch: "\u4e86\u89e3\u7814\u7a76\u65b9\u5411",
+      suggestProjects: "\u4ed6\u5728\u505a\u54ea\u4e9b\u9879\u76ee\uff1f",
+      suggestPublications: "\u603b\u7ed3\u8bba\u6587\u53d1\u8868",
+      suggestFit: "\u5982\u4f55\u5339\u914d ML \u57fa\u7840\u8bbe\u65bd\u5c97\u4f4d\uff1f",
     },
   };
 
@@ -57,6 +55,7 @@
 
   /* ---- DOM refs ---- */
   var chatMessages = document.getElementById("chat-messages");
+  var chatZoneBody = document.getElementById("chat-zone-body");
   var chatForm = document.getElementById("chat-form");
   var chatInput = document.getElementById("chat-input");
   var sendBtn = document.getElementById("send-btn");
@@ -174,6 +173,17 @@
     sessionStorage.setItem(BETA_CHAT_HISTORY_KEY, JSON.stringify(trimmed));
   }
 
+  /* ---- Show/hide messages area ---- */
+  function updateMessagesVisibility() {
+    if (chatZoneBody) {
+      if (history.length > 0 || chatMessages.children.length > 0) {
+        chatZoneBody.classList.add("has-messages");
+      } else {
+        chatZoneBody.classList.remove("has-messages");
+      }
+    }
+  }
+
   /* ---- Message rendering ---- */
   function appendMessage(role, text, options) {
     options = options || {};
@@ -198,6 +208,7 @@
     wrapper.appendChild(bubble);
     chatMessages.appendChild(wrapper);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    updateMessagesVisibility();
     return wrapper;
   }
 
@@ -208,13 +219,12 @@
   function renderHistory() {
     if (!chatMessages) { return; }
     chatMessages.innerHTML = "";
-    if (!history.length) {
-      appendMessage("assistant", t("greeting"));
-    } else {
+    if (history.length) {
       history.forEach(function (item) {
         appendMessage(item.role, item.content, item);
       });
     }
+    updateMessagesVisibility();
   }
 
   /* ---- Chat submission ---- */
@@ -310,13 +320,13 @@
     });
   });
 
-  /* Locale change re-renders the greeting and suggestion text */
+  /* Locale change re-renders suggestion text */
   function applyLocaleText() {
     if (chatInput) { chatInput.placeholder = t("placeholder"); }
     if (chatDisclaimer) { chatDisclaimer.textContent = t("disclaimer"); }
 
     /* Update suggestion button labels */
-    var keys = ["suggestResearch", "suggestExperience", "suggestProjects", "suggestEducation", "suggestContact"];
+    var keys = ["suggestResearch", "suggestProjects", "suggestPublications", "suggestFit"];
     suggestionButtons.forEach(function (btn, i) {
       if (keys[i]) { btn.textContent = t(keys[i]); }
     });
@@ -325,17 +335,15 @@
     var questions = {
       en: [
         "What are your main research interests?",
-        "Tell me about your work experience.",
-        "What projects have you worked on?",
-        "What is your education background?",
-        "How can I contact you?",
+        "What projects is he building now?",
+        "Summarize his publications.",
+        "How does this fit ML infra roles?",
       ],
       zh: [
         "\u4f60\u7684\u4e3b\u8981\u7814\u7a76\u65b9\u5411\u662f\u4ec0\u4e48\uff1f",
-        "\u8bf7\u4ecb\u7ecd\u4f60\u7684\u5de5\u4f5c\u7ecf\u5386\u3002",
-        "\u4f60\u505a\u8fc7\u54ea\u4e9b\u9879\u76ee\uff1f",
-        "\u4f60\u7684\u6559\u80b2\u80cc\u666f\u662f\u4ec0\u4e48\uff1f",
-        "\u5982\u4f55\u8054\u7cfb\u4f60\uff1f",
+        "\u4ed6\u5728\u505a\u54ea\u4e9b\u9879\u76ee\uff1f",
+        "\u603b\u7ed3\u4ed6\u7684\u8bba\u6587\u53d1\u8868\u3002",
+        "\u5982\u4f55\u5339\u914d ML \u57fa\u7840\u8bbe\u65bd\u5c97\u4f4d\uff1f",
       ],
     };
     var locale = currentLocale();

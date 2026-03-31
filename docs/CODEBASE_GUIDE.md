@@ -41,6 +41,43 @@ Chat orchestration:
 - enables desktop-only bubble-width control
 - handles happy-mode unlock flow
 
+### `frontend/beta.html`
+
+Beta homepage. A recruiter-friendly redesign with:
+
+- wide CSS Grid layout (hero + sidebar, education + skills side-by-side)
+- profile hero card with name, headline, description, and CTA buttons
+- bio summary and contact info cards in a right sidebar
+- education and skills sections in a two-column row
+- experience highlights section
+- compact sticky chat bar at the bottom (suggestion chips + input)
+
+### `frontend/js/beta-home.js`
+
+Beta homepage orchestration:
+
+- fetches `GET /api/content` and `GET /api/portfolio`
+- renders profile hero, bio summary, contact info, education, skills, experience
+- bilingual rendering with locale toggle
+- admin-override priority: override > knowledge base > fallback defaults
+
+### `frontend/js/beta-chat.js`
+
+Beta chat bar orchestration:
+
+- compact sticky bar with suggestion chips and input field
+- session-aware history stored in sessionStorage
+- calls `POST /api/chat`
+- markdown rendering with XSS protection
+
+### `frontend/css/beta.css`
+
+Beta homepage styles:
+
+- CSS Grid layout with responsive breakpoints
+- low-saturation blue palette, uppercase card titles
+- compact chat bar fixed to viewport bottom
+
 ### `frontend/js/manager.js`
 
 Manager orchestration:

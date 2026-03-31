@@ -1,6 +1,7 @@
 /* ====================================================
    Beta Homepage – Clean Professional Theme
    Low-saturation blue palette, recruiter-friendly layout
+   Wide grid with hero + sidebar, education + skills row
    ==================================================== */
 
 /* ---------- Fonts ---------- */
@@ -34,8 +35,7 @@
   --beta-font-display: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
   --beta-font-body: "IBM Plex Sans", "Noto Sans SC", "Segoe UI", sans-serif;
 
-  --chat-zone-height: 380px;
-  --chat-zone-collapsed-height: 52px;
+  --chat-bar-height: 180px;
   --header-height: 60px;
 }
 
@@ -134,17 +134,35 @@ button, input, textarea, select { font: inherit; }
 
 /* ---------- Main layout ---------- */
 .beta-main {
-  max-width: 840px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px;
-  padding-bottom: calc(var(--chat-zone-height) + 40px);
+  padding: 32px 32px;
+  padding-bottom: calc(var(--chat-bar-height) + 40px);
 }
 
 /* ---------- Profile Zone ---------- */
 .profile-zone {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+}
+
+/* --- Grid rows --- */
+.profile-row {
+  display: grid;
+  gap: 24px;
+}
+
+.profile-row-top {
+  grid-template-columns: 1fr 1fr;
+}
+
+.profile-row-mid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.profile-row-bottom {
+  grid-template-columns: 1fr;
 }
 
 /* --- Hero --- */
@@ -163,24 +181,48 @@ button, input, textarea, select { font: inherit; }
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--beta-accent);
-  margin-bottom: 12px;
+  background: var(--beta-accent-bg);
+  border: 1px solid var(--beta-accent-soft);
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin-bottom: 16px;
 }
 
 .profile-name {
   font-family: var(--beta-font-display);
-  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
   color: var(--beta-text);
   margin: 0 0 10px;
 }
 
 .profile-headline {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: var(--beta-text-secondary);
   line-height: 1.55;
-  margin: 0 0 24px;
+  margin: 0 0 16px;
   max-width: 600px;
+}
+
+.profile-description {
+  font-size: 0.95rem;
+  color: var(--beta-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.profile-description p {
+  margin: 0 0 10px;
+}
+
+.profile-description p:last-child {
+  margin-bottom: 0;
+}
+
+.profile-description:empty {
+  display: none;
 }
 
 .profile-quick-links {
@@ -193,7 +235,7 @@ button, input, textarea, select { font: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 20px;
+  padding: 10px 24px;
   border: 1px solid var(--beta-border-strong);
   border-radius: 999px;
   font-size: 0.9rem;
@@ -210,7 +252,28 @@ button, input, textarea, select { font: inherit; }
   box-shadow: var(--beta-shadow-sm);
 }
 
-.quick-link-icon { font-size: 1rem; }
+.quick-link-primary {
+  background: var(--beta-accent);
+  color: #fff;
+  border-color: var(--beta-accent);
+}
+
+.quick-link-primary:hover {
+  background: var(--beta-accent-hover);
+  color: #fff;
+  border-color: var(--beta-accent-hover);
+}
+
+/* --- Sidebar --- */
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-card {
+  flex: 1;
+}
 
 /* --- Profile cards --- */
 .profile-card {
@@ -223,16 +286,16 @@ button, input, textarea, select { font: inherit; }
 
 .card-title {
   font-family: var(--beta-font-display);
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 0.82rem;
+  font-weight: 700;
   color: var(--beta-text);
   margin: 0 0 16px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--beta-border);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 .card-body {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--beta-text-secondary);
   line-height: 1.7;
 }
@@ -242,10 +305,7 @@ button, input, textarea, select { font: inherit; }
 
 /* Education entries */
 .edu-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 12px 0;
+  padding: 14px 0;
   border-bottom: 1px solid var(--beta-border);
 }
 
@@ -253,178 +313,132 @@ button, input, textarea, select { font: inherit; }
 
 .edu-info h3 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--beta-text);
 }
 
 .edu-info p {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
   font-size: 0.88rem;
   color: var(--beta-text-secondary);
 }
 
-.edu-year {
-  font-size: 0.85rem;
+.edu-description {
+  margin: 4px 0 0;
+  font-size: 0.86rem;
   color: var(--beta-text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin-left: 16px;
 }
 
 /* Skill tags */
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .skill-tag {
   display: inline-block;
-  padding: 6px 14px;
-  background: var(--beta-accent-bg);
-  color: var(--beta-accent);
-  border-radius: 999px;
-  font-size: 0.85rem;
+  padding: 8px 18px;
+  background: var(--beta-surface);
+  color: var(--beta-text);
+  border-radius: var(--beta-radius-sm);
+  font-size: 0.88rem;
   font-weight: 500;
-  border: 1px solid var(--beta-accent-soft);
+  border: 1px solid var(--beta-border-strong);
   transition: all 0.15s;
 }
 
 .skill-tag:hover {
-  background: var(--beta-accent-soft);
+  border-color: var(--beta-accent);
+  color: var(--beta-accent);
 }
 
 /* Contact items */
 .contact-item {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--beta-border);
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
 }
-
-.contact-item:last-child { border-bottom: none; }
 
 .contact-label {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--beta-text);
-  min-width: 80px;
+  white-space: nowrap;
 }
 
 .contact-value {
-  font-size: 0.9rem;
-  color: var(--beta-accent);
+  font-size: 0.88rem;
+  color: var(--beta-text-secondary);
   word-break: break-word;
 }
 
-.contact-value:hover { text-decoration: underline; }
+a.contact-value:hover {
+  color: var(--beta-accent);
+}
 
-/* ---------- Chat Zone ---------- */
+/* Experience entries */
+.exp-entry {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--beta-border);
+}
+
+.exp-entry:last-child { border-bottom: none; }
+
+.exp-entry h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--beta-text);
+}
+
+.exp-entry .exp-role {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  color: var(--beta-text-secondary);
+}
+
+.exp-entry .exp-desc {
+  margin: 4px 0 0;
+  font-size: 0.86rem;
+  color: var(--beta-text-muted);
+  line-height: 1.6;
+}
+
+/* ---------- Chat Bar (compact sticky) ---------- */
 .chat-zone {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 90;
-  height: var(--chat-zone-height);
   background: var(--beta-surface);
   border-top: 1px solid var(--beta-border-strong);
   box-shadow: 0 -4px 24px rgba(25, 46, 98, 0.08);
-  display: flex;
-  flex-direction: column;
-  transition: height 0.3s ease;
 }
 
-.chat-zone.is-collapsed {
-  height: var(--chat-zone-collapsed-height);
-}
-
-.chat-zone.is-collapsed .chat-zone-body {
-  display: none;
-}
-
-.chat-zone.is-collapsed .chat-zone-subtitle {
-  display: none;
-}
-
-.chat-zone-header {
-  flex-shrink: 0;
-  padding: 12px 24px 8px;
-  max-width: 840px;
-  width: 100%;
+.chat-zone-inner {
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 10px 32px 8px;
 }
 
-.chat-zone-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.chat-zone-title {
-  font-family: var(--beta-font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--beta-text);
-  margin: 0;
-}
-
-.chat-zone-collapse {
-  background: none;
-  border: 1px solid var(--beta-border);
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--beta-text-secondary);
-  font-size: 0.75rem;
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-
-.chat-zone-collapse:hover {
-  background: var(--beta-accent-bg);
-  color: var(--beta-accent);
-}
-
-.chat-zone.is-collapsed .collapse-icon {
-  transform: rotate(180deg);
-}
-
-.collapse-icon {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.chat-zone-subtitle {
-  font-size: 0.82rem;
-  color: var(--beta-text-muted);
-  margin: 4px 0 0;
-}
-
-/* Chat body */
+/* Chat messages (hidden by default, shown when conversation starts) */
 .chat-zone-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: 840px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-  min-height: 0;
-  overflow: hidden;
+  display: none;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-bottom: 8px;
+}
+
+.chat-zone-body.has-messages {
+  display: block;
 }
 
 .chat-messages {
-  flex: 1;
-  overflow-y: auto;
   padding: 8px 0;
-  min-height: 0;
   scroll-behavior: smooth;
 }
 
@@ -522,37 +536,35 @@ button, input, textarea, select { font: inherit; }
 
 /* Suggestion buttons */
 .chat-suggestions {
-  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 6px 0;
+  gap: 8px;
+  padding: 0 0 10px;
 }
 
 .suggestion-btn {
-  background: var(--beta-accent-bg);
-  border: 1px solid var(--beta-accent-soft);
+  background: var(--beta-surface);
+  border: 1px solid var(--beta-border-strong);
   border-radius: 999px;
-  padding: 5px 14px;
-  font-size: 0.8rem;
-  color: var(--beta-accent);
+  padding: 6px 16px;
+  font-size: 0.84rem;
+  color: var(--beta-text-secondary);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
 }
 
 .suggestion-btn:hover {
-  background: var(--beta-accent-soft);
   border-color: var(--beta-accent);
+  color: var(--beta-accent);
+  background: var(--beta-accent-bg);
 }
 
 /* Chat input form */
 .chat-input-form {
-  flex-shrink: 0;
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  padding: 8px 0 4px;
+  gap: 10px;
 }
 
 .chat-input {
@@ -560,11 +572,11 @@ button, input, textarea, select { font: inherit; }
   resize: none;
   border: 1px solid var(--beta-border-strong);
   border-radius: var(--beta-radius-md);
-  padding: 10px 14px;
-  font-size: 0.9rem;
+  padding: 12px 16px;
+  font-size: 0.92rem;
   line-height: 1.5;
   color: var(--beta-text);
-  background: var(--beta-surface);
+  background: var(--beta-bg);
   transition: border-color 0.15s;
   max-height: 120px;
   overflow-y: auto;
@@ -580,17 +592,16 @@ button, input, textarea, select { font: inherit; }
 
 .chat-send-btn {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  padding: 10px 24px;
   border: none;
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--beta-accent);
   color: #fff;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
   transition: background 0.15s;
+  white-space: nowrap;
 }
 
 .chat-send-btn:hover { background: var(--beta-accent-hover); }
@@ -598,11 +609,10 @@ button, input, textarea, select { font: inherit; }
 
 /* Chat footer */
 .chat-footer {
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 0 6px;
+  padding: 4px 0 0;
   font-size: 0.75rem;
   color: var(--beta-text-muted);
 }
@@ -612,15 +622,25 @@ button, input, textarea, select { font: inherit; }
 /* Tablet */
 @media (max-width: 900px) {
   .beta-main {
-    max-width: 100%;
     padding: 24px 16px;
-    padding-bottom: calc(var(--chat-zone-height) + 32px);
+    padding-bottom: calc(var(--chat-bar-height) + 32px);
+  }
+
+  .profile-row-top {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-row-mid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    flex-direction: row;
   }
 
   .profile-hero { padding: 28px 24px 24px; }
   .profile-card { padding: 20px 24px; }
-  .chat-zone-header { padding: 12px 16px 8px; }
-  .chat-zone-body { padding: 0 16px; }
+  .chat-zone-inner { padding: 10px 16px 8px; }
 
   .beta-nav { gap: 12px; }
   .beta-nav a { font-size: 0.85rem; }
@@ -628,10 +648,6 @@ button, input, textarea, select { font: inherit; }
 
 /* Mobile */
 @media (max-width: 600px) {
-  :root {
-    --chat-zone-height: 320px;
-  }
-
   .beta-header {
     padding: 0 16px;
     gap: 10px;
@@ -645,7 +661,7 @@ button, input, textarea, select { font: inherit; }
 
   .beta-main {
     padding: 16px 12px;
-    padding-bottom: calc(var(--chat-zone-height) + 24px);
+    padding-bottom: calc(var(--chat-bar-height) + 24px);
   }
 
   .profile-hero {
@@ -665,28 +681,18 @@ button, input, textarea, select { font: inherit; }
     border-radius: var(--beta-radius-md);
   }
 
-  .card-title { font-size: 1.05rem; }
-
-  .edu-entry {
+  .profile-sidebar {
     flex-direction: column;
-    gap: 2px;
   }
-
-  .edu-year { margin-left: 0; }
 
   .msg-bubble { max-width: 88%; }
   .suggestion-btn { font-size: 0.75rem; padding: 4px 10px; }
 
-  .chat-zone-header { padding: 10px 12px 6px; }
-  .chat-zone-body { padding: 0 12px; }
+  .chat-zone-inner { padding: 8px 12px 6px; }
 }
 
 /* Small mobile */
 @media (max-width: 400px) {
-  :root {
-    --chat-zone-height: 280px;
-  }
-
   .beta-nav-back { display: none; }
 
   .profile-quick-links { flex-direction: column; }
