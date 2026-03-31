@@ -4,8 +4,8 @@ A production-minded portfolio project: a bilingual homepage with a grounded AI
 assistant, a compact visitor feedback flow, a protected manager entrance, and an
 optional private happy-mode unlock.
 
-The frontend is static and can be hosted on GitHub Pages or any static host.
-The backend is a FastAPI service designed to run in a container.
+The frontend is static and can be hosted on any static host or behind a reverse
+proxy. The backend is a FastAPI service designed to run in a container.
 
 ## Features
 
@@ -94,16 +94,16 @@ docker compose up --build
 
 ## Deployment
 
-Recommended deployment is:
+Recommended deployment is a single server running both frontend and backend:
 
-- GitHub Pages or another static host for `frontend/`
+- nginx serving `frontend/` and proxying `/api/*` to the backend container
 - backend container from `backend/Dockerfile`
 - persistent mounted storage for:
   - `backend/knowledge`
   - `backend/data`
 
-For GitHub Pages with a custom domain such as `www.runyuma.uk`, see
-[docs/GITHUB_PAGES_DEPLOYMENT.md](docs/GITHUB_PAGES_DEPLOYMENT.md).
+For single-server deployment (recommended), see
+[docs/SERVER_DEPLOYMENT.md](docs/SERVER_DEPLOYMENT.md).
 
 For container-based hosting of both frontend and backend, see
 [docs/CONTAINER_DEPLOYMENT.md](docs/CONTAINER_DEPLOYMENT.md).
@@ -145,8 +145,9 @@ public links are provided.
 - [Knowledge System](docs/KNOWLEDGE_SYSTEM.md)
 - [Knowledge Templates Guide](docs/KNOWLEDGE_TEMPLATES.md)
 - [Safety Policy](docs/SAFETY_POLICY.md)
+- [Server Deployment](docs/SERVER_DEPLOYMENT.md)
 - [Container Deployment](docs/CONTAINER_DEPLOYMENT.md)
-- [GitHub Pages Deployment](docs/GITHUB_PAGES_DEPLOYMENT.md)
+- [GitHub Pages Deployment (legacy)](docs/GITHUB_PAGES_DEPLOYMENT.md)
 - [Testing Guide](docs/TESTING.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 

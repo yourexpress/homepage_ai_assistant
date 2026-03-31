@@ -1,7 +1,12 @@
-# GitHub Pages Deployment
+# GitHub Pages Deployment (Legacy)
 
-This repository can publish the static frontend from `frontend/` directly to
-GitHub Pages.
+> **Note:** This project is now hosted on AWS EC2 using the server deployment
+> model described in [SERVER_DEPLOYMENT.md](SERVER_DEPLOYMENT.md). The
+> instructions below are kept for historical reference but are no longer the
+> active deployment path. The GitHub Pages workflow has been removed.
+
+This repository previously published the static frontend from `frontend/`
+directly to GitHub Pages.
 
 Recommended public setup:
 

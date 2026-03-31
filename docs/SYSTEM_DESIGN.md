@@ -13,7 +13,7 @@ The system has two deployable parts:
 - FastAPI backend
   - chat, metrics, content, comments, happy-mode, admin, and health endpoints
 
-The frontend can be hosted on GitHub Pages or any static host. The backend runs
+The frontend can be hosted behind a reverse proxy or any static host. The backend runs
 as a containerized FastAPI service.
 
 ## Frontend Pages
@@ -209,14 +209,14 @@ Implication:
 
 Supported deployment options:
 
-- GitHub Pages for `frontend/` plus a separately hosted backend
+- single-server deployment with nginx reverse proxy (recommended)
 - frontend container plus backend container
 
-GitHub Pages path:
+Single-server path:
 
-- deploy `frontend/` with `.github/workflows/pages.yml`
-- configure the custom domain in repository Pages settings
-- keep the backend deployed separately
+- both frontend and backend on the same host
+- nginx serves `frontend/` and proxies `/api/*` to the backend
+- compose example in `docker-compose.server.yml`
 
 Container path:
 
