@@ -36,6 +36,7 @@ This document describes the current intended coverage areas.
   - metrics shape and counter reflection
 - `test_admin_api.py`
   - protected site-content load/save
+  - profile override fields stored and returned
   - happy challenge and verify flow
 - `test_comments_api.py`
   - create
@@ -50,7 +51,9 @@ This document describes the current intended coverage areas.
 - `frontend/tests/smoke_tests.js`
 
 These check only static DOM structure and basic page wiring. They do not
-replace browser automation or full end-to-end tests.
+replace browser automation or full end-to-end tests. Manager page smoke tests
+verify that the profile override sections (About, Education, Research, Contact)
+are present in the DOM.
 
 ## Lightweight Validation Commands
 

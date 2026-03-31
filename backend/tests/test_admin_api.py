@@ -68,6 +68,62 @@ class TestAdminSiteContent:
         assert data["items"][0]["body"] == "Clear academic homepage."
 
 
+    async def test_profile_override_fields_stored_and_returned(self, client, tmp_path, monkeypatch):
+        from app.config import settings
+
+        monkeypatch.setattr(settings, "admin_api_key", "secret-key")
+        monkeypatch.setattr(settings, "site_content_file", str(tmp_path / "site_content.json"))
+
+        load_response = await client.get(
+            "/api/admin/site-content",
+            headers={"X-Admin-Key": "secret-key"},
+        )
+        assert load_response.status_code == 200
+        content = load_response.json()["content"]
+
+        assert content["profile_name"] == {"en": "", "zh": ""}
+        assert content["profile_headline"] == {"en": "", "zh": ""}
+        assert content["profile_about_paragraphs"] == []
+        assert content["profile_education"] == []
+        assert content["profile_research_interests"] == []
+        assert content["profile_contact_items"] == []
+
+        content["profile_name"] = {"en": "Test Name", "zh": "测试名字"}
+        content["profile_headline"] = {"en": "Test Headline", "zh": "测试头衔"}
+        content["profile_education"] = [
+            {
+                "degree": {"en": "M.S. Computer Science", "zh": "计算机科学硕士"},
+                "institution": {"en": "Test University", "zh": "测试大学"},
+                "year": 2025,
+            }
+        ]
+        content["profile_research_interests"] = [{"en": "AI Safety", "zh": "AI 安全"}]
+        content["profile_contact_items"] = [
+            {
+                "label": {"en": "Email", "zh": "邮箱"},
+                "value": {"en": "test@example.com", "zh": "test@example.com"},
+                "href": "mailto:test@example.com",
+            }
+        ]
+
+        with patch(
+            "app.services.translation_service.translate_text",
+            AsyncMock(return_value="翻译文本"),
+        ):
+            save_response = await client.put(
+                "/api/admin/site-content",
+                headers={"X-Admin-Key": "secret-key"},
+                json={"content": content},
+            )
+
+        assert save_response.status_code == 200
+        saved = save_response.json()["content"]
+        assert saved["profile_name"]["en"] == "Test Name"
+        assert saved["profile_education"][0]["degree"]["en"] == "M.S. Computer Science"
+        assert saved["profile_research_interests"][0]["en"] == "AI Safety"
+        assert saved["profile_contact_items"][0]["href"] == "mailto:test@example.com"
+
+
 class TestHappyMode:
     async def test_wrong_code_returns_wrong_answer(self, client, monkeypatch):
         from app.config import settings

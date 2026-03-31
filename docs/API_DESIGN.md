@@ -180,6 +180,24 @@ Response includes:
 - saved content
 - translation sync notes
 
+#### Profile Override Fields
+
+The site-content store also accepts profile override fields. When present and
+non-empty, these take precedence over the equivalent knowledge-base values on
+the homepage. Empty strings and empty arrays mean "no override."
+
+| Field | Type | Overrides |
+|---|---|---|
+| `profile_name` | `{en, zh}` | Profile name (hero title) |
+| `profile_headline` | `{en, zh}` | Headline (hero summary) |
+| `profile_about_paragraphs` | `[{en, zh}, ...]` | About section paragraphs |
+| `profile_education` | `[{degree:{en,zh}, institution:{en,zh}, year:int}, ...]` | Education cards |
+| `profile_research_interests` | `[{en, zh}, ...]` | Research interest items |
+| `profile_contact_items` | `[{label:{en,zh}, value:{en,zh}, href:str}, ...]` | Contact methods |
+
+All profile override fields pass through the same bilingual sync pipeline as
+existing presentation copy fields.
+
 ## Middleware Behavior
 
 ### Rate limiter

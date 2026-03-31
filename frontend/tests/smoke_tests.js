@@ -18,6 +18,16 @@ function renderResults() {
   el.innerHTML = html;
 }
 
+let framesLoaded = 0;
+const totalFrames = 2;
+
+function onFrameReady() {
+  framesLoaded += 1;
+  if (framesLoaded === totalFrames) {
+    renderResults();
+  }
+}
+
 const frame = document.getElementById("test-frame");
 
 frame.addEventListener("load", () => {
@@ -51,5 +61,22 @@ frame.addEventListener("load", () => {
   const viewport = doc.querySelector('meta[name="viewport"]');
   assert(viewport !== null, "page includes viewport meta tag");
 
-  renderResults();
+  onFrameReady();
+});
+
+const managerFrame = document.getElementById("test-frame-manager");
+
+managerFrame.addEventListener("load", () => {
+  const doc = managerFrame.contentDocument;
+
+  assert(doc.getElementById("admin-key-input") !== null, "manager.html includes admin key input");
+  assert(doc.getElementById("manager-load-btn") !== null, "manager.html includes load dashboard button");
+  assert(doc.getElementById("manager-form") !== null, "manager.html includes the editable content form");
+  assert(doc.getElementById("manager-profile-overrides") !== null, "manager.html includes profile override section container");
+  assert(doc.getElementById("profile-about-section") !== null, "manager.html includes About override section");
+  assert(doc.getElementById("profile-education-section") !== null, "manager.html includes Education override section");
+  assert(doc.getElementById("profile-research-section") !== null, "manager.html includes Research override section");
+  assert(doc.getElementById("profile-contact-section") !== null, "manager.html includes Contact override section");
+
+  onFrameReady();
 });

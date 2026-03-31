@@ -12,7 +12,8 @@ proxy. The backend is a FastAPI service designed to run in a container.
 - session-aware portfolio chat with a compact, resizable desktop bubble
 - bilingual English and Chinese homepage content
 - compact feedback form without a public comments feed
-- protected manager entrance for homepage editing
+- protected manager entrance for homepage editing with LinkedIn-style profile
+  override sections (name, headline, about, education, research, contact)
 - automatic EN/ZH sync when content is edited through the manager flow
 - protected owner-only comments inbox
 - optional happy-personality mode unlocked from a small private-code dock
@@ -136,6 +137,12 @@ The homepage reads profile basics such as introduction, research interests,
 education, and public contacts from the runtime knowledge files when they are
 present. The contact card prefers email, LinkedIn, and GitHub values when those
 public links are provided.
+
+The manager entrance also supports profile overrides for name, headline, about
+paragraphs, education entries, research interests, and contact methods. When an
+override field is set to a non-empty value, the homepage uses it instead of the
+knowledge-base data. When cleared, the homepage falls back to the knowledge
+base.
 
 ## Documentation
 
