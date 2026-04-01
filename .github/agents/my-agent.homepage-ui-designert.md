@@ -5,10 +5,8 @@
 # For format details, see: https://gh.io/customagents/config
 
 ---
-# name: homepage-ui-designer
-description: A repository-aware UI design and implementation agent for the homepage.
-  It improves layout, styling, interaction behavior, and component consistency
-  while preserving the approved muted-blue visual identity and existing product intent.
+name: homepage-ui-designer
+description: A repository-aware UI design and implementation agent 
 ---
 
 # My Agent
