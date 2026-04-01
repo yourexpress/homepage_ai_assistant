@@ -464,36 +464,46 @@
   (function initResize() {
     if (!resizeHandle || !chatZoneBody) { return; }
 
-    var isResizing = false;
+    var activePointerId = null;
     var startY = 0;
     var startMaxH = 0;
 
-    function onMouseDown(e) {
-      if (e.button !== 0) { return; }
+    function onPointerDown(e) {
+      if (e.button !== 0 || activePointerId !== null) { return; }
       e.preventDefault();
-      isResizing = true;
+      activePointerId = e.pointerId;
       startY = e.clientY;
       var style = window.getComputedStyle(chatZoneBody);
       startMaxH = parseInt(style.maxHeight, 10) || 340;
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
+
+      resizeHandle.setPointerCapture(e.pointerId);
+      document.body.classList.add("is-resizing-chat");
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerUp);
     }
 
-    function onMouseMove(e) {
-      if (!isResizing) { return; }
+    function onPointerMove(e) {
+      if (e.pointerId !== activePointerId) { return; }
       /* Dragging upward increases height, downward decreases */
       var delta = startY - e.clientY;
       var newMaxH = Math.max(80, Math.min(startMaxH + delta, window.innerHeight * 0.6));
       chatZoneBody.style.maxHeight = newMaxH + "px";
     }
 
-    function onMouseUp() {
-      isResizing = false;
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
+    function onPointerUp(e) {
+      if (e && e.pointerId !== activePointerId) { return; }
+      if (resizeHandle.hasPointerCapture(activePointerId)) {
+        resizeHandle.releasePointerCapture(activePointerId);
+      }
+      activePointerId = null;
+      document.body.classList.remove("is-resizing-chat");
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
     }
 
-    resizeHandle.addEventListener("mousedown", onMouseDown);
+    resizeHandle.addEventListener("pointerdown", onPointerDown);
   })();
 
   /* ---- Init ---- */
