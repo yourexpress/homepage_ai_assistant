@@ -18,6 +18,16 @@ the current implementation state and the most likely next improvements.
 - manager profile overrides for homepage personal information (name, headline,
   about paragraphs, education, research interests, contact items) with
   LinkedIn-style grouped sections and array add/remove controls
+- beta homepage with wide CSS-Grid layout and a sticky session-aware chat bar
+  (suggestion chips, drag-to-move, vertical resize, clear-session)
+- beta chat session context: history is trimmed in-memory and capped before
+  being sent to the backend so conversations stay within the backend limit for
+  any session length
+- beta chat display: messages area enlarged and auto-scroll target corrected so
+  multi-paragraph assistant responses are fully visible and the view tracks the
+  latest message automatically
+- updated LLM system prompt to guide complete, substantive, well-structured
+  answers instead of defaulting to brevity
 
 ## Current Architecture Decisions
 

@@ -10,6 +10,9 @@ proxy. The backend is a FastAPI service designed to run in a container.
 ## Features
 
 - session-aware portfolio chat with a compact, resizable desktop bubble
+- **beta homepage** (`beta.html`) with a wide CSS-Grid layout and a sticky,
+  session-aware chat bar — full conversation context is kept for the current
+  browser session, drag-to-move, and vertical resize supported
 - bilingual English and Chinese homepage content
 - compact feedback form without a public comments feed
 - protected manager entrance for homepage editing with LinkedIn-style profile
@@ -24,14 +27,18 @@ proxy. The backend is a FastAPI service designed to run in a container.
 ```text
 frontend/
   index.html
+  beta.html
   comments-reader.html
   metrics.html
   manager.html
   css/style.css
+  css/beta.css
   js/app-config.js
   js/comments-reader.js
   js/home.js
   js/chat.js
+  js/beta-home.js
+  js/beta-chat.js
   js/metrics.js
   js/manager.js
 
