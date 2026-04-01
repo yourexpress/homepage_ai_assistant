@@ -78,6 +78,9 @@ managerFrame.addEventListener("load", () => {
   assert(doc.getElementById("profile-education-section") !== null, "manager.html includes Education override section");
   assert(doc.getElementById("profile-research-section") !== null, "manager.html includes Research override section");
   assert(doc.getElementById("profile-contact-section") !== null, "manager.html includes Contact override section");
+  assert(doc.getElementById("resume-upload-section") !== null, "manager.html includes resume upload section");
+  assert(doc.getElementById("resume-file-input") !== null, "manager.html includes resume file input");
+  assert(doc.getElementById("resume-upload-btn") !== null, "manager.html includes resume upload button");
 
   onFrameReady();
 });
@@ -108,6 +111,10 @@ betaFrame.addEventListener("load", () => {
   assert(doc.getElementById("send-btn") !== null, "beta.html includes a send button");
   assert(doc.getElementById("chat-suggestions") !== null, "beta.html includes suggestion buttons container");
   assert(doc.querySelectorAll(".suggestion-btn").length >= 3, "beta.html includes at least 3 suggestion buttons");
+  assert(doc.getElementById("chat-minimize-btn") !== null, "beta.html includes a minimize button");
+  assert(doc.getElementById("chat-clear-btn") !== null, "beta.html includes a clear chat button");
+  assert(doc.getElementById("chat-zone-drag-handle") !== null, "beta.html includes a drag handle");
+  assert(doc.getElementById("chat-zone-resize-handle") !== null, "beta.html includes a resize handle");
 
   /* Responsive meta */
   const viewport = doc.querySelector('meta[name="viewport"]');

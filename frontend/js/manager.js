@@ -500,4 +500,82 @@
   });
   managerForm.addEventListener("submit", saveContent);
   handleAddButtons();
+
+  /* ---- Resume upload ---- */
+  const resumeSection = document.getElementById("resume-upload-section");
+  const resumeFileInput = document.getElementById("resume-file-input");
+  const resumeUploadBtn = document.getElementById("resume-upload-btn");
+  const resumeStatus = document.getElementById("resume-upload-status");
+  const resumeCurrentInfo = document.getElementById("resume-current-info");
+
+  function showResumeSection() {
+    if (resumeSection) { resumeSection.hidden = false; }
+  }
+
+  async function loadResumeInfo() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/admin/resume/latest`, {
+        headers: { "X-Admin-Key": adminKeyInput.value },
+      });
+      if (!response.ok) { return; }
+      const data = await response.json();
+      if (data.resume) {
+        resumeCurrentInfo.textContent = `Current: ${data.resume.filename} (uploaded ${data.resume.uploaded_at})`;
+      } else {
+        resumeCurrentInfo.textContent = "No resume uploaded yet.";
+      }
+    } catch (_e) {
+      resumeCurrentInfo.textContent = "";
+    }
+  }
+
+  async function uploadResume() {
+    if (!resumeFileInput || !resumeFileInput.files.length) {
+      resumeStatus.textContent = "Please select a file first.";
+      return;
+    }
+    const file = resumeFileInput.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    resumeStatus.textContent = "Uploading...";
+    resumeUploadBtn.disabled = true;
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/admin/resume`, {
+        method: "POST",
+        headers: { "X-Admin-Key": adminKeyInput.value },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        resumeStatus.textContent = data.detail || "Upload failed.";
+        return;
+      }
+      resumeStatus.textContent = `Uploaded: ${data.filename}`;
+      resumeFileInput.value = "";
+      await loadResumeInfo();
+    } catch (error) {
+      console.error(error);
+      resumeStatus.textContent = "Upload failed. Check your connection.";
+    } finally {
+      resumeUploadBtn.disabled = false;
+    }
+  }
+
+  if (resumeUploadBtn) {
+    resumeUploadBtn.addEventListener("click", uploadResume);
+  }
+
+  /* Extend loadDashboard to also show the resume section */
+  const _originalLoadDashboard = loadDashboard;
+  loadDashboard = async function () {
+    await _originalLoadDashboard();
+    if (managerForm && !managerForm.hidden) {
+      showResumeSection();
+      await loadResumeInfo();
+    }
+  };
+  /* Re-bind events with the wrapped loadDashboard */
+  managerLoadBtn.removeEventListener("click", _originalLoadDashboard);
+  managerLoadBtn.addEventListener("click", loadDashboard);
 })();
