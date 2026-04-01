@@ -66,9 +66,14 @@ Beta homepage orchestration:
 Beta chat bar orchestration:
 
 - compact sticky bar with suggestion chips and input field
-- session-aware history stored in sessionStorage
-- calls `POST /api/chat`
-- markdown rendering with XSS protection
+- session-aware conversation history stored in `sessionStorage` and sent to the
+  backend on every request; history is trimmed to `MAX_HISTORY_MESSAGES` so it
+  never exceeds the backend validation limit
+- calls `POST /api/chat` with full `{message, history, session_id}`
+- markdown rendering with XSS protection (escapeHtml → renderMarkdown)
+- auto-scrolls the messages container (`chat-zone-body`) to show the latest
+  message after each reply
+- supports minimize, clear-session, drag-to-move, and vertical resize
 
 ### `frontend/css/beta.css`
 
@@ -76,7 +81,8 @@ Beta homepage styles:
 
 - CSS Grid layout with responsive breakpoints
 - low-saturation blue palette, uppercase card titles
-- compact chat bar fixed to viewport bottom
+- compact chat bar fixed to viewport bottom; messages area sized to show
+  multi-paragraph responses (340 px default, resizable by the user)
 
 ### `frontend/js/manager.js`
 

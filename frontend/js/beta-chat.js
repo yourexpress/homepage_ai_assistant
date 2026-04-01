@@ -175,8 +175,8 @@
   }
 
   function saveHistory() {
-    var trimmed = history.slice(-MAX_HISTORY_MESSAGES);
-    sessionStorage.setItem(BETA_CHAT_HISTORY_KEY, JSON.stringify(trimmed));
+    history = history.slice(-MAX_HISTORY_MESSAGES);
+    sessionStorage.setItem(BETA_CHAT_HISTORY_KEY, JSON.stringify(history));
   }
 
   /**
@@ -216,8 +216,8 @@
 
     wrapper.appendChild(bubble);
     chatMessages.appendChild(wrapper);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
     updateMessagesVisibility();
+    if (chatZoneBody) { chatZoneBody.scrollTop = chatZoneBody.scrollHeight; }
     return wrapper;
   }
 
@@ -472,7 +472,7 @@
       isResizing = true;
       startY = e.clientY;
       var style = window.getComputedStyle(chatZoneBody);
-      startMaxH = parseInt(style.maxHeight, 10) || 240;
+      startMaxH = parseInt(style.maxHeight, 10) || 340;
       document.addEventListener("mousemove", onMouseMove);
       document.addEventListener("mouseup", onMouseUp);
     }

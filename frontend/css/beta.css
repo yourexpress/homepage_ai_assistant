@@ -36,7 +36,7 @@
   --beta-font-body: "IBM Plex Sans", "Noto Sans SC", "Segoe UI", sans-serif;
 
   /* Used for bottom-padding calculation; actual bar height is dynamic. */
-  --chat-bar-height: 180px;
+  --chat-bar-height: 280px;
   --header-height: 60px;
 }
 
@@ -527,8 +527,8 @@ a.contact-value:hover {
 /* Chat messages (hidden by default, shown when conversation starts) */
 .chat-zone-body {
   display: none;
-  /* Cap message area so chat bar doesn't dominate the viewport. */
-  max-height: 240px;
+  /* Tall enough to show multi-paragraph assistant responses; user can resize. */
+  max-height: 340px;
   overflow-y: auto;
   padding-bottom: 8px;
 }

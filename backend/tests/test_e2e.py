@@ -29,7 +29,13 @@ Tests that cover this module:
 
 from __future__ import annotations
 
+import asyncio
+from unittest.mock import MagicMock
+
+import app.config as cfg
 import pytest
+from app.main import create_app
+from httpx import ASGITransport, AsyncClient
 
 from .helpers import (
     BLOCKED_MESSAGES,
@@ -105,49 +111,93 @@ class TestEndToEndMetricsConsistency:
 
 
 class TestEndToEndCORS:
-    """CORS headers are set correctly on responses.
+    """CORS headers are set correctly on responses."""
 
-    TODO: These tests require sending requests with specific Origin headers.
-    The current httpx client fixture does not set Origin by default.
-    Wire up once staging / Docker Compose E2E harness is available.
-    """
-
-    @pytest.mark.skip(reason="TODO: requires Origin header injection in test client")
     async def test_allowed_origin_receives_cors_headers(self, client):
-        # TODO: Send request with Origin: https://www.runyuma.uk
-        # Assert Access-Control-Allow-Origin header is present
-        pass
+        """Requests from an allowed origin include Access-Control-Allow-Origin."""
+        response = await client.post(
+            "/api/chat",
+            json={"message": "Tell me about Alex."},
+            headers={"Origin": "https://www.runyuma.uk"},
+        )
+        assert response.status_code == 200
+        assert response.headers.get("access-control-allow-origin") == "https://www.runyuma.uk"
 
-    @pytest.mark.skip(reason="TODO: requires Origin header injection in test client")
     async def test_disallowed_origin_blocked(self, client):
-        # TODO: Send request with Origin: https://evil.example.com
-        # Assert request is rejected or CORS headers absent
-        pass
+        """Requests from a disallowed origin do not receive CORS headers."""
+        response = await client.post(
+            "/api/chat",
+            json={"message": "Tell me about Alex."},
+            headers={"Origin": "https://evil.example.com"},
+        )
+        assert "access-control-allow-origin" not in response.headers
 
 
 class TestEndToEndRateLimitCascade:
-    """Rate limit exhaustion → 429, followed by recovery.
+    """Rate limit exhaustion → 429, followed by recovery."""
 
-    TODO: This test overlaps with test_chat.py::TestChatRateLimit but
-    exercises the full middleware chain.  Keeping as placeholder for
-    future E2E harness against a fresh app instance with controlled
-    rate-limit settings.
-    """
+    async def test_rate_limit_cascade(self, mock_llm, reset_metrics):
+        """Full cascade: exhaust burst → 429 → wait for refill → 200."""
+        original_burst = cfg.settings.rate_limit_burst
+        original_refill = cfg.settings.rate_limit_refill_interval
+        # 1-token burst, 10 ms per token (fast refill for test speed)
+        cfg.settings.rate_limit_burst = 1
+        cfg.settings.rate_limit_refill_interval = 0.01
+        try:
+            app = create_app()
+            async with AsyncClient(
+                transport=ASGITransport(app=app), base_url="http://test"
+            ) as ac:
+                r1 = await ac.post("/api/chat", json={"message": "first"})
+                assert r1.status_code == 200, "first request should succeed"
 
-    @pytest.mark.skip(reason="TODO: duplicate of test_chat.py rate limit test; extend for E2E")
-    async def test_rate_limit_cascade(self, client):
-        # TODO: Exhaust burst → verify 429 → wait for refill → verify 200
-        pass
+                r2 = await ac.post("/api/chat", json={"message": "second"})
+                assert r2.status_code == 429, "burst exhausted: expected 429"
+
+                await asyncio.sleep(0.05)  # wait for token to refill
+
+                r3 = await ac.post("/api/chat", json={"message": "third"})
+                assert r3.status_code == 200, "after refill: expected 200"
+        finally:
+            cfg.settings.rate_limit_burst = original_burst
+            cfg.settings.rate_limit_refill_interval = original_refill
 
 
 class TestEndToEndConcurrencyCascade:
-    """Concurrency saturation → 503, followed by recovery.
+    """Concurrency saturation → 503, followed by recovery."""
 
-    TODO: Similar to test_chat.py::TestChatConcurrencyLimit but intended
-    for a full E2E harness with controlled concurrency settings.
-    """
+    async def test_concurrency_cascade(self, mock_llm, reset_metrics):
+        """Full cascade: saturate semaphore → 503 → slot released → 200."""
+        original_max = cfg.settings.max_concurrent_requests
+        cfg.settings.max_concurrent_requests = 1
 
-    @pytest.mark.skip(reason="TODO: duplicate of test_chat.py concurrency test; extend for E2E")
-    async def test_concurrency_cascade(self, client):
-        # TODO: Saturate semaphore → verify 503 → release → verify 200
-        pass
+        async def slow_complete(messages):
+            await asyncio.sleep(0.5)
+            resp = MagicMock()
+            resp.text = "Slow response"
+            resp.prompt_tokens = 10
+            resp.completion_tokens = 20
+            return resp
+
+        mock_llm.side_effect = slow_complete
+
+        try:
+            app = create_app()
+            async with AsyncClient(
+                transport=ASGITransport(app=app), base_url="http://test"
+            ) as ac:
+                slow_task = asyncio.create_task(
+                    ac.post("/api/chat", json={"message": "slow"})
+                )
+                await asyncio.sleep(0.1)  # let slow request acquire the slot
+
+                r_rejected = await ac.post("/api/chat", json={"message": "fast"})
+                assert r_rejected.status_code == 503, "slot full: expected 503"
+
+                r_slow = await slow_task
+                assert r_slow.status_code == 200, "slow request should complete"
+
+                r_recovered = await ac.post("/api/chat", json={"message": "recovered"})
+                assert r_recovered.status_code == 200, "after slot freed: expected 200"
+        finally:
+            cfg.settings.max_concurrent_requests = original_max
