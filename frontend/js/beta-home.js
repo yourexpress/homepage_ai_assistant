@@ -30,6 +30,7 @@
       skillsTitle: "Skills",
       contactTitle: "Contact Info",
       experienceTitle: "Experience Highlights",
+      dataModelTitle: "Data / Admin Model",
       linkExperience: "View Experience",
       linkPublications: "Publications",
       linkResume: "Resume",
@@ -46,6 +47,7 @@
       skillsTitle: "\u6280\u80fd",
       contactTitle: "\u8054\u7cfb\u65b9\u5f0f",
       experienceTitle: "\u7ecf\u5386\u4eae\u70b9",
+      dataModelTitle: "\u6570\u636e / \u7ba1\u7406\u6a21\u5f0f",
       linkExperience: "\u67e5\u770b\u7ecf\u5386",
       linkPublications: "\u8bba\u6587\u53d1\u8868",
       linkResume: "\u7b80\u5386",
@@ -93,6 +95,8 @@
   var contactList = document.getElementById("contact-list");
   var experienceTitle = document.getElementById("experience-title");
   var experienceList = document.getElementById("experience-list");
+  var dataModelTitle = document.getElementById("data-model-title");
+  var dataModelList = document.getElementById("data-model-list");
   var linkExperience = document.getElementById("link-experience");
   var linkPublications = document.getElementById("link-publications");
   var navStable = document.getElementById("nav-stable");
@@ -248,6 +252,30 @@
     return [selected.email, selected.linkedin, selected.github].filter(Boolean);
   }
 
+  /** Return static entries describing how the data / admin model works. */
+  var DATA_MODEL_ENTRIES = {
+    en: [
+      {
+        heading: "Source of truth",
+        description: "Knowledge-base summary feeds the public profile by default.",
+      },
+      {
+        heading: "Safe override",
+        description: "Manager edits selectively replace fields through authenticated, validated, server-side update flow.",
+      },
+    ],
+    zh: [
+      {
+        heading: "\u6570\u636e\u6765\u6e90",
+        description: "\u77e5\u8bc6\u5e93\u6458\u8981\u9ed8\u8ba4\u586b\u5145\u516c\u5f00\u4e3b\u9875\u3002",
+      },
+      {
+        heading: "\u5b89\u5168\u8986\u76d6",
+        description: "\u7ba1\u7406\u5458\u901a\u8fc7\u8eab\u4efd\u9a8c\u8bc1\u3001\u670d\u52a1\u5668\u7aef\u6821\u9a8c\u7684\u66f4\u65b0\u6d41\u7a0b\u9009\u62e9\u6027\u66ff\u6362\u5b57\u6bb5\u3002",
+      },
+    ],
+  };
+
   /** Return up to 4 experience entries for the highlights section. */
   function buildExperienceItems() {
     var exp = portfolioData.experience || {};
@@ -268,6 +296,7 @@
     setText(skillsTitle, t("skillsTitle"));
     setText(contactTitle, t("contactTitle"));
     setText(experienceTitle, t("experienceTitle"));
+    setText(dataModelTitle, t("dataModelTitle"));
     setText(navStable, t("stableNav"));
     setText(navExperience, t("navExperience"));
     setText(navPublications, t("navPublications"));
@@ -285,6 +314,7 @@
     renderSkills(skillsList, buildSkills(profile));
     renderContacts(contactList, buildContactItems(profile));
     renderExperience(experienceList, buildExperienceItems());
+    renderDataModel(dataModelList);
     setLangButtons();
   }
 
@@ -421,6 +451,27 @@
         desc.textContent = localize(item.description || item.summary, currentLocale());
         entry.appendChild(desc);
       }
+
+      target.appendChild(entry);
+    });
+  }
+
+  function renderDataModel(target) {
+    if (!target) { return; }
+    clearChildren(target);
+    var items = DATA_MODEL_ENTRIES[currentLocale()] || DATA_MODEL_ENTRIES.en;
+    items.forEach(function (item) {
+      var entry = document.createElement("div");
+      entry.className = "exp-entry";
+
+      var h3 = document.createElement("h3");
+      h3.textContent = item.heading;
+      entry.appendChild(h3);
+
+      var desc = document.createElement("p");
+      desc.className = "exp-desc";
+      desc.textContent = item.description;
+      entry.appendChild(desc);
 
       target.appendChild(entry);
     });

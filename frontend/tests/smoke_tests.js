@@ -95,6 +95,7 @@ betaFrame.addEventListener("load", () => {
   assert(doc.getElementById("education-list") !== null, "beta.html includes an education list");
   assert(doc.getElementById("skills-list") !== null, "beta.html includes a skills/research list");
   assert(doc.getElementById("contact-list") !== null, "beta.html includes a contact list");
+  assert(doc.getElementById("data-model-list") !== null, "beta.html includes a data/admin model card");
   assert(doc.querySelector('a[href="experience.html"]') !== null, "beta.html links to experience page");
   assert(doc.querySelector('a[href="publications.html"]') !== null, "beta.html links to publications page");
   assert(doc.querySelector('a[href="index.html"]') !== null, "beta.html links back to current homepage");
