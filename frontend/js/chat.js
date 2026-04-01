@@ -24,6 +24,7 @@
         "Hello, I am the homepage AI assistant. I can use the current session history to answer questions about public projects, experience, and research.",
       thinking: "Thinking...",
       assistantUnavailable: "The assistant is unavailable right now. Please try again.",
+      assistantRateLimited: "You\u2019ve reached the question limit. Please wait a few minutes before asking again.",
       assistantUnreachable: "Unable to reach the assistant. Please check your connection.",
       chatPlaceholder: "Ask about projects, research, experience, or fit.",
       chatDisclaimer: "The assistant keeps context only for this browser session.",
@@ -53,6 +54,7 @@
         "你好，我是主页 AI 助手。我可以结合当前会话历史，回答关于公开项目、经历和研究方向的问题。",
       thinking: "正在思考...",
       assistantUnavailable: "助手暂时不可用，请稍后再试。",
+      assistantRateLimited: "\u60a8\u5df2\u8fbe\u5230\u63d0\u95ee\u9650\u5236\uff0c\u8bf7\u7a0d\u7b49\u51e0\u5206\u949f\u540e\u518d\u8bd5\u3002",
       assistantUnreachable: "暂时无法连接到助手，请检查网络或后端配置。",
       chatPlaceholder: "欢迎询问项目、研究方向、经历或岗位匹配度。",
       chatDisclaimer: "助手只会在当前浏览器会话中保留上下文。",
@@ -624,7 +626,7 @@
       removeElement(typingEl);
 
       if (!response.ok) {
-        appendMessage("error", t("assistantUnavailable"));
+        appendMessage("error", response.status === 429 ? t("assistantRateLimited") : t("assistantUnavailable"));
         history.pop();
         saveHistory();
         return;

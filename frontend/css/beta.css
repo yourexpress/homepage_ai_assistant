@@ -28,6 +28,8 @@
   --beta-assistant-bubble: #f0f4fb;
   --beta-success: #1f9d71;
   --beta-danger: #d64252;
+  --beta-danger-bg: #fff2f4;
+  --beta-danger-border: rgba(214, 66, 82, 0.18);
   --beta-radius-sm: 8px;
   --beta-radius-md: 12px;
   --beta-radius-lg: 16px;
@@ -416,8 +418,8 @@ a.contact-value:hover {
   right: 0;
   z-index: 90;
   background: var(--beta-surface);
-  border-top: 1px solid var(--beta-border-strong);
-  box-shadow: 0 -4px 24px rgba(25, 46, 98, 0.08);
+  border-top: 2px solid var(--beta-accent);
+  box-shadow: 0 -4px 24px rgba(25, 46, 98, 0.12);
   transition: box-shadow 0.2s;
 }
 
@@ -428,7 +430,7 @@ a.contact-value:hover {
   right: 12px;
   display: flex;
   gap: 4px;
-  z-index: 2;
+  z-index: 5;
 }
 
 .chat-toolbar-btn {
@@ -454,12 +456,12 @@ a.contact-value:hover {
 /* Drag handle */
 .chat-zone-drag-handle {
   position: absolute;
-  top: 0;
+  top: 14px; /* sits just below the 12 px resize strip + 2 px gap */
   left: 50%;
   transform: translateX(-50%);
   padding: 2px 16px 0;
   cursor: grab;
-  z-index: 2;
+  z-index: 5;
   user-select: none;
   color: var(--beta-text-muted);
   font-size: 12px;
@@ -476,20 +478,39 @@ a.contact-value:hover {
   line-height: 1;
 }
 
-/* Resize handle (top edge) */
+/* Resize handle (top edge) — visible pill indicator, taller hit target */
 .chat-zone-resize-handle {
   position: absolute;
-  top: -3px;
+  top: 0;
   left: 0;
   right: 0;
-  height: 6px;
+  height: 12px;
   cursor: ns-resize;
-  z-index: 3;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
+  transition: background 0.15s;
+}
+
+.chat-zone-resize-handle::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--beta-border-strong);
+  transition: background 0.15s, width 0.15s;
 }
 
 .chat-zone-resize-handle:hover {
   background: var(--beta-accent-soft);
+}
+
+.chat-zone-resize-handle:hover::before {
+  background: var(--beta-accent);
+  width: 48px;
 }
 
 /* Minimized state: hide everything except the input form row */
@@ -521,7 +542,7 @@ a.contact-value:hover {
 .chat-zone-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 32px 8px;
+  padding: 14px 32px 8px;
 }
 
 /* Chat messages (hidden by default, shown when conversation starts) */
@@ -576,6 +597,13 @@ a.contact-value:hover {
 .assistant-msg .msg-bubble {
   background: var(--beta-assistant-bubble);
   color: var(--beta-text);
+  border-bottom-left-radius: 4px;
+}
+
+.error-msg .msg-bubble {
+  background: var(--beta-danger-bg);
+  color: var(--beta-danger);
+  border: 1px solid var(--beta-danger-border);
   border-bottom-left-radius: 4px;
 }
 
@@ -744,7 +772,7 @@ a.contact-value:hover {
 
   .profile-hero { padding: 28px 24px 24px; }
   .profile-card { padding: 20px 24px; }
-  .chat-zone-inner { padding: 10px 16px 8px; }
+  .chat-zone-inner { padding: 14px 16px 8px; }
 
   .beta-nav { gap: 12px; }
   .beta-nav a { font-size: 0.85rem; }
@@ -792,7 +820,7 @@ a.contact-value:hover {
   .msg-bubble { max-width: 88%; }
   .suggestion-btn { font-size: 0.75rem; padding: 4px 10px; }
 
-  .chat-zone-inner { padding: 8px 12px 6px; }
+  .chat-zone-inner { padding: 14px 12px 6px; }
 }
 
 /* Small mobile */
