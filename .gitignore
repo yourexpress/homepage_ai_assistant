@@ -203,6 +203,7 @@ cython_debug/
 
 # Private runtime knowledge files
 backend/knowledge/*.json
+backend/data/resumes/
 
 # Marimo
 marimo/_static/

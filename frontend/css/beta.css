@@ -418,6 +418,104 @@ a.contact-value:hover {
   background: var(--beta-surface);
   border-top: 1px solid var(--beta-border-strong);
   box-shadow: 0 -4px 24px rgba(25, 46, 98, 0.08);
+  transition: box-shadow 0.2s;
+}
+
+/* Toolbar: clear + minimize buttons */
+.chat-zone-toolbar {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.chat-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--beta-border);
+  border-radius: 6px;
+  background: var(--beta-surface);
+  color: var(--beta-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chat-toolbar-btn:hover {
+  border-color: var(--beta-accent);
+  color: var(--beta-accent);
+  background: var(--beta-accent-bg);
+}
+
+/* Drag handle */
+.chat-zone-drag-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 16px 0;
+  cursor: grab;
+  z-index: 2;
+  user-select: none;
+  color: var(--beta-text-muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.chat-zone-drag-handle:hover { opacity: 1; }
+.chat-zone-drag-handle:active { cursor: grabbing; }
+
+.drag-dots {
+  display: block;
+  line-height: 1;
+}
+
+/* Resize handle (top edge) */
+.chat-zone-resize-handle {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  z-index: 3;
+  background: transparent;
+}
+
+.chat-zone-resize-handle:hover {
+  background: var(--beta-accent-soft);
+}
+
+/* Minimized state: hide everything except the input form row */
+.chat-zone.is-minimized .chat-zone-body,
+.chat-zone.is-minimized .chat-suggestions,
+.chat-zone.is-minimized .chat-footer,
+.chat-zone.is-minimized .chat-zone-drag-handle,
+.chat-zone.is-minimized .chat-zone-resize-handle {
+  display: none;
+}
+
+.chat-zone.is-minimized .chat-zone-inner {
+  padding-top: 6px;
+  padding-bottom: 4px;
+}
+
+/* Detached (dragged) state */
+.chat-zone.is-detached {
+  left: auto;
+  right: auto;
+  bottom: auto;
+  border-radius: var(--beta-radius-lg);
+  border: 1px solid var(--beta-border-strong);
+  box-shadow: var(--beta-shadow-lg);
+  width: min(800px, 90vw);
+  overflow: hidden;
 }
 
 .chat-zone-inner {
@@ -703,4 +801,10 @@ a.contact-value:hover {
 
   .profile-quick-links { flex-direction: column; }
   .quick-link-btn { justify-content: center; }
+}
+
+/* Hide drag/resize on touch devices */
+@media (pointer: coarse) {
+  .chat-zone-drag-handle,
+  .chat-zone-resize-handle { display: none; }
 }

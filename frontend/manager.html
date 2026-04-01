@@ -128,6 +128,22 @@
           <button type="submit" class="primary-btn">Save homepage content</button>
           <div id="manager-sync-notes" class="sync-notes"></div>
         </form>
+
+        <!-- Resume Upload Section (outside the content form) -->
+        <section id="resume-upload-section" class="manager-section" style="margin-top:24px;" hidden>
+          <div class="manager-section-head">
+            <h3>Resume upload</h3>
+            <p>Upload a resume file (PDF, DOC, or DOCX, max 10 MB). The backend keeps the last three copies; visitors see the latest version.</p>
+          </div>
+          <div id="resume-upload-status" class="helper-text"></div>
+          <div class="manager-row" style="align-items:center;">
+            <label style="flex:1;">
+              <input type="file" id="resume-file-input" accept=".pdf,.doc,.docx" />
+            </label>
+            <button type="button" class="primary-btn" id="resume-upload-btn">Upload resume</button>
+          </div>
+          <div id="resume-current-info" class="helper-text" style="margin-top:8px;"></div>
+        </section>
       </article>
     </section>
   </main>

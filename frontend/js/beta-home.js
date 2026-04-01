@@ -99,6 +99,7 @@
   var dataModelList = document.getElementById("data-model-list");
   var linkExperience = document.getElementById("link-experience");
   var linkPublications = document.getElementById("link-publications");
+  var linkResume = document.getElementById("link-resume");
   var navStable = document.getElementById("nav-stable");
   var navExperience = document.getElementById("nav-experience");
   var navPublications = document.getElementById("nav-publications");
@@ -306,6 +307,11 @@
     }
     if (linkPublications) {
       linkPublications.textContent = t("linkPublications");
+    }
+
+    /* Update Resume link text and visibility based on backend availability */
+    if (linkResume) {
+      linkResume.textContent = t("linkResume");
     }
 
     renderDescription(profileDescription, buildDescriptionItems());
@@ -516,6 +522,30 @@
           console.error(results[1].reason);
         }
         renderContent();
+        /* Wire the resume download link after initial render. */
+        wireResumeLink();
+      });
+  }
+
+  /**
+   * Check whether a resume has been uploaded and set the link href.
+   * Hides the button when no resume is available.
+   */
+  function wireResumeLink() {
+    if (!linkResume) { return; }
+    fetch(BACKEND_URL + "/api/resume/info")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.available) {
+          linkResume.href = BACKEND_URL + "/api/resume/latest";
+          linkResume.setAttribute("download", "");
+          linkResume.style.display = "";
+        } else {
+          linkResume.style.display = "none";
+        }
+      })
+      .catch(function () {
+        linkResume.style.display = "none";
       });
   }
 

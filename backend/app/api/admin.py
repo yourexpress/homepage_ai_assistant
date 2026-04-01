@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, UploadFile
+from fastapi.responses import FileResponse
 
 from app.config import settings
 from math import ceil
-from typing import Literal
+from typing import Any, Literal
 
 from fastapi import Query
 
@@ -19,6 +20,7 @@ from app.models import (
 )
 from app.services.comments_store import comments_store
 from app.services.happy_auth import is_enabled as happy_mode_enabled
+from app.services.resume_store import resume_store
 from app.services.site_content_store import site_content_store
 
 router = APIRouter()
@@ -79,3 +81,31 @@ async def get_admin_comments(
         total_pages=total_pages,
         sort=sort,
     )
+
+
+@router.post("/admin/resume")
+async def upload_resume(
+    file: UploadFile,
+    x_admin_key: str | None = Header(default=None, alias="X-Admin-Key"),
+) -> dict[str, Any]:
+    """Upload a resume file (PDF/DOC/DOCX, max 10 MB). Keeps last three copies."""
+    _require_admin_key(x_admin_key)
+    content = await file.read()
+    filename = file.filename or "resume"
+    try:
+        meta = resume_store.save(content, filename)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"ok": True, **meta}
+
+
+@router.get("/admin/resume/latest")
+async def get_resume_info(
+    x_admin_key: str | None = Header(default=None, alias="X-Admin-Key"),
+) -> dict[str, Any]:
+    """Return metadata for the latest uploaded resume (admin view)."""
+    _require_admin_key(x_admin_key)
+    meta = resume_store.latest()
+    if meta is None:
+        return {"ok": True, "resume": None}
+    return {"ok": True, "resume": meta}

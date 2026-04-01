@@ -4,10 +4,11 @@
  * Beta Homepage – Compact Sticky Chat Bar
  *
  * Provides a compact chat bar anchored at the bottom of the viewport
- * with suggestion chips and inline message display.
+ * with suggestion chips and inline message display.  Supports minimize,
+ * clear-session, drag-to-move, and vertical resize.
  * Compatible with the existing POST /api/chat backend.
  *
- * Inputs:  User text via chat input, suggestion buttons.
+ * Inputs:  User text via chat input, suggestion buttons, toolbar controls.
  * Outputs: Rendered assistant messages in the chat panel.
  *
  * Failure modes:
@@ -54,6 +55,7 @@
   var isWaiting = false;
 
   /* ---- DOM refs ---- */
+  var chatZone = document.getElementById("chat-zone");
   var chatMessages = document.getElementById("chat-messages");
   var chatZoneBody = document.getElementById("chat-zone-body");
   var chatForm = document.getElementById("chat-form");
@@ -63,6 +65,10 @@
   var chatDisclaimer = document.getElementById("chat-disclaimer");
   var chatSuggestions = document.getElementById("chat-suggestions");
   var suggestionButtons = chatSuggestions ? Array.from(chatSuggestions.querySelectorAll(".suggestion-btn")) : [];
+  var minimizeBtn = document.getElementById("chat-minimize-btn");
+  var clearBtn = document.getElementById("chat-clear-btn");
+  var dragHandle = document.getElementById("chat-zone-drag-handle");
+  var resizeHandle = document.getElementById("chat-zone-resize-handle");
 
   /* ---- Helpers ---- */
   function currentLocale() { return getLocale(); }
@@ -363,6 +369,130 @@
       if (!history.length) { renderHistory(); }
     });
   });
+
+  /* ---- Minimize / Expand ---- */
+  function toggleMinimize() {
+    if (!chatZone) { return; }
+    var isMin = chatZone.classList.toggle("is-minimized");
+    if (minimizeBtn) {
+      minimizeBtn.title = isMin ? "Expand chat" : "Minimize chat";
+      minimizeBtn.setAttribute("aria-label", isMin ? "Expand chat zone" : "Minimize chat zone");
+    }
+    if (!isMin && chatInput) { chatInput.focus(); }
+  }
+
+  if (minimizeBtn) {
+    minimizeBtn.addEventListener("click", toggleMinimize);
+  }
+
+  /* ---- Clear session ---- */
+  function clearSession() {
+    history = [];
+    sessionStorage.removeItem(BETA_CHAT_HISTORY_KEY);
+    if (chatMessages) { chatMessages.innerHTML = ""; }
+    updateMessagesVisibility();
+    if (chatSuggestions) { chatSuggestions.style.display = ""; }
+    if (chatZone) { chatZone.classList.remove("is-minimized"); }
+    updateCharCounter();
+    if (chatInput) { chatInput.focus(); }
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", clearSession);
+  }
+
+  /* ---- Drag to move ---- */
+  (function initDrag() {
+    if (!dragHandle || !chatZone) { return; }
+
+    var isDragging = false;
+    var offsetX = 0;
+    var offsetY = 0;
+
+    function onMouseDown(e) {
+      if (e.button !== 0) { return; }
+      e.preventDefault();
+      isDragging = true;
+
+      var rect = chatZone.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+
+      /* Detach from fixed-bottom into positioned floating panel */
+      if (!chatZone.classList.contains("is-detached")) {
+        chatZone.classList.add("is-detached");
+        chatZone.style.left = rect.left + "px";
+        chatZone.style.top = rect.top + "px";
+        chatZone.style.width = rect.width + "px";
+      }
+
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    }
+
+    function onMouseMove(e) {
+      if (!isDragging) { return; }
+      var newLeft = e.clientX - offsetX;
+      var newTop = e.clientY - offsetY;
+      /* Clamp within viewport */
+      newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - chatZone.offsetWidth));
+      newTop = Math.max(0, Math.min(newTop, window.innerHeight - 40));
+      chatZone.style.left = newLeft + "px";
+      chatZone.style.top = newTop + "px";
+    }
+
+    function onMouseUp() {
+      isDragging = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    }
+
+    dragHandle.addEventListener("mousedown", onMouseDown);
+
+    /* Double-click resets to docked position */
+    dragHandle.addEventListener("dblclick", function () {
+      chatZone.classList.remove("is-detached");
+      chatZone.style.left = "";
+      chatZone.style.top = "";
+      chatZone.style.width = "";
+    });
+  })();
+
+  /* ---- Resize (vertical) ---- */
+  (function initResize() {
+    if (!resizeHandle || !chatZoneBody) { return; }
+
+    var isResizing = false;
+    var startY = 0;
+    var startMaxH = 0;
+
+    function onMouseDown(e) {
+      if (e.button !== 0) { return; }
+      e.preventDefault();
+      isResizing = true;
+      startY = e.clientY;
+      var style = window.getComputedStyle(chatZoneBody);
+      startMaxH = parseInt(style.maxHeight, 10) || 240;
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    }
+
+    function onMouseMove(e) {
+      if (!isResizing) { return; }
+      /* Dragging upward increases height, downward decreases */
+      var delta = startY - e.clientY;
+      var newMaxH = Math.max(80, Math.min(startMaxH + delta, window.innerHeight * 0.6));
+      chatZoneBody.style.maxHeight = newMaxH + "px";
+    }
+
+    function onMouseUp() {
+      isResizing = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    }
+
+    resizeHandle.addEventListener("mousedown", onMouseDown);
+  })();
 
   /* ---- Init ---- */
   loadHistory();
