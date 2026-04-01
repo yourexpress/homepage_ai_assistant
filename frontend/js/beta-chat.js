@@ -29,6 +29,7 @@
       greeting: "Hello! I\u2019m the AI assistant for this homepage. Ask me about research, projects, experience, or anything you see here.",
       thinking: "Thinking\u2026",
       unavailable: "The assistant is unavailable right now. Please try again.",
+      rateLimited: "You\u2019ve reached the question limit. Please wait a few minutes before asking again.",
       unreachable: "Unable to reach the assistant. Please check your connection.",
       placeholder: "Ask about experience, publications, projects, or resume\u2026",
       disclaimer: "Context kept for this session only.",
@@ -41,6 +42,7 @@
       greeting: "\u4f60\u597d\uff01\u6211\u662f\u672c\u7ad9\u7684 AI \u52a9\u624b\u3002\u53ef\u4ee5\u5411\u6211\u8be2\u95ee\u7814\u7a76\u65b9\u5411\u3001\u9879\u76ee\u3001\u7ecf\u5386\u6216\u672c\u7ad9\u4efb\u4f55\u5185\u5bb9\u3002",
       thinking: "\u6b63\u5728\u601d\u8003\u2026",
       unavailable: "\u52a9\u624b\u6682\u65f6\u4e0d\u53ef\u7528\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002",
+      rateLimited: "\u60a8\u5df2\u8fbe\u5230\u63d0\u95ee\u9650\u5236\uff0c\u8bf7\u7a0d\u7b49\u51e0\u5206\u949f\u540e\u518d\u8bd5\u3002",
       unreachable: "\u6682\u65f6\u65e0\u6cd5\u8fde\u63a5\u52a9\u624b\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u3002",
       placeholder: "\u8be2\u95ee\u7ecf\u5386\u3001\u8bba\u6587\u3001\u9879\u76ee\u6216\u7b80\u5386\u2026",
       suggestResearch: "\u4e86\u89e3\u7814\u7a76\u65b9\u5411",
@@ -272,7 +274,7 @@
       .then(function (response) {
         removeElement(typingEl);
         if (!response.ok) {
-          appendMessage("error", t("unavailable"));
+          appendMessage("error", response.status === 429 ? t("rateLimited") : t("unavailable"));
           history.pop();
           saveHistory();
           return;
