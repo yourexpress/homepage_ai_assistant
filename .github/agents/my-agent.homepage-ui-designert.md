@@ -1,12 +1,9 @@
 ---
-# Fill in the fields below to create a basic custom agent for your repository.
-# The Copilot CLI can be used for local testing: https://gh.io/customagents/cli
-# To make this agent available, merge this file into the default repository branch.
-# For format details, see: https://gh.io/customagents/config
-
----
-name: homepage-ui-designer
-description: A repository-aware UI design and implementation agent 
+name: my-agent.homepage-ui-designer
+description: >
+  A repository-aware UI design and implementation agent for the homepage.
+  It improves layout, styling, interaction behavior, and component consistency
+  while preserving the approved muted-blue visual identity and sticky bottom chat design.
 ---
 
 # My Agent
