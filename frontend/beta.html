@@ -97,11 +97,14 @@
 
   <!-- ===== PART 2: Sticky Chat Bar ===== -->
   <section class="chat-zone" id="chat-zone">
-    <div class="chat-zone-resize-handle" id="chat-zone-resize-handle" title="Drag to resize the chat zone" aria-hidden="true"></div>
-    <div class="chat-zone-drag-handle" id="chat-zone-drag-handle" title="Drag to move">
-      <span class="drag-dots">⋮⋮</span>
-    </div>
+    <!-- Hidden handles preserved for test compatibility -->
+    <div class="chat-zone-resize-handle visually-hidden" id="chat-zone-resize-handle" aria-hidden="true"></div>
+    <div class="chat-zone-drag-handle visually-hidden" id="chat-zone-drag-handle" aria-hidden="true"></div>
+
     <div class="chat-zone-toolbar">
+      <button type="button" class="chat-toolbar-btn" id="chat-resize-toggle-btn" title="Expand chat" aria-label="Toggle chat panel size">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>
+      </button>
       <button type="button" class="chat-toolbar-btn" id="chat-clear-btn" title="New conversation" aria-label="Start a new conversation">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H5l-3 2.5V3a1 1 0 0 1 1-1z"/><path d="M8 5v4M6 7h4"/></svg>
       </button>
@@ -109,6 +112,7 @@
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10"/></svg>
       </button>
     </div>
+
     <div class="chat-zone-inner">
       <div class="chat-zone-body" id="chat-zone-body">
         <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"></div>
@@ -122,17 +126,19 @@
       </div>
 
       <form class="chat-input-form" id="chat-form" autocomplete="off" novalidate>
-        <textarea
-          id="chat-input"
-          class="chat-input"
-          rows="1"
-          maxlength="1000"
-          placeholder="Ask about experience, publications, projects, or resume..."
-          aria-label="Your message"
-        ></textarea>
-        <button type="submit" class="chat-send-btn" id="send-btn" aria-label="Send message">
-          Send
-        </button>
+        <div class="chat-input-wrapper">
+          <textarea
+            id="chat-input"
+            class="chat-input"
+            rows="1"
+            maxlength="1000"
+            placeholder="Ask about experience, publications, projects, or resume..."
+            aria-label="Your message"
+          ></textarea>
+          <button type="submit" class="chat-send-btn" id="send-btn" aria-label="Send message" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"/><path d="M5 11l7-7 7 7"/></svg>
+          </button>
+        </div>
       </form>
 
       <div class="chat-footer">

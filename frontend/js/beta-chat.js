@@ -69,8 +69,7 @@
   var suggestionButtons = chatSuggestions ? Array.from(chatSuggestions.querySelectorAll(".suggestion-btn")) : [];
   var minimizeBtn = document.getElementById("chat-minimize-btn");
   var clearBtn = document.getElementById("chat-clear-btn");
-  var dragHandle = document.getElementById("chat-zone-drag-handle");
-  var resizeHandle = document.getElementById("chat-zone-resize-handle");
+  var resizeToggleBtn = document.getElementById("chat-resize-toggle-btn");
 
   /* ---- Helpers ---- */
   function currentLocale() { return getLocale(); }
@@ -241,12 +240,22 @@
   /* ---- Chat submission ---- */
   function setBusy(busy) {
     isWaiting = busy;
-    if (sendBtn) { sendBtn.disabled = busy; }
+    updateSendButtonState();
   }
 
   function updateCharCounter() {
     if (!charCount || !chatInput) { return; }
     charCount.textContent = chatInput.value.length + " / " + MAX_INPUT_LENGTH;
+  }
+
+  /**
+   * Enable/disable the send button based on whether the input has content.
+   * Mimics ChatGPT's behavior: send button is only active when there is text.
+   */
+  function updateSendButtonState() {
+    if (!sendBtn || !chatInput) { return; }
+    var hasContent = chatInput.value.trim().length > 0;
+    sendBtn.disabled = isWaiting || !hasContent;
   }
 
   function submitMessage(text) {
@@ -257,6 +266,7 @@
     saveHistory();
     chatInput.value = "";
     updateCharCounter();
+    updateSendButtonState();
 
     var typingEl = appendMessage("typing", t("thinking"));
     setBusy(true);
@@ -314,7 +324,10 @@
   }
 
   if (chatInput) {
-    chatInput.addEventListener("input", updateCharCounter);
+    chatInput.addEventListener("input", function () {
+      updateCharCounter();
+      updateSendButtonState();
+    });
     chatInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
@@ -395,7 +408,9 @@
     updateMessagesVisibility();
     if (chatSuggestions) { chatSuggestions.style.display = ""; }
     if (chatZone) { chatZone.classList.remove("is-minimized"); }
+    if (chatZoneBody) { chatZoneBody.classList.remove("is-expanded"); }
     updateCharCounter();
+    updateSendButtonState();
     if (chatInput) { chatInput.focus(); }
   }
 
@@ -403,112 +418,25 @@
     clearBtn.addEventListener("click", clearSession);
   }
 
-  /* ---- Drag to move ---- */
-  (function initDrag() {
-    if (!dragHandle || !chatZone) { return; }
+  /* ---- Resize toggle (compact / expanded via header icon) ---- */
+  (function initResizeToggle() {
+    if (!resizeToggleBtn || !chatZoneBody) { return; }
 
-    var isDragging = false;
-    var offsetX = 0;
-    var offsetY = 0;
+    var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
+    var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
 
-    function onMouseDown(e) {
-      if (e.button !== 0) { return; }
-      e.preventDefault();
-      isDragging = true;
-
-      var rect = chatZone.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-
-      /* Detach from fixed-bottom into positioned floating panel */
-      if (!chatZone.classList.contains("is-detached")) {
-        chatZone.classList.add("is-detached");
-        chatZone.style.left = rect.left + "px";
-        chatZone.style.top = rect.top + "px";
-        chatZone.style.width = rect.width + "px";
-      }
-
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
-    }
-
-    function onMouseMove(e) {
-      if (!isDragging) { return; }
-      var newLeft = e.clientX - offsetX;
-      var newTop = e.clientY - offsetY;
-      /* Clamp within viewport */
-      newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - chatZone.offsetWidth));
-      newTop = Math.max(0, Math.min(newTop, window.innerHeight - 40));
-      chatZone.style.left = newLeft + "px";
-      chatZone.style.top = newTop + "px";
-    }
-
-    function onMouseUp() {
-      isDragging = false;
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    }
-
-    dragHandle.addEventListener("mousedown", onMouseDown);
-
-    /* Double-click resets to docked position */
-    dragHandle.addEventListener("dblclick", function () {
-      chatZone.classList.remove("is-detached");
-      chatZone.style.left = "";
-      chatZone.style.top = "";
-      chatZone.style.width = "";
+    resizeToggleBtn.addEventListener("click", function () {
+      var isExpanded = chatZoneBody.classList.toggle("is-expanded");
+      resizeToggleBtn.innerHTML = isExpanded ? COMPACT_ICON : EXPAND_ICON;
+      resizeToggleBtn.title = isExpanded ? "Compact chat" : "Expand chat";
+      resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
     });
-  })();
-
-  /* ---- Resize (vertical) ---- */
-  (function initResize() {
-    if (!resizeHandle || !chatZoneBody) { return; }
-
-    var activePointerId = null;
-    var startY = 0;
-    var startMaxH = 0;
-
-    function onPointerDown(e) {
-      if (e.button !== 0 || activePointerId !== null) { return; }
-      e.preventDefault();
-      activePointerId = e.pointerId;
-      startY = e.clientY;
-      var style = window.getComputedStyle(chatZoneBody);
-      startMaxH = parseInt(style.maxHeight, 10) || 340;
-
-      resizeHandle.setPointerCapture(e.pointerId);
-      document.body.classList.add("is-resizing-chat");
-      window.addEventListener("pointermove", onPointerMove);
-      window.addEventListener("pointerup", onPointerUp);
-      window.addEventListener("pointercancel", onPointerUp);
-    }
-
-    function onPointerMove(e) {
-      if (e.pointerId !== activePointerId) { return; }
-      /* Dragging upward increases height, downward decreases */
-      var delta = startY - e.clientY;
-      var newMaxH = Math.max(80, Math.min(startMaxH + delta, window.innerHeight * 0.6));
-      chatZoneBody.style.maxHeight = newMaxH + "px";
-    }
-
-    function onPointerUp(e) {
-      if (e && e.pointerId !== activePointerId) { return; }
-      if (resizeHandle.hasPointerCapture(activePointerId)) {
-        resizeHandle.releasePointerCapture(activePointerId);
-      }
-      activePointerId = null;
-      document.body.classList.remove("is-resizing-chat");
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerUp);
-    }
-
-    resizeHandle.addEventListener("pointerdown", onPointerDown);
   })();
 
   /* ---- Init ---- */
   loadHistory();
   renderHistory();
   updateCharCounter();
+  updateSendButtonState();
   applyLocaleText();
 })();

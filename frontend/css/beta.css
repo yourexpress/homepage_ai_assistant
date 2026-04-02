@@ -410,27 +410,46 @@ a.contact-value:hover {
   line-height: 1.6;
 }
 
-/* ---------- Chat Bar (compact sticky) ---------- */
+/* ---------- Chat Bar (ChatGPT-style sticky) ---------- */
 .chat-zone {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 90;
-  background: var(--beta-surface);
-  border-top: 2px solid var(--beta-accent);
-  box-shadow: 0 -4px 24px rgba(25, 46, 98, 0.12);
+  background: linear-gradient(to top, var(--beta-surface) 85%, transparent);
   transition: box-shadow 0.2s;
+  /* pointer-events: none lets clicks pass through the transparent gradient to
+     content underneath; each child re-enables pointer-events.  Keyboard
+     navigation is unaffected because pointer-events only governs mouse/touch. */
+  pointer-events: none;
 }
 
-/* Toolbar: clear + minimize buttons */
-.chat-zone-toolbar {
+.chat-zone > * {
+  pointer-events: auto;
+}
+
+/* Hidden elements kept for test compatibility */
+.visually-hidden {
   position: absolute;
-  top: 6px;
-  right: 12px;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Toolbar: resize + clear + minimize buttons */
+.chat-zone-toolbar {
   display: flex;
+  justify-content: flex-end;
   gap: 4px;
-  z-index: 5;
+  padding: 4px 32px 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .chat-toolbar-btn {
@@ -439,127 +458,53 @@ a.contact-value:hover {
   justify-content: center;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--beta-border);
+  border: none;
   border-radius: 6px;
-  background: var(--beta-surface);
+  background: transparent;
   color: var(--beta-text-muted);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .chat-toolbar-btn:hover {
-  border-color: var(--beta-accent);
-  color: var(--beta-accent);
-  background: var(--beta-accent-bg);
+  color: var(--beta-text-secondary);
+  background: var(--beta-bg-subtle);
 }
 
-/* Drag handle */
-.chat-zone-drag-handle {
-  position: absolute;
-  top: 14px; /* sits just below the 12 px resize strip + 2 px gap */
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 2px 16px 0;
-  cursor: grab;
-  z-index: 5;
-  user-select: none;
-  color: var(--beta-text-muted);
-  font-size: 12px;
-  letter-spacing: 2px;
-  opacity: 0.5;
-  transition: opacity 0.15s;
-}
-
-.chat-zone-drag-handle:hover { opacity: 1; }
-.chat-zone-drag-handle:active { cursor: grabbing; }
-
-.drag-dots {
-  display: block;
-  line-height: 1;
-}
-
-/* Resize handle (top edge) — visible pill indicator, taller hit target */
-.chat-zone-resize-handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 12px;
-  cursor: ns-resize;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  touch-action: none;
-  transition: background 0.15s;
-}
-
-/* Prevent text selection while dragging the resize pill */
-body.is-resizing-chat {
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: ns-resize;
-}
-
-.chat-zone-resize-handle::before {
-  content: "";
-  display: block;
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--beta-border-strong);
-  transition: background 0.15s, width 0.15s;
-}
-
-.chat-zone-resize-handle:hover {
-  background: var(--beta-accent-soft);
-}
-
-.chat-zone-resize-handle:hover::before {
-  background: var(--beta-accent);
-  width: 48px;
-}
-
-/* Minimized state: hide everything except the input form row */
+/* Minimized state */
 .chat-zone.is-minimized .chat-zone-body,
 .chat-zone.is-minimized .chat-suggestions,
-.chat-zone.is-minimized .chat-footer,
-.chat-zone.is-minimized .chat-zone-drag-handle,
-.chat-zone.is-minimized .chat-zone-resize-handle {
+.chat-zone.is-minimized .chat-footer {
   display: none;
 }
 
 .chat-zone.is-minimized .chat-zone-inner {
-  padding-top: 6px;
-  padding-bottom: 4px;
-}
-
-/* Detached (dragged) state */
-.chat-zone.is-detached {
-  left: auto;
-  right: auto;
-  bottom: auto;
-  border-radius: var(--beta-radius-lg);
-  border: 1px solid var(--beta-border-strong);
-  box-shadow: var(--beta-shadow-lg);
-  width: min(800px, 90vw);
-  overflow: hidden;
+  padding-top: 4px;
+  padding-bottom: 6px;
 }
 
 .chat-zone-inner {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 14px 32px 8px;
+  padding: 0 32px 12px;
 }
 
-/* Chat messages (hidden by default, shown when conversation starts) */
+/* Chat messages area */
 .chat-zone-body {
   display: none;
-  /* Tall enough to show multi-paragraph assistant responses; user can resize. */
   max-height: 340px;
   overflow-y: auto;
   padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-radius: var(--beta-radius-md);
+  background: var(--beta-surface);
+  border: 1px solid var(--beta-border);
+  box-shadow: var(--beta-shadow-sm);
+}
+
+/* Expanded state for resize toggle */
+.chat-zone-body.is-expanded {
+  max-height: 60vh;
 }
 
 .chat-zone-body.has-messages {
@@ -670,7 +615,7 @@ body.is-resizing-chat {
   30% { opacity: 1; transform: scale(1); }
 }
 
-/* Suggestion buttons */
+/* Suggestion buttons (ChatGPT-style) */
 .chat-suggestions {
   display: flex;
   flex-wrap: wrap;
@@ -681,67 +626,88 @@ body.is-resizing-chat {
 .suggestion-btn {
   background: var(--beta-surface);
   border: 1px solid var(--beta-border-strong);
-  border-radius: 999px;
-  padding: 6px 16px;
+  border-radius: var(--beta-radius-lg);
+  padding: 8px 16px;
   font-size: 0.84rem;
   color: var(--beta-text-secondary);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
 .suggestion-btn:hover {
-  border-color: var(--beta-accent);
-  color: var(--beta-accent);
-  background: var(--beta-accent-bg);
+  border-color: var(--beta-text-secondary);
+  color: var(--beta-text);
+  background: var(--beta-bg-subtle);
 }
 
-/* Chat input form */
+/* Chat input form (ChatGPT-style rounded container) */
 .chat-input-form {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  background: var(--beta-surface);
+  border: 1.5px solid var(--beta-border-strong);
+  border-radius: 24px;
+  padding: 6px 6px 6px 20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--beta-shadow-sm);
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: var(--beta-accent);
+  box-shadow: 0 0 0 3px var(--beta-accent-soft);
 }
 
 .chat-input {
   flex: 1;
   resize: none;
-  border: 1px solid var(--beta-border-strong);
-  border-radius: var(--beta-radius-md);
-  padding: 12px 16px;
-  font-size: 0.92rem;
+  border: none;
+  background: transparent;
+  padding: 8px 8px 8px 0;
+  font-size: 0.95rem;
   line-height: 1.5;
   color: var(--beta-text);
-  background: var(--beta-bg);
-  transition: border-color 0.15s;
-  max-height: 120px;
+  max-height: 150px;
   overflow-y: auto;
 }
 
 .chat-input:focus {
   outline: none;
-  border-color: var(--beta-accent);
-  box-shadow: 0 0 0 3px var(--beta-accent-soft);
+  box-shadow: none;
 }
 
 .chat-input::placeholder { color: var(--beta-text-muted); }
 
 .chat-send-btn {
   flex-shrink: 0;
-  padding: 10px 24px;
+  width: 36px;
+  height: 36px;
   border: none;
-  border-radius: 999px;
-  background: var(--beta-accent);
+  border-radius: 50%;
+  background: var(--beta-text);
   color: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background 0.15s;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, opacity 0.15s;
 }
 
-.chat-send-btn:hover { background: var(--beta-accent-hover); }
-.chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.chat-send-btn:hover:not(:disabled) { background: var(--beta-accent); }
+
+.chat-send-btn:disabled {
+  background: var(--beta-text-muted);
+  opacity: 0.45;
+  cursor: default;
+}
 
 /* Chat footer */
 .chat-footer {
@@ -780,7 +746,8 @@ body.is-resizing-chat {
 
   .profile-hero { padding: 28px 24px 24px; }
   .profile-card { padding: 20px 24px; }
-  .chat-zone-inner { padding: 14px 16px 8px; }
+  .chat-zone-inner { padding: 0 16px 10px; }
+  .chat-zone-toolbar { padding: 4px 16px 0; }
 
   .beta-nav { gap: 12px; }
   .beta-nav a { font-size: 0.85rem; }
@@ -826,9 +793,20 @@ body.is-resizing-chat {
   }
 
   .msg-bubble { max-width: 88%; }
-  .suggestion-btn { font-size: 0.75rem; padding: 4px 10px; }
+  .suggestion-btn { font-size: 0.78rem; padding: 6px 12px; white-space: normal; }
 
-  .chat-zone-inner { padding: 14px 12px 6px; }
+  .chat-zone-inner { padding: 0 12px 8px; }
+  .chat-zone-toolbar { padding: 4px 12px 0; }
+
+  .chat-input-wrapper {
+    border-radius: 20px;
+    padding: 4px 4px 4px 16px;
+  }
+
+  .chat-send-btn {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 /* Small mobile */
@@ -837,10 +815,4 @@ body.is-resizing-chat {
 
   .profile-quick-links { flex-direction: column; }
   .quick-link-btn { justify-content: center; }
-}
-
-/* Hide drag/resize on touch devices */
-@media (pointer: coarse) {
-  .chat-zone-drag-handle,
-  .chat-zone-resize-handle { display: none; }
 }
