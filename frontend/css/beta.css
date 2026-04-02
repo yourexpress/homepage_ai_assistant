@@ -429,17 +429,45 @@ a.contact-value:hover {
   pointer-events: auto;
 }
 
-/* Hidden elements kept for test compatibility */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  clip: rect(0 0 0 0);
-  overflow: hidden;
-  white-space: nowrap;
+/* Centered pill resize handle */
+.chat-zone-pill-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 0 2px;
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pill-bar {
+  width: 40px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--beta-border-strong);
+  transition: background 0.15s, width 0.15s;
+}
+
+.chat-zone-pill-handle:hover .pill-bar,
+.chat-zone-pill-handle:focus-visible .pill-bar {
+  background: var(--beta-text-muted);
+  width: 52px;
+}
+
+.chat-zone-pill-handle:active .pill-bar {
+  background: var(--beta-accent);
+}
+
+/* Prevent text selection while dragging pill bar */
+body.is-resizing-chat {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: ns-resize;
+}
+
+body.is-resizing-chat * {
+  cursor: ns-resize !important;
 }
 
 /* Toolbar: resize + clear + minimize buttons */
@@ -474,7 +502,8 @@ a.contact-value:hover {
 /* Minimized state */
 .chat-zone.is-minimized .chat-zone-body,
 .chat-zone.is-minimized .chat-suggestions,
-.chat-zone.is-minimized .chat-footer {
+.chat-zone.is-minimized .chat-footer,
+.chat-zone.is-minimized .chat-zone-pill-handle {
   display: none;
 }
 
@@ -492,7 +521,7 @@ a.contact-value:hover {
 /* Chat messages area */
 .chat-zone-body {
   display: none;
-  max-height: 340px;
+  height: 200px;
   overflow-y: auto;
   padding-bottom: 8px;
   margin-bottom: 8px;
@@ -502,9 +531,9 @@ a.contact-value:hover {
   box-shadow: var(--beta-shadow-sm);
 }
 
-/* Expanded state for resize toggle */
+/* Expanded state for quick toggle */
 .chat-zone-body.is-expanded {
-  max-height: 60vh;
+  /* Height set by JS; this class is kept for the toggle button state */
 }
 
 .chat-zone-body.has-messages {
