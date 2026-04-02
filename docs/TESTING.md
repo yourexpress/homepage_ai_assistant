@@ -55,6 +55,33 @@ This checks:
 - chat bubble structure exists
 - private-code dock exists
 
+## 4. Frontend Interaction Tests
+
+Open:
+
+- `frontend/tests/interaction_tests.html`
+
+Or run headlessly by serving `frontend/` via HTTP and opening
+`tests/interaction_tests.html` in a headless browser. Requires
+Playwright or Puppeteer with Chromium installed:
+
+```bash
+cd frontend
+python3 -m http.server 8099
+# In another terminal, navigate a headless browser to
+# http://localhost:8099/tests/interaction_tests.html
+```
+
+These verify DOM state **before and after** backend responses by mocking
+`fetch()` inside each iframe:
+
+- user message appears immediately (optimistic UI)
+- typing indicator shown while waiting, removed after response
+- assistant reply rendered with markdown formatting
+- error messages shown for HTTP errors and network failures
+- inline clear pill present inside input wrapper
+- send button follows ChatGPT pattern (disabled when input empty)
+
 ## Useful Manual Checks
 
 ### Manager flow

@@ -19,7 +19,8 @@ the current implementation state and the most likely next improvements.
   about paragraphs, education, research interests, contact items) with
   LinkedIn-style grouped sections and array add/remove controls
 - beta homepage with wide CSS-Grid layout and a sticky session-aware chat bar
-  (suggestion chips, drag-to-move, vertical resize, clear-session)
+  (suggestion chips, drag-to-resize via pill bar, inline clear-session pill
+  inside the input area)
 - beta chat session context: history is trimmed in-memory and capped before
   being sent to the backend so conversations stay within the backend limit for
   any session length
@@ -28,6 +29,8 @@ the current implementation state and the most likely next improvements.
   latest message automatically
 - updated LLM system prompt to guide complete, substantive, well-structured
   answers instead of defaulting to brevity
+- frontend interaction tests that verify DOM rendering before and after backend
+  responses using fetch mocking (22 assertions across beta and index chat flows)
 
 ## Current Architecture Decisions
 
@@ -41,7 +44,8 @@ the current implementation state and the most likely next improvements.
 
 - replace file-backed comments/content with a shared database if multi-instance
   deployment is needed
-- add real browser automation for the frontend flows
+- extend browser automation for the remaining frontend flows (feedback form,
+  manager save, happy personality, locale switching)
 - add stronger admin authentication if the manager entrance needs broader use
 - persist metrics outside process memory if long-term analytics matter
 - clean remaining placeholder example content when private production data is

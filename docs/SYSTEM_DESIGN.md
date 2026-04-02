@@ -38,6 +38,17 @@ Protected manager UI for editing homepage content through:
 - `GET /api/admin/site-content`
 - `PUT /api/admin/site-content`
 
+### `beta.html`
+
+Beta homepage with:
+
+- wide CSS-Grid personal-information zone (hero + sidebar, education + skills,
+  experience highlights + data model)
+- sticky chat bar with suggestion chips, drag-to-resize via centered pill bar,
+  and inline clear-session pill inside the input area
+- separate CSS (`css/beta.css`) and JS (`js/beta-home.js`, `js/beta-chat.js`)
+- reuses `js/app-config.js` and the same backend APIs
+
 ## Frontend Scripts
 
 - `js/app-config.js`
@@ -58,6 +69,15 @@ Protected manager UI for editing homepage content through:
   - metrics polling and rendering
 - `js/manager.js`
   - admin content loading and save flow
+- `js/beta-home.js`
+  - beta homepage profile data loading and rendering
+  - locale switching for the beta layout
+- `js/beta-chat.js`
+  - beta sticky chat bar with suggestion chips
+  - drag-to-resize via centered pill bar (no button toggle)
+  - inline clear-session pill inside the chat input area
+  - window.confirm() dialog before clearing non-empty history
+  - session history persistence
 
 ## Backend Endpoints
 
@@ -100,6 +120,44 @@ These protected endpoints require the `X-Admin-Key` header to match
    - current user message
 8. Backend calls the OpenAI client.
 9. Frontend appends the assistant reply to current-session history.
+
+## Optimistic UI Pattern
+
+The frontend renders DOM changes immediately when a user acts, before waiting
+for the backend response. This keeps the interface responsive and is verified
+by the interaction tests in `frontend/tests/interaction_tests.js`.
+
+### Chat message submission
+
+Before backend response:
+- user message appended to chat window instantly
+- typing indicator (animated dots) shown
+- chat input cleared and send button disabled
+- history updated in session storage
+
+After backend success (HTTP 200):
+- typing indicator removed
+- assistant reply appended with markdown rendering (escapeHtml → renderMarkdown → innerHTML)
+- suggestions hidden after first exchange (beta)
+- send button stays disabled until user types (ChatGPT pattern)
+
+After backend error (HTTP 429, 500, etc.):
+- typing indicator removed
+- error message appended with localized text
+- last user message removed from history
+
+After network failure:
+- typing indicator removed
+- "unreachable" error message appended
+- last user message removed from history
+
+### Page load (content + portfolio)
+
+- both index and beta pages call `GET /api/content` and `GET /api/portfolio`
+  concurrently via `Promise.allSettled`
+- on success: DOM sections populated (hero, about, education, skills, contact)
+- on failure: fallback content rendered (hardcoded defaults)
+- beta page additionally calls `GET /api/resume/info` to wire the resume link
 
 ## Safety Model
 
