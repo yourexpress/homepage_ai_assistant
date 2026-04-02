@@ -10,17 +10,26 @@ proxy. The backend is a FastAPI service designed to run in a container.
 ## Features
 
 - session-aware portfolio chat with a compact, resizable desktop bubble
-- **beta homepage** (`beta.html`) with a wide CSS-Grid layout and a sticky,
+- **beta homepage** (`beta.html`) with a compact CSS-Grid layout and a sticky,
   session-aware chat bar — full conversation context is kept for the current
-  browser session, drag-to-move, and vertical resize supported
+  browser session, vertical drag-to-resize via pill bar supported
+- **collapsible long messages** — assistant responses taller than a threshold
+  are collapsed with a "Show more" toggle; visitors expand and collapse freely
+- **horizontal news ticker** on the beta homepage — shows the latest bilingual
+  news items, editable from the manager page
+- **resume download** from the header bar — visitors can download the latest
+  resume directly; the owner uploads through the manager entrance
+- **consistent header bar** across all public pages with navigation, resume
+  download icon, and language switcher
 - bilingual English and Chinese homepage content
 - compact feedback form without a public comments feed
 - protected manager entrance for homepage editing with LinkedIn-style profile
-  override sections (name, headline, about, education, research, contact)
+  override sections (name, headline, about, education, research, contact),
+  news items editor, and resume upload
 - automatic EN/ZH sync when content is edited through the manager flow
 - protected owner-only comments inbox
 - optional happy-personality mode unlocked from a small private-code dock
-- container deployment scaffolding.
+- container deployment scaffolding
 
 ## Repository Structure
 
@@ -41,6 +50,7 @@ frontend/
   js/beta-chat.js
   js/metrics.js
   js/manager.js
+  js/portfolio-pages.js
 
 backend/
   Dockerfile
@@ -69,6 +79,7 @@ backend/
       comments_store.py
       translation_service.py
       happy_auth.py
+      resume_store.py
   knowledge/
     templates/
   data/
@@ -154,6 +165,7 @@ base.
 ## Documentation
 
 - [Product Requirements](docs/REQUIREMENTS.md)
+- [Implementation Plan](docs/IMPLEMENTATION_PLAN.md)
 - [System Design](docs/SYSTEM_DESIGN.md)
 - [API Design](docs/API_DESIGN.md)
 - [Knowledge System](docs/KNOWLEDGE_SYSTEM.md)

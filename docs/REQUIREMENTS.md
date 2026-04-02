@@ -9,11 +9,15 @@ Provide a public-facing, bilingual portfolio homepage where visitors can:
 - understand Runyu Ma's profile through curated homepage content
 - talk to an AI assistant grounded in approved public knowledge
 - leave lightweight feedback about the website and resume presentation
+- download the latest resume directly from the header
+- see latest news in a horizontal ticker
 
 At the same time, the owner should be able to:
 
 - edit homepage copy through a protected manager entrance
 - keep English and Chinese homepage copy synchronized through that manager flow
+- upload and manage resume files through the manager entrance
+- edit news items through the manager entrance
 - deploy the system in containers while keeping private knowledge and secrets on
   the server
 
@@ -30,12 +34,34 @@ At the same time, the owner should be able to:
 ### Homepage
 
 - `frontend/index.html` is the main page.
-- The homepage shows:
+- `frontend/beta.html` is the beta homepage with a compact, informal layout.
+- Both homepages show:
   - a hero area populated from file-backed site content
-  - a floating AI chat bubble
-  - a compact feedback card
+  - a chat interface (floating bubble on index, sticky bar on beta)
+  - a compact feedback card (index only)
 - The visual design should feel clean, modern, and easy to scan on desktop and
   mobile.
+
+### Consistent Header Bar
+
+- Every public-facing page must show the same complete header bar.
+- The header includes: logo, navigation links (Home, Experience, Publications,
+  GitHub), a Resume download icon/link, and a language switcher.
+- The Resume link in the header checks the backend for availability and hides
+  itself when no resume has been uploaded.
+- Internal pages (manager, metrics, comments inbox) may have their own
+  navigation appropriate to admin workflows.
+
+### News Ticker
+
+- The beta homepage displays a horizontal scrolling news ticker below the
+  header.
+- News items are stored as bilingual entries in site content
+  (`news_title`, `news_items`).
+- The owner can edit news items through the manager page (same
+  `PUT /api/admin/site-content` endpoint).
+- The ticker scrolls continuously from right to left using CSS animation.
+- When no news items exist, the ticker section is hidden.
 
 ### Chat
 
@@ -52,6 +78,19 @@ At the same time, the owner should be able to:
 - Desktop or laptop visitors can resize the chat bubble smoothly.
 - The chat bubble must be closable and should prioritize message space over
   oversized controls.
+
+### Chat Message Display
+
+- Assistant responses must display completely. No truncation, line-clamping,
+  ellipsis, fixed bubble heights, or overflow rules that hide message text.
+- The chat body auto-expands to show content up to the viewport-based maximum.
+- Long messages that exceed the viewport maximum are readable through normal
+  vertical scrolling in the message list.
+- Long assistant messages (over a configurable height threshold) are rendered
+  in a collapsed state with a "Show more" toggle. Visitors can expand to read
+  the full content and collapse it again. User messages are never collapsed.
+- The clear-history button uses a clean, recognizable icon (not the trash-can
+  icon). A simple broom/sweep or refresh-style icon is preferred.
 
 ### Knowledge and Prompting
 
@@ -74,6 +113,19 @@ At the same time, the owner should be able to:
   `PUT /api/admin/site-content`.
 - Access requires `ADMIN_API_KEY`.
 - Homepage content is stored in `SITE_CONTENT_FILE`.
+- The manager includes a news items editor (add, edit, remove bilingual news
+  entries) as part of the site content form.
+
+### Resume Management
+
+- The manager page includes a resume upload section (`POST /api/admin/resume`).
+- Accepted formats: PDF, DOC, DOCX. Maximum size: 10 MB.
+- The backend keeps the last three uploaded copies (oldest deleted first).
+- A public endpoint (`GET /api/resume/latest`) serves the most recent resume
+  for visitor download.
+- A public metadata endpoint (`GET /api/resume/info`) reports availability.
+- The beta homepage header shows a Resume download icon that links to the
+  latest resume. The icon is hidden when no resume is available.
 
 ### English and Chinese Auto-Sync
 
@@ -135,3 +187,5 @@ At the same time, the owner should be able to:
 - Translation sync depends on LLM availability.
 - Session history is browser-session scoped, not account scoped.
 - Happy personality is only active for sessions with a valid signed token.
+- News items are part of the site-content store, not a separate feed system.
+- Resume storage is file-backed with a simple three-copy retention policy.
