@@ -57,6 +57,31 @@ are present in the DOM. Beta page smoke tests verify the personal-information
 zone cards, sticky chat bar elements, pill-bar drag resize handle, and that
 the resize toggle button is absent (drag-only resize).
 
+## Frontend Interaction Coverage
+
+- `frontend/tests/interaction_tests.html`
+- `frontend/tests/interaction_tests.js`
+
+These tests verify that the front-end DOM is rendered correctly **before and
+after** the backend acts on user interactions. They mock `fetch()` inside
+iframes to simulate backend responses without a running server.
+
+### Beta chat interactions
+
+- optimistic UI: user message appears immediately, typing indicator shown,
+  input cleared, send button disabled while waiting
+- success response: assistant message rendered with markdown, typing indicator
+  removed, send button follows ChatGPT pattern (disabled until input present)
+- error handling: error message on 429 (rate limited) and network failure
+- minimize/expand toggle: DOM class `is-minimized` added and removed
+- suggestion chips: data-question attributes present on buttons
+
+### Index chat interactions
+
+- optimistic UI: user message appears immediately, input cleared
+- success response: assistant message rendered with markdown
+- error handling: error message on 500 and network failure
+
 ## Lightweight Validation Commands
 
 Backend static verification:

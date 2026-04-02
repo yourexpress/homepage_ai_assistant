@@ -55,6 +55,29 @@ This checks:
 - chat bubble structure exists
 - private-code dock exists
 
+## 4. Frontend Interaction Tests
+
+Open:
+
+- `frontend/tests/interaction_tests.html`
+
+Or run via Playwright CLI (requires `npm install playwright` and
+`npx playwright install chromium`):
+
+```bash
+node /path/to/run_interaction_tests.js
+```
+
+These verify DOM state **before and after** backend responses by mocking
+`fetch()` inside each iframe:
+
+- user message appears immediately (optimistic UI)
+- typing indicator shown while waiting, removed after response
+- assistant reply rendered with markdown formatting
+- error messages shown for HTTP errors and network failures
+- minimize/expand toggle updates DOM classes
+- send button follows ChatGPT pattern (disabled when input empty)
+
 ## Useful Manual Checks
 
 ### Manager flow

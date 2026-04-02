@@ -28,6 +28,8 @@ the current implementation state and the most likely next improvements.
   latest message automatically
 - updated LLM system prompt to guide complete, substantive, well-structured
   answers instead of defaulting to brevity
+- frontend interaction tests that verify DOM rendering before and after backend
+  responses using fetch mocking (22 assertions across beta and index chat flows)
 
 ## Current Architecture Decisions
 
@@ -41,7 +43,8 @@ the current implementation state and the most likely next improvements.
 
 - replace file-backed comments/content with a shared database if multi-instance
   deployment is needed
-- add real browser automation for the frontend flows
+- extend browser automation for the remaining frontend flows (feedback form,
+  manager save, happy personality, locale switching)
 - add stronger admin authentication if the manager entrance needs broader use
 - persist metrics outside process memory if long-term analytics matter
 - clean remaining placeholder example content when private production data is
