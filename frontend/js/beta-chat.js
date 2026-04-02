@@ -429,7 +429,7 @@
       var isExpanded = chatZoneBody.classList.toggle("is-expanded");
       resizeToggleBtn.innerHTML = isExpanded ? COMPACT_ICON : EXPAND_ICON;
       resizeToggleBtn.title = isExpanded ? "Compact chat" : "Expand chat";
-      resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat panel" : "Expand chat panel");
+      resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
     });
   })();
 

@@ -419,6 +419,9 @@ a.contact-value:hover {
   z-index: 90;
   background: linear-gradient(to top, var(--beta-surface) 85%, transparent);
   transition: box-shadow 0.2s;
+  /* pointer-events: none lets clicks pass through the transparent gradient to
+     content underneath; each child re-enables pointer-events.  Keyboard
+     navigation is unaffected because pointer-events only governs mouse/touch. */
   pointer-events: none;
 }
 
@@ -702,7 +705,7 @@ a.contact-value:hover {
 
 .chat-send-btn:disabled {
   background: var(--beta-text-muted);
-  opacity: 0.35;
+  opacity: 0.45;
   cursor: default;
 }
 
