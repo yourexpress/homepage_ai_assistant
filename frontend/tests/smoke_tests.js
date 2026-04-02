@@ -81,6 +81,8 @@ managerFrame.addEventListener("load", () => {
   assert(doc.getElementById("resume-upload-section") !== null, "manager.html includes resume upload section");
   assert(doc.getElementById("resume-file-input") !== null, "manager.html includes resume file input");
   assert(doc.getElementById("resume-upload-btn") !== null, "manager.html includes resume upload button");
+  assert(doc.getElementById("news-items-section") !== null, "manager.html includes news items editor section");
+  assert(doc.getElementById("news-items-fields") !== null, "manager.html includes news items fields container");
 
   onFrameReady();
 });
@@ -93,15 +95,21 @@ betaFrame.addEventListener("load", () => {
   /* Part 1: Personal Information Zone */
   assert(doc.getElementById("profile-name") !== null, "beta.html includes a profile name heading");
   assert(doc.getElementById("profile-headline") !== null, "beta.html includes a profile headline");
-  assert(doc.getElementById("profile-badge") !== null, "beta.html includes a profile badge");
   assert(doc.getElementById("about-paragraphs") !== null, "beta.html includes an about paragraphs area");
   assert(doc.getElementById("education-list") !== null, "beta.html includes an education list");
   assert(doc.getElementById("skills-list") !== null, "beta.html includes a skills/research list");
   assert(doc.getElementById("contact-list") !== null, "beta.html includes a contact list");
-  assert(doc.getElementById("data-model-list") !== null, "beta.html includes a data/admin model card");
   assert(doc.querySelector('a[href="experience.html"]') !== null, "beta.html links to experience page");
   assert(doc.querySelector('a[href="publications.html"]') !== null, "beta.html links to publications page");
-  assert(doc.querySelector('a[href="index.html"]') !== null, "beta.html links back to current homepage");
+  assert(doc.getElementById("profile-badge") === null, "beta.html no longer includes a profile badge (compact layout)");
+  assert(doc.getElementById("data-model-list") === null, "beta.html no longer includes a data/admin model card (compact layout)");
+
+  /* News ticker */
+  assert(doc.getElementById("news-ticker") !== null, "beta.html includes a news ticker element");
+  assert(doc.getElementById("news-ticker-content") !== null, "beta.html includes news ticker content container");
+
+  /* Header resume icon */
+  assert(doc.getElementById("header-resume") !== null, "beta.html includes a resume download icon in the header");
 
   /* Part 2: Sticky Chat Bar */
   assert(doc.getElementById("chat-zone") !== null, "beta.html includes a sticky chat zone");

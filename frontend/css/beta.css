@@ -108,11 +108,15 @@ button, input, textarea, select { font: inherit; }
 }
 
 .beta-nav-resume {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   color: var(--beta-text-secondary);
   transition: color 0.15s;
+}
+
+.beta-nav-resume[href]:not([hidden]) {
+  display: flex;
 }
 
 .beta-nav-resume:hover {
@@ -160,6 +164,10 @@ button, input, textarea, select { font: inherit; }
   white-space: nowrap;
   font-size: 0.85rem;
   color: var(--beta-text-secondary);
+}
+
+.news-ticker[hidden] {
+  display: none;
 }
 
 .news-ticker-label {

@@ -83,7 +83,6 @@
   /* ---- DOM refs ---- */
   var profileName = document.getElementById("profile-name");
   var profileHeadline = document.getElementById("profile-headline");
-  var profileDescription = document.getElementById("profile-description");
   var aboutTitle = document.getElementById("about-title");
   var aboutParagraphs = document.getElementById("about-paragraphs");
   var educationTitle = document.getElementById("education-title");
@@ -167,12 +166,6 @@
       }
     }
     return result;
-  }
-
-  function buildDescriptionItems() {
-    var summary = siteContent.hero_summary || {};
-    var text = localize(summary, currentLocale());
-    return text ? [text] : [];
   }
 
   function buildEducation(profile) {
@@ -305,7 +298,6 @@
       linkPublications.textContent = t("linkPublications");
     }
 
-    renderDescription(profileDescription, buildDescriptionItems());
     renderAbout(aboutParagraphs, buildAboutItems(profile));
     renderEducation(educationList, buildEducation(profile));
     renderSkills(skillsList, buildSkills(profile));
@@ -313,16 +305,6 @@
     renderExperience(experienceList, buildExperienceItems());
     renderNewsTicker();
     setLangButtons();
-  }
-
-  function renderDescription(target, items) {
-    if (!target) { return; }
-    clearChildren(target);
-    (items || []).forEach(function (item) {
-      var p = document.createElement("p");
-      p.textContent = typeof item === "string" ? item : localize(item, currentLocale());
-      target.appendChild(p);
-    });
   }
 
   function renderAbout(target, items) {
