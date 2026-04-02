@@ -81,7 +81,6 @@
   var portfolioData = { profile: {}, experience: {}, projects: {}, publications: {} };
 
   /* ---- DOM refs ---- */
-  var profileBadge = document.getElementById("profile-badge");
   var profileName = document.getElementById("profile-name");
   var profileHeadline = document.getElementById("profile-headline");
   var profileDescription = document.getElementById("profile-description");
@@ -95,12 +94,9 @@
   var contactList = document.getElementById("contact-list");
   var experienceTitle = document.getElementById("experience-title");
   var experienceList = document.getElementById("experience-list");
-  var dataModelTitle = document.getElementById("data-model-title");
-  var dataModelList = document.getElementById("data-model-list");
   var linkExperience = document.getElementById("link-experience");
   var linkPublications = document.getElementById("link-publications");
-  var linkResume = document.getElementById("link-resume");
-  var navStable = document.getElementById("nav-stable");
+  var headerResume = document.getElementById("header-resume");
   var navExperience = document.getElementById("nav-experience");
   var navPublications = document.getElementById("nav-publications");
   var newsTicker = document.getElementById("news-ticker");
@@ -292,7 +288,6 @@
   function renderContent() {
     var profile = portfolioData.profile || {};
 
-    setText(profileBadge, t("badge"));
     setText(profileName, buildName(profile));
     setText(profileHeadline, buildHeadline(profile));
     setText(aboutTitle, t("aboutTitle"));
@@ -300,8 +295,6 @@
     setText(skillsTitle, t("skillsTitle"));
     setText(contactTitle, t("contactTitle"));
     setText(experienceTitle, t("experienceTitle"));
-    setText(dataModelTitle, t("dataModelTitle"));
-    setText(navStable, t("stableNav"));
     setText(navExperience, t("navExperience"));
     setText(navPublications, t("navPublications"));
 
@@ -312,18 +305,12 @@
       linkPublications.textContent = t("linkPublications");
     }
 
-    /* Update Resume link text and visibility based on backend availability */
-    if (linkResume) {
-      linkResume.textContent = t("linkResume");
-    }
-
     renderDescription(profileDescription, buildDescriptionItems());
     renderAbout(aboutParagraphs, buildAboutItems(profile));
     renderEducation(educationList, buildEducation(profile));
     renderSkills(skillsList, buildSkills(profile));
     renderContacts(contactList, buildContactItems(profile));
     renderExperience(experienceList, buildExperienceItems());
-    renderDataModel(dataModelList);
     renderNewsTicker();
     setLangButtons();
   }
@@ -563,24 +550,24 @@
   }
 
   /**
-   * Check whether a resume has been uploaded and set the link href.
-   * Hides the button when no resume is available.
+   * Check whether a resume has been uploaded and set the header link href.
+   * Hides the icon when no resume is available.
    */
   function wireResumeLink() {
-    if (!linkResume) { return; }
+    if (!headerResume) { return; }
     fetch(BACKEND_URL + "/api/resume/info")
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.available) {
-          linkResume.href = BACKEND_URL + "/api/resume/latest";
-          linkResume.setAttribute("download", "");
-          linkResume.style.display = "";
+          headerResume.href = BACKEND_URL + "/api/resume/latest";
+          headerResume.setAttribute("download", "");
+          headerResume.hidden = false;
         } else {
-          linkResume.style.display = "none";
+          headerResume.hidden = true;
         }
       })
       .catch(function () {
-        linkResume.style.display = "none";
+        headerResume.hidden = true;
       });
   }
 

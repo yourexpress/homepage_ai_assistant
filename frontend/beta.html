@@ -15,10 +15,12 @@
   <header class="beta-header">
     <a href="beta.html" class="beta-logo">Runyu Ma</a>
     <nav class="beta-nav">
-      <a href="index.html" class="beta-nav-back" id="nav-stable">← Current Homepage</a>
       <a href="experience.html" id="nav-experience">Experience</a>
       <a href="publications.html" id="nav-publications">Publications</a>
       <a href="https://github.com/yourexpress" target="_blank" rel="noopener">GitHub</a>
+      <a class="beta-nav-resume" id="header-resume" href="#" hidden title="Download Resume" aria-label="Download Resume">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+      </a>
     </nav>
     <div class="beta-lang-toggle" aria-label="Language switcher">
       <button type="button" class="beta-lang-btn" data-locale="en">EN</button>
@@ -42,7 +44,6 @@
       <div class="profile-row profile-row-top">
         <!-- Hero: Name + Title + Description + CTA -->
         <div class="profile-hero">
-          <span class="profile-badge" id="profile-badge">Academic Profile</span>
           <h1 class="profile-name" id="profile-name">Runyu Ma</h1>
           <p class="profile-headline" id="profile-headline">
             Researcher, AI Inference Engineer, Machine Learning Engineer
@@ -54,9 +55,6 @@
             </a>
             <a href="publications.html" class="quick-link-btn" id="link-publications">
               Publications
-            </a>
-            <a class="quick-link-btn" id="link-resume" href="#">
-              Resume
             </a>
           </div>
         </div>
@@ -88,15 +86,11 @@
         </div>
       </div>
 
-      <!-- Row 3: Experience Highlights + Data / Admin Model -->
+      <!-- Row 3: Experience Highlights -->
       <div class="profile-row profile-row-bottom">
         <div class="profile-card" id="card-experience">
           <h2 class="card-title" id="experience-title">Experience Highlights</h2>
           <div class="card-body" id="experience-list"></div>
-        </div>
-        <div class="profile-card" id="card-data-model">
-          <h2 class="card-title" id="data-model-title">Data / Admin Model</h2>
-          <div class="card-body" id="data-model-list"></div>
         </div>
       </div>
 

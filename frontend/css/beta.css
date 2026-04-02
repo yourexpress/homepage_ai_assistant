@@ -107,6 +107,18 @@ button, input, textarea, select { font: inherit; }
   color: var(--beta-accent-hover) !important;
 }
 
+.beta-nav-resume {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--beta-text-secondary);
+  transition: color 0.15s;
+}
+
+.beta-nav-resume:hover {
+  color: var(--beta-accent);
+}
+
 .beta-lang-toggle {
   display: flex;
   gap: 6px;
@@ -193,13 +205,13 @@ button, input, textarea, select { font: inherit; }
 .profile-zone {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 /* --- Grid rows --- */
 .profile-row {
   display: grid;
-  gap: 24px;
+  gap: 16px;
 }
 
 .profile-row-top {
@@ -211,7 +223,7 @@ button, input, textarea, select { font: inherit; }
 }
 
 .profile-row-bottom {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
 }
 
 /* --- Hero --- */
@@ -219,7 +231,7 @@ button, input, textarea, select { font: inherit; }
   background: var(--beta-surface);
   border: 1px solid var(--beta-border);
   border-radius: var(--beta-radius-xl);
-  padding: 40px 36px 36px;
+  padding: 28px 32px 28px;
   box-shadow: var(--beta-shadow-md);
 }
 
