@@ -76,8 +76,13 @@
   var CHAT_MIN_HEIGHT = 120;
   var CHAT_DEFAULT_HEIGHT = 200;
   var CHAT_EXPANDED_HEIGHT = 420;
+  var CHAT_ABSOLUTE_MAX_HEIGHT = 700;
+  var CHAT_EXPAND_THRESHOLD = (CHAT_DEFAULT_HEIGHT + CHAT_EXPANDED_HEIGHT) / 2;
   var chatBodyHeight = CHAT_DEFAULT_HEIGHT;
   var resizeState = null;
+
+  var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
+  var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
 
   /* ---- Helpers ---- */
   function currentLocale() { return getLocale(); }
@@ -424,16 +429,22 @@
     if (chatInput) { chatInput.focus(); }
   }
 
+  /**
+   * Prompt user for confirmation before clearing chat history.
+   * Skips confirmation when the history is already empty.
+   */
+  function confirmClearSession() {
+    if (history.length === 0) {
+      clearSession();
+      return;
+    }
+    if (window.confirm("Clear chat history?")) {
+      clearSession();
+    }
+  }
+
   if (clearBtn) {
-    clearBtn.addEventListener("click", function () {
-      if (history.length === 0) {
-        clearSession();
-        return;
-      }
-      if (window.confirm("Clear chat history?")) {
-        clearSession();
-      }
-    });
+    clearBtn.addEventListener("click", confirmClearSession);
   }
 
   /* ---- Pill-bar drag resize ---- */
@@ -443,7 +454,7 @@
    * @returns {number} Max height in pixels.
    */
   function chatMaxHeight() {
-    return Math.min(window.innerHeight * 0.75, 700);
+    return Math.min(window.innerHeight * 0.75, CHAT_ABSOLUTE_MAX_HEIGHT);
   }
 
   /**
@@ -524,8 +535,7 @@
    */
   function syncToggleState() {
     if (!resizeToggleBtn || !chatZoneBody) { return; }
-    var threshold = (CHAT_DEFAULT_HEIGHT + CHAT_EXPANDED_HEIGHT) / 2;
-    var isExpanded = chatBodyHeight > threshold;
+    var isExpanded = chatBodyHeight > CHAT_EXPAND_THRESHOLD;
     if (isExpanded) {
       chatZoneBody.classList.add("is-expanded");
     } else {
@@ -536,9 +546,7 @@
     resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
   }
 
-  var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
-  var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
-
+  /* ---- Resize toggle (compact / expanded via header icon) ---- */
   (function initResizeToggle() {
     if (!resizeToggleBtn || !chatZoneBody) { return; }
 
