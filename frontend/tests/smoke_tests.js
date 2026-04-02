@@ -113,8 +113,9 @@ betaFrame.addEventListener("load", () => {
   assert(doc.querySelectorAll(".suggestion-btn").length >= 3, "beta.html includes at least 3 suggestion buttons");
   assert(doc.getElementById("chat-minimize-btn") !== null, "beta.html includes a minimize button");
   assert(doc.getElementById("chat-clear-btn") !== null, "beta.html includes a clear chat button");
-  assert(doc.getElementById("chat-zone-drag-handle") !== null, "beta.html includes a drag handle");
-  assert(doc.getElementById("chat-zone-resize-handle") !== null, "beta.html includes a resize handle");
+  assert(doc.getElementById("chat-zone-resize-handle") !== null, "beta.html includes a centered pill resize handle");
+  assert(doc.querySelector(".chat-zone-pill-handle .pill-bar") !== null, "beta.html pill handle contains a visible pill bar element");
+  assert(doc.getElementById("chat-zone-drag-handle") === null, "beta.html does not include a drag-to-move handle");
 
   /* Responsive meta */
   const viewport = doc.querySelector('meta[name="viewport"]');

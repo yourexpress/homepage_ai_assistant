@@ -97,9 +97,10 @@
 
   <!-- ===== PART 2: Sticky Chat Bar ===== -->
   <section class="chat-zone" id="chat-zone">
-    <!-- Hidden handles preserved for test compatibility -->
-    <div class="chat-zone-resize-handle visually-hidden" id="chat-zone-resize-handle" aria-hidden="true"></div>
-    <div class="chat-zone-drag-handle visually-hidden" id="chat-zone-drag-handle" aria-hidden="true"></div>
+    <!-- Centered pill bar for vertical resize -->
+    <div class="chat-zone-pill-handle" id="chat-zone-resize-handle" role="separator" aria-label="Resize chat panel" tabindex="0">
+      <div class="pill-bar"></div>
+    </div>
 
     <div class="chat-zone-toolbar">
       <button type="button" class="chat-toolbar-btn" id="chat-resize-toggle-btn" title="Expand chat" aria-label="Toggle chat panel size">

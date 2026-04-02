@@ -5,7 +5,7 @@
  *
  * Provides a compact chat bar anchored at the bottom of the viewport
  * with suggestion chips and inline message display.  Supports minimize,
- * clear-session, drag-to-move, and vertical resize.
+ * clear-session, and vertical resize via centered pill bar.
  * Compatible with the existing POST /api/chat backend.
  *
  * Inputs:  User text via chat input, suggestion buttons, toolbar controls.
@@ -70,6 +70,14 @@
   var minimizeBtn = document.getElementById("chat-minimize-btn");
   var clearBtn = document.getElementById("chat-clear-btn");
   var resizeToggleBtn = document.getElementById("chat-resize-toggle-btn");
+  var pillHandle = document.getElementById("chat-zone-resize-handle");
+
+  /* ---- Resize constants ---- */
+  var CHAT_MIN_HEIGHT = 120;
+  var CHAT_DEFAULT_HEIGHT = 200;
+  var CHAT_EXPANDED_HEIGHT = 420;
+  var chatBodyHeight = CHAT_DEFAULT_HEIGHT;
+  var resizeState = null;
 
   /* ---- Helpers ---- */
   function currentLocale() { return getLocale(); }
@@ -409,28 +417,143 @@
     if (chatSuggestions) { chatSuggestions.style.display = ""; }
     if (chatZone) { chatZone.classList.remove("is-minimized"); }
     if (chatZoneBody) { chatZoneBody.classList.remove("is-expanded"); }
+    applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
+    syncToggleState();
     updateCharCounter();
     updateSendButtonState();
     if (chatInput) { chatInput.focus(); }
   }
 
   if (clearBtn) {
-    clearBtn.addEventListener("click", clearSession);
+    clearBtn.addEventListener("click", function () {
+      if (history.length === 0) {
+        clearSession();
+        return;
+      }
+      if (window.confirm("Clear chat history?")) {
+        clearSession();
+      }
+    });
+  }
+
+  /* ---- Pill-bar drag resize ---- */
+
+  /**
+   * Compute the maximum allowed chat body height based on the current viewport.
+   * @returns {number} Max height in pixels.
+   */
+  function chatMaxHeight() {
+    return Math.min(window.innerHeight * 0.75, 700);
+  }
+
+  /**
+   * Clamp a height value between the minimum and maximum bounds.
+   * @param {number} h - Desired height.
+   * @returns {number} Clamped height.
+   */
+  function clampHeight(h) {
+    return Math.max(CHAT_MIN_HEIGHT, Math.min(h, chatMaxHeight()));
+  }
+
+  /**
+   * Apply the given height to the chat body element via inline style.
+   * @param {number} h - Height in pixels to apply.
+   */
+  function applyChatBodyHeight(h) {
+    chatBodyHeight = clampHeight(h);
+    if (chatZoneBody) {
+      chatZoneBody.style.height = chatBodyHeight + "px";
+    }
+  }
+
+  /**
+   * Handle pointer down on the pill bar to start resizing.
+   * @param {PointerEvent} event
+   */
+  function onPillPointerDown(event) {
+    if (!chatZoneBody) { return; }
+    event.preventDefault();
+    resizeState = {
+      pointerId: event.pointerId,
+      startY: event.clientY,
+      startHeight: chatBodyHeight,
+    };
+    pillHandle.setPointerCapture(event.pointerId);
+    document.body.classList.add("is-resizing-chat");
+    window.addEventListener("pointermove", onPillPointerMove);
+    window.addEventListener("pointerup", onPillPointerUp);
+    window.addEventListener("pointercancel", onPillPointerUp);
+  }
+
+  /**
+   * Handle pointer move during a pill-bar drag to resize the chat body.
+   * Dragging upward (negative deltaY) increases height.
+   * @param {PointerEvent} event
+   */
+  function onPillPointerMove(event) {
+    if (!resizeState || event.pointerId !== resizeState.pointerId) { return; }
+    var deltaY = resizeState.startY - event.clientY;
+    applyChatBodyHeight(resizeState.startHeight + deltaY);
+  }
+
+  /**
+   * Handle pointer up / cancel to stop resizing.
+   * @param {PointerEvent} event
+   */
+  function onPillPointerUp(event) {
+    if (!resizeState || (event && event.pointerId !== resizeState.pointerId)) { return; }
+    if (pillHandle.hasPointerCapture(resizeState.pointerId)) {
+      pillHandle.releasePointerCapture(resizeState.pointerId);
+    }
+    document.body.classList.remove("is-resizing-chat");
+    window.removeEventListener("pointermove", onPillPointerMove);
+    window.removeEventListener("pointerup", onPillPointerUp);
+    window.removeEventListener("pointercancel", onPillPointerUp);
+    syncToggleState();
+    resizeState = null;
+  }
+
+  if (pillHandle) {
+    pillHandle.addEventListener("pointerdown", onPillPointerDown);
   }
 
   /* ---- Resize toggle (compact / expanded via header icon) ---- */
+
+  /**
+   * Sync the expand/compact toggle button state with the current height.
+   */
+  function syncToggleState() {
+    if (!resizeToggleBtn || !chatZoneBody) { return; }
+    var threshold = (CHAT_DEFAULT_HEIGHT + CHAT_EXPANDED_HEIGHT) / 2;
+    var isExpanded = chatBodyHeight > threshold;
+    if (isExpanded) {
+      chatZoneBody.classList.add("is-expanded");
+    } else {
+      chatZoneBody.classList.remove("is-expanded");
+    }
+    resizeToggleBtn.innerHTML = isExpanded ? COMPACT_ICON : EXPAND_ICON;
+    resizeToggleBtn.title = isExpanded ? "Compact chat" : "Expand chat";
+    resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
+  }
+
+  var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
+  var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
+
   (function initResizeToggle() {
     if (!resizeToggleBtn || !chatZoneBody) { return; }
 
-    var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
-    var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
-
     resizeToggleBtn.addEventListener("click", function () {
-      var isExpanded = chatZoneBody.classList.toggle("is-expanded");
-      resizeToggleBtn.innerHTML = isExpanded ? COMPACT_ICON : EXPAND_ICON;
-      resizeToggleBtn.title = isExpanded ? "Compact chat" : "Expand chat";
-      resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
+      var isExpanded = chatZoneBody.classList.contains("is-expanded");
+      if (isExpanded) {
+        applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
+      } else {
+        applyChatBodyHeight(CHAT_EXPANDED_HEIGHT);
+      }
+      syncToggleState();
     });
+
+    /* Apply the default height on init */
+    applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
   })();
 
   /* ---- Init ---- */
