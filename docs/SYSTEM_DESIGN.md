@@ -45,7 +45,7 @@ Beta homepage with:
 - wide CSS-Grid personal-information zone (hero + sidebar, education + skills,
   experience highlights + data model)
 - sticky chat bar with suggestion chips, drag-to-resize via centered pill bar,
-  clear-session, and minimize
+  and inline clear-session pill inside the input area
 - separate CSS (`css/beta.css`) and JS (`js/beta-home.js`, `js/beta-chat.js`)
 - reuses `js/app-config.js` and the same backend APIs
 
@@ -75,7 +75,8 @@ Beta homepage with:
 - `js/beta-chat.js`
   - beta sticky chat bar with suggestion chips
   - drag-to-resize via centered pill bar (no button toggle)
-  - minimize, clear-session with confirmation dialog
+  - inline clear-session pill inside the chat input area
+  - window.confirm() dialog before clearing non-empty history
   - session history persistence
 
 ## Backend Endpoints

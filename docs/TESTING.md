@@ -79,7 +79,7 @@ These verify DOM state **before and after** backend responses by mocking
 - typing indicator shown while waiting, removed after response
 - assistant reply rendered with markdown formatting
 - error messages shown for HTTP errors and network failures
-- minimize/expand toggle updates DOM classes
+- inline clear pill present inside input wrapper
 - send button follows ChatGPT pattern (disabled when input empty)
 
 ## Useful Manual Checks

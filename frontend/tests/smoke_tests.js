@@ -111,12 +111,13 @@ betaFrame.addEventListener("load", () => {
   assert(doc.getElementById("send-btn") !== null, "beta.html includes a send button");
   assert(doc.getElementById("chat-suggestions") !== null, "beta.html includes suggestion buttons container");
   assert(doc.querySelectorAll(".suggestion-btn").length >= 3, "beta.html includes at least 3 suggestion buttons");
-  assert(doc.getElementById("chat-minimize-btn") !== null, "beta.html includes a minimize button");
-  assert(doc.getElementById("chat-clear-btn") !== null, "beta.html includes a clear chat button");
+  assert(doc.getElementById("chat-clear-btn") !== null, "beta.html includes a clear chat button inside the input area");
+  assert(doc.querySelector(".chat-clear-pill") !== null, "beta.html clear button uses inline pill style");
   assert(doc.getElementById("chat-zone-resize-handle") !== null, "beta.html includes a centered pill resize handle");
   assert(doc.querySelector(".chat-zone-pill-handle .pill-bar") !== null, "beta.html pill handle contains a visible pill bar element");
   assert(doc.getElementById("chat-resize-toggle-btn") === null, "beta.html does not include a resize toggle button (drag-only resize)");
   assert(doc.getElementById("chat-zone-drag-handle") === null, "beta.html does not include a drag-to-move handle");
+  assert(doc.getElementById("chat-minimize-btn") === null, "beta.html does not include a separate minimize button (cleaner layout)");
 
   /* Responsive meta */
   const viewport = doc.querySelector('meta[name="viewport"]');

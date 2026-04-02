@@ -54,7 +54,8 @@ These check only static DOM structure and basic page wiring. They do not
 replace browser automation or full end-to-end tests. Manager page smoke tests
 verify that the profile override sections (About, Education, Research, Contact)
 are present in the DOM. Beta page smoke tests verify the personal-information
-zone cards, sticky chat bar elements, pill-bar drag resize handle, and that
+zone cards, sticky chat bar elements, pill-bar drag resize handle, inline
+clear pill inside the input area, absence of separate minimize button, and that
 the resize toggle button is absent (drag-only resize).
 
 ## Frontend Interaction Coverage
@@ -73,7 +74,7 @@ iframes to simulate backend responses without a running server.
 - success response: assistant message rendered with markdown, typing indicator
   removed, send button follows ChatGPT pattern (disabled until input present)
 - error handling: error message on 429 (rate limited) and network failure
-- minimize/expand toggle: DOM class `is-minimized` added and removed
+- inline clear pill: exists inside input wrapper, no separate minimize button
 - suggestion chips: data-question attributes present on buttons
 
 ### Index chat interactions

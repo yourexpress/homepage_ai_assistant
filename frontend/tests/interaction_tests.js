@@ -267,20 +267,6 @@ betaFrame.addEventListener("load", function () {
         }, 2000).then(function (foundNetError) {
           assert(foundNetError, "beta: error message shown after network failure (unreachable)");
 
-          /* ========== Group: Beta Chat – Minimize Toggle ========== */
-          group("Beta Chat – Minimize/expand toggle");
-
-          var chatZone = doc.getElementById("chat-zone");
-          var minimizeBtn = doc.getElementById("chat-minimize-btn");
-
-          assert(chatZone && !chatZone.classList.contains("is-minimized"), "beta: chat zone starts in expanded state");
-
-          if (minimizeBtn) { minimizeBtn.click(); }
-          assert(chatZone && chatZone.classList.contains("is-minimized"), "beta: chat zone minimized after button click");
-
-          if (minimizeBtn) { minimizeBtn.click(); }
-          assert(chatZone && !chatZone.classList.contains("is-minimized"), "beta: chat zone expanded after second click");
-
           /* ========== Group: Beta Chat – Suggestion Chips ========== */
           group("Beta Chat – Suggestion chip interaction");
 
@@ -293,6 +279,13 @@ betaFrame.addEventListener("load", function () {
             firstSuggestion && firstSuggestion.getAttribute("data-question"),
             "beta: suggestion buttons have data-question attributes"
           );
+
+          /* ========== Group: Beta Chat – Inline clear pill ========== */
+          group("Beta Chat – Inline clear pill");
+
+          var clearPill = doc.querySelector(".chat-clear-pill");
+          assert(clearPill !== null, "beta: inline clear pill button exists inside input wrapper");
+          assert(doc.getElementById("chat-minimize-btn") === null, "beta: no separate minimize button (removed for cleaner UI)");
 
           onFrameDone();
         });

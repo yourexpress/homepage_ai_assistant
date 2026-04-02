@@ -470,36 +470,7 @@ body.is-resizing-chat * {
   cursor: ns-resize !important;
 }
 
-/* Toolbar: resize + clear + minimize buttons */
-.chat-zone-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  gap: 4px;
-  padding: 4px 32px 0;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.chat-toolbar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--beta-text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.chat-toolbar-btn:hover {
-  color: var(--beta-text-secondary);
-  background: var(--beta-bg-subtle);
-}
-
-/* Minimized state */
+/* Minimized state — only show the input form */
 .chat-zone.is-minimized .chat-zone-body,
 .chat-zone.is-minimized .chat-suggestions,
 .chat-zone.is-minimized .chat-footer,
@@ -679,7 +650,7 @@ body.is-resizing-chat * {
   background: var(--beta-surface);
   border: 1.5px solid var(--beta-border-strong);
   border-radius: 24px;
-  padding: 6px 6px 6px 20px;
+  padding: 6px 6px 6px 8px;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-shadow: var(--beta-shadow-sm);
 }
@@ -687,6 +658,33 @@ body.is-resizing-chat * {
 .chat-input-wrapper:focus-within {
   border-color: var(--beta-accent);
   box-shadow: 0 0 0 3px var(--beta-accent-soft);
+}
+
+/* Inline clear pill inside the input wrapper */
+.chat-clear-pill {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--beta-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0;
+  margin-right: 2px;
+}
+
+.chat-clear-pill:hover {
+  color: var(--beta-danger);
+  background: var(--beta-danger-bg);
+}
+
+.chat-clear-pill:active {
+  transform: scale(0.92);
 }
 
 .chat-input {
@@ -771,7 +769,6 @@ body.is-resizing-chat * {
   .profile-hero { padding: 28px 24px 24px; }
   .profile-card { padding: 20px 24px; }
   .chat-zone-inner { padding: 0 16px 10px; }
-  .chat-zone-toolbar { padding: 4px 16px 0; }
 
   .beta-nav { gap: 12px; }
   .beta-nav a { font-size: 0.85rem; }
@@ -820,11 +817,10 @@ body.is-resizing-chat * {
   .suggestion-btn { font-size: 0.78rem; padding: 6px 12px; white-space: normal; }
 
   .chat-zone-inner { padding: 0 12px 8px; }
-  .chat-zone-toolbar { padding: 4px 12px 0; }
 
   .chat-input-wrapper {
     border-radius: 20px;
-    padding: 4px 4px 4px 16px;
+    padding: 4px 4px 4px 6px;
   }
 
   .chat-send-btn {

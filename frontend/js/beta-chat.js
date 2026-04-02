@@ -67,7 +67,6 @@
   var chatDisclaimer = document.getElementById("chat-disclaimer");
   var chatSuggestions = document.getElementById("chat-suggestions");
   var suggestionButtons = chatSuggestions ? Array.from(chatSuggestions.querySelectorAll(".suggestion-btn")) : [];
-  var minimizeBtn = document.getElementById("chat-minimize-btn");
   var clearBtn = document.getElementById("chat-clear-btn");
   var pillHandle = document.getElementById("chat-zone-resize-handle");
 
@@ -392,21 +391,6 @@
     });
   });
 
-  /* ---- Minimize / Expand ---- */
-  function toggleMinimize() {
-    if (!chatZone) { return; }
-    var isMin = chatZone.classList.toggle("is-minimized");
-    if (minimizeBtn) {
-      minimizeBtn.title = isMin ? "Expand chat" : "Minimize chat";
-      minimizeBtn.setAttribute("aria-label", isMin ? "Expand chat zone" : "Minimize chat zone");
-    }
-    if (!isMin && chatInput) { chatInput.focus(); }
-  }
-
-  if (minimizeBtn) {
-    minimizeBtn.addEventListener("click", toggleMinimize);
-  }
-
   /* ---- Clear session ---- */
   function clearSession() {
     history = [];
@@ -414,7 +398,6 @@
     if (chatMessages) { chatMessages.innerHTML = ""; }
     updateMessagesVisibility();
     if (chatSuggestions) { chatSuggestions.style.display = ""; }
-    if (chatZone) { chatZone.classList.remove("is-minimized"); }
     applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
     updateCharCounter();
     updateSendButtonState();
