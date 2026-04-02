@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Frontend Interaction Tests</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .pass { color: green; }
+    .fail { color: red; }
+    .skip { color: orange; }
+    #results { margin-top: 1rem; }
+    .test-row { margin: 0.25rem 0; }
+    .group-title { font-weight: bold; margin-top: 1rem; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Portfolio AI Assistant — Frontend Interaction Tests</h1>
+  <p>
+    These tests verify front-end rendering <strong>before and after</strong>
+    backend responses by mocking <code>fetch</code> inside each iframe.
+    No running backend is required.
+  </p>
+  <div id="results">Running…</div>
+
+  <!--
+    Each page under test is loaded in a hidden iframe.
+    The test script intercepts fetch() inside the iframe to simulate
+    backend responses and then checks DOM state.
+  -->
+  <iframe id="test-frame-beta" src="../beta.html" style="display:none;" width="800" height="600"></iframe>
+  <iframe id="test-frame-index" src="../index.html" style="display:none;" width="800" height="600"></iframe>
+
+  <script src="interaction_tests.js"></script>
+</body>
+</html>
