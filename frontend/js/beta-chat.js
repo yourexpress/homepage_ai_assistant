@@ -249,9 +249,9 @@
     wrapper.appendChild(bubble);
     chatMessages.appendChild(wrapper);
 
-    /* Collapse long assistant/error messages */
+    /* Collapse long assistant/error messages after layout settles */
     if (role === "assistant" || role === "error") {
-      maybeCollapse(wrapper, bubble);
+      requestAnimationFrame(function () { maybeCollapse(wrapper, bubble); });
     }
 
     updateMessagesVisibility();

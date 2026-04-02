@@ -359,9 +359,9 @@
     }
     chatWindow.appendChild(el);
 
-    /* Collapse long assistant/error messages */
+    /* Collapse long assistant/error messages after layout settles */
     if (role === "assistant" || role === "error") {
-      maybeCollapse(el);
+      requestAnimationFrame(() => maybeCollapse(el));
     }
 
     chatWindow.scrollTop = chatWindow.scrollHeight;

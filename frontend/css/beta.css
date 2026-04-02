@@ -167,6 +167,8 @@ button, input, textarea, select { font: inherit; }
 }
 
 .news-ticker[hidden] {
+  /* Re-enforce hidden because .news-ticker sets display:flex which overrides
+     the native hidden attribute in all browsers. */
   display: none;
 }
 

@@ -548,7 +548,8 @@
           headerResume.hidden = true;
         }
       })
-      .catch(function () {
+      .catch(function (err) {
+        console.error("Failed to check resume availability:", err);
         headerResume.hidden = true;
       });
   }
