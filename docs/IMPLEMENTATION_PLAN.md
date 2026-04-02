@@ -64,7 +64,7 @@ forcing them to scroll past large blocks of text.
 ### 2. Replace the clear-history icon
 
 **Goal:** Replace the trash-can SVG icon on the clear-history button with a
-cleaner broom/sweep icon that looks more polished and less alarming.
+cleaner eraser icon that looks more polished and less alarming.
 
 **Scope:**
 - Replace the SVG in `frontend/beta.html` (the `.chat-clear-pill` button).
