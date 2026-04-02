@@ -491,7 +491,15 @@ a.contact-value:hover {
   align-items: center;
   justify-content: center;
   background: transparent;
+  touch-action: none;
   transition: background 0.15s;
+}
+
+/* Prevent text selection while dragging the resize pill */
+body.is-resizing-chat {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: ns-resize;
 }
 
 .chat-zone-resize-handle::before {
