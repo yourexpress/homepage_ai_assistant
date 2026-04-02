@@ -284,7 +284,7 @@ betaFrame.addEventListener("load", function () {
           group("Beta Chat – Inline clear pill");
 
           var clearPill = doc.querySelector(".chat-clear-pill");
-          assert(clearPill !== null, "beta: inline clear pill button exists inside input wrapper");
+          assert(clearPill !== null, "beta: inline clear pill button exists inside chat body");
           assert(doc.getElementById("chat-minimize-btn") === null, "beta: no separate minimize button (removed for cleaner UI)");
 
           onFrameDone();

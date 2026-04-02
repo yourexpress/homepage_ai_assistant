@@ -201,7 +201,7 @@
   }
 
   /* ---- Collapsible long messages ---- */
-  var MSG_COLLAPSE_HEIGHT = 200;
+  var MSG_COLLAPSE_HEIGHT = 500;
 
   /**
    * If the bubble exceeds MSG_COLLAPSE_HEIGHT, collapse it and add a toggle.

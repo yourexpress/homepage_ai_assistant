@@ -105,6 +105,7 @@
 
     <div class="chat-zone-inner">
       <div class="chat-zone-body" id="chat-zone-body">
+        <button type="button" class="chat-clear-pill" id="chat-clear-btn" title="Clear conversation history" aria-label="Clear conversation history">Clear History</button>
         <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"></div>
       </div>
 
@@ -117,9 +118,6 @@
 
       <form class="chat-input-form" id="chat-form" autocomplete="off" novalidate>
         <div class="chat-input-wrapper">
-          <button type="button" class="chat-clear-pill" id="chat-clear-btn" title="New conversation" aria-label="Start a new conversation">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20H7L3 16c-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0l5.9 5.9c.6.6.6 1.5 0 2.1L13.4 20"/><path d="M6.3 13.7l5 5"/></svg>
-          </button>
           <textarea
             id="chat-input"
             class="chat-input"
