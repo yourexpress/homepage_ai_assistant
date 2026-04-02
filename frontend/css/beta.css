@@ -135,6 +135,52 @@ button, input, textarea, select { font: inherit; }
   color: var(--beta-accent);
 }
 
+/* ---------- News Ticker ---------- */
+.news-ticker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 36px;
+  padding: 0 28px;
+  background: var(--beta-accent-bg);
+  border-bottom: 1px solid var(--beta-border);
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  color: var(--beta-text-secondary);
+}
+
+.news-ticker-label {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--beta-accent);
+}
+
+.news-ticker-track {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.news-ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 30s linear infinite;
+}
+
+.news-ticker-content span {
+  display: inline;
+  padding: 0 40px 0 0;
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* ---------- Main layout ---------- */
 .beta-main {
   max-width: 1200px;

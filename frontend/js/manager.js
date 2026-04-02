@@ -110,6 +110,7 @@
     renderEducationOverrides(content);
     renderResearchOverrides(content);
     renderContactOverrides(content);
+    renderNewsOverrides(content);
   }
 
   function renderAboutOverrides(content) {
@@ -279,6 +280,41 @@
     profileContactFields.appendChild(wrapper);
   }
 
+  /* ---- News items editor ---- */
+  const newsItemsFields = document.getElementById("news-items-fields");
+
+  function renderNewsOverrides(content) {
+    if (!newsItemsFields) { return; }
+    const items = Array.isArray(content.news_items) ? content.news_items : [];
+    newsItemsFields.innerHTML = "";
+    items.forEach((item, index) => {
+      appendNewsItem(index, item);
+    });
+  }
+
+  function appendNewsItem(index, item) {
+    if (!newsItemsFields) { return; }
+    const wrapper = document.createElement("div");
+    wrapper.className = "manager-array-item";
+    const en = (typeof item === "object" && item.en) ? item.en : "";
+    const zh = (typeof item === "object" && item.zh) ? item.zh : "";
+    wrapper.innerHTML = `
+      <div class="manager-array-item-head">
+        <span>News ${index + 1}</span>
+        <button type="button" class="manager-remove-btn" title="Remove">×</button>
+      </div>
+      <div class="manager-row">
+        <label>English<textarea data-array="news_items" data-index="${index}" data-lang="en" rows="2">${escapeAttr(en)}</textarea></label>
+        <label>Chinese<textarea data-array="news_items" data-index="${index}" data-lang="zh" rows="2">${escapeAttr(zh)}</textarea></label>
+      </div>
+    `;
+    wrapper.querySelector(".manager-remove-btn").addEventListener("click", () => {
+      wrapper.remove();
+      reindexArrayItems(newsItemsFields, "news_items");
+    });
+    newsItemsFields.appendChild(wrapper);
+  }
+
   function reindexArrayItems(container, arrayName) {
     container.querySelectorAll(".manager-array-item").forEach((item, newIndex) => {
       item.querySelectorAll(`[data-array="${arrayName}"]`).forEach((field) => {
@@ -364,6 +400,7 @@
     content.profile_education = collectArrayField("profile_education");
     content.profile_research_interests = collectArrayField("profile_research_interests");
     content.profile_contact_items = collectArrayField("profile_contact_items");
+    content.news_items = collectArrayField("news_items");
     return content;
   }
 
@@ -485,6 +522,9 @@
         } else if (type === "contact") {
           const index = profileContactFields.querySelectorAll(".manager-array-item").length;
           appendContactItem(index, {});
+        } else if (type === "news") {
+          const index = newsItemsFields ? newsItemsFields.querySelectorAll(".manager-array-item").length : 0;
+          appendNewsItem(index, { en: "", zh: "" });
         }
       });
     });

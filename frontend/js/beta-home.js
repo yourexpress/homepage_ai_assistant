@@ -103,6 +103,9 @@
   var navStable = document.getElementById("nav-stable");
   var navExperience = document.getElementById("nav-experience");
   var navPublications = document.getElementById("nav-publications");
+  var newsTicker = document.getElementById("news-ticker");
+  var newsTickerLabel = document.getElementById("news-ticker-label");
+  var newsTickerContent = document.getElementById("news-ticker-content");
   var localeButtons = Array.from(document.querySelectorAll(".beta-lang-btn"));
 
   /* ---- Helpers ---- */
@@ -321,6 +324,7 @@
     renderContacts(contactList, buildContactItems(profile));
     renderExperience(experienceList, buildExperienceItems());
     renderDataModel(dataModelList);
+    renderNewsTicker();
     setLangButtons();
   }
 
@@ -481,6 +485,37 @@
 
       target.appendChild(entry);
     });
+  }
+
+  function renderNewsTicker() {
+    if (!newsTicker || !newsTickerContent) { return; }
+    var items = siteContent.news_items || [];
+    if (!items.length) {
+      newsTicker.hidden = true;
+      return;
+    }
+    /* Set label */
+    if (newsTickerLabel) {
+      var title = siteContent.news_title || {};
+      newsTickerLabel.textContent = localize(title, currentLocale()) || "News";
+    }
+    /* Build duplicated content for seamless infinite scroll */
+    var texts = items.map(function (item) {
+      return localize(item, currentLocale());
+    }).filter(Boolean);
+    if (!texts.length) {
+      newsTicker.hidden = true;
+      return;
+    }
+    var html = "";
+    /* Duplicate the items so the second half scrolls in as the first scrolls out */
+    for (var dup = 0; dup < 2; dup++) {
+      texts.forEach(function (txt) {
+        html += "<span>" + txt + "</span>";
+      });
+    }
+    newsTickerContent.innerHTML = html;
+    newsTicker.hidden = false;
   }
 
   function setLangButtons() {
