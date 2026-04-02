@@ -587,6 +587,46 @@ body.is-resizing-chat * {
 .msg-bubble p { margin: 0 0 8px; }
 .msg-bubble p:last-child { margin-bottom: 0; }
 
+/* Collapsible long messages */
+.msg-collapsed .msg-bubble {
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.msg-collapsed .msg-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--beta-assistant-bubble));
+  pointer-events: none;
+}
+
+.msg-collapsed.error-msg .msg-bubble::after {
+  background: linear-gradient(to bottom, transparent, var(--beta-danger-bg));
+}
+
+.msg-toggle-btn {
+  display: block;
+  margin: 4px 0 0;
+  padding: 2px 10px;
+  border: none;
+  border-radius: var(--beta-radius-sm);
+  background: transparent;
+  color: var(--beta-accent);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.msg-toggle-btn:hover {
+  color: var(--beta-accent-hover);
+}
+
 /* Thinking animation */
 .thinking-dots {
   display: inline-flex;

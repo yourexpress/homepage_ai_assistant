@@ -815,6 +815,46 @@ h3 {
   font-weight: 600;
 }
 
+/* Collapsible long messages */
+.message.msg-collapsed {
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.message.msg-collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--assistant-bubble));
+  pointer-events: none;
+}
+
+.message.error.msg-collapsed::after {
+  background: linear-gradient(to bottom, transparent, #fff2f4);
+}
+
+.msg-toggle-btn {
+  display: block;
+  margin: 2px 0 6px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.msg-toggle-btn:hover {
+  color: var(--accent-strong);
+}
+
 #chat-form,
 .comment-form,
 .manager-form {

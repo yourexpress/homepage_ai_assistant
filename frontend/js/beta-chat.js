@@ -200,6 +200,31 @@
     }
   }
 
+  /* ---- Collapsible long messages ---- */
+  var MSG_COLLAPSE_HEIGHT = 200;
+
+  /**
+   * If the bubble exceeds MSG_COLLAPSE_HEIGHT, collapse it and add a toggle.
+   * Only applied to assistant and error messages.
+   * @param {HTMLElement} wrapper - The .chat-msg wrapper.
+   * @param {HTMLElement} bubble - The .msg-bubble element.
+   */
+  function maybeCollapse(wrapper, bubble) {
+    if (bubble.scrollHeight <= MSG_COLLAPSE_HEIGHT) { return; }
+    wrapper.classList.add("msg-collapsed");
+    var toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "msg-toggle-btn";
+    toggle.textContent = currentLocale() === "zh" ? "展开" : "Show more";
+    toggle.addEventListener("click", function () {
+      var isCollapsed = wrapper.classList.toggle("msg-collapsed");
+      toggle.textContent = isCollapsed
+        ? (currentLocale() === "zh" ? "展开" : "Show more")
+        : (currentLocale() === "zh" ? "收起" : "Show less");
+    });
+    wrapper.appendChild(toggle);
+  }
+
   /* ---- Message rendering ---- */
   function appendMessage(role, text, options) {
     options = options || {};
@@ -223,6 +248,12 @@
 
     wrapper.appendChild(bubble);
     chatMessages.appendChild(wrapper);
+
+    /* Collapse long assistant/error messages */
+    if (role === "assistant" || role === "error") {
+      maybeCollapse(wrapper, bubble);
+    }
+
     updateMessagesVisibility();
     if (chatZoneBody) { chatZoneBody.scrollTop = chatZoneBody.scrollHeight; }
     return wrapper;

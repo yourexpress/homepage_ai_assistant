@@ -319,6 +319,30 @@
       .replace(/\*(.+?)\*/g, "<em>$1</em>");
   }
 
+  /* ---- Collapsible long messages ---- */
+  const MSG_COLLAPSE_HEIGHT = 200;
+
+  function maybeCollapse(wrapper) {
+    if (wrapper.scrollHeight <= MSG_COLLAPSE_HEIGHT) { return; }
+    wrapper.classList.add("msg-collapsed");
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "msg-toggle-btn";
+    toggle.textContent = getLocale() === "zh" ? "展开" : "Show more";
+    toggle.addEventListener("click", () => {
+      const isCollapsed = wrapper.classList.toggle("msg-collapsed");
+      toggle.textContent = isCollapsed
+        ? (getLocale() === "zh" ? "展开" : "Show more")
+        : (getLocale() === "zh" ? "收起" : "Show less");
+    });
+    /* Insert the toggle after the message element (same parent) */
+    if (wrapper.nextSibling) {
+      wrapper.parentNode.insertBefore(toggle, wrapper.nextSibling);
+    } else {
+      wrapper.parentNode.appendChild(toggle);
+    }
+  }
+
   function appendMessage(role, text, extra = {}) {
     const el = document.createElement("div");
     el.classList.add("message", role);
@@ -334,6 +358,12 @@
       el.textContent = text;
     }
     chatWindow.appendChild(el);
+
+    /* Collapse long assistant/error messages */
+    if (role === "assistant" || role === "error") {
+      maybeCollapse(el);
+    }
+
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return el;
   }
