@@ -68,6 +68,7 @@ function fakeResponse(status, body) {
   return {
     ok: status >= 200 && status < 300,
     status: status,
+    statusText: status === 200 ? "OK" : status === 429 ? "Too Many Requests" : "Error",
     json: function () {
       return Promise.resolve(body);
     },
@@ -84,11 +85,12 @@ function waitFor(conditionFn, timeoutMs) {
   timeoutMs = timeoutMs || 3000;
   return new Promise(function (resolve) {
     var start = Date.now();
-    (function check() {
+    function poll() {
       if (conditionFn()) { return resolve(true); }
       if (Date.now() - start > timeoutMs) { return resolve(false); }
-      setTimeout(check, 50);
-    })();
+      setTimeout(poll, 50);
+    }
+    poll();
   });
 }
 

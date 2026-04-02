@@ -61,11 +61,15 @@ Open:
 
 - `frontend/tests/interaction_tests.html`
 
-Or run via Playwright CLI (requires `npm install playwright` and
-`npx playwright install chromium`):
+Or run headlessly by serving `frontend/` via HTTP and opening
+`tests/interaction_tests.html` in a headless browser. Requires
+Playwright or Puppeteer with Chromium installed:
 
 ```bash
-node /path/to/run_interaction_tests.js
+cd frontend
+python3 -m http.server 8099
+# In another terminal, navigate a headless browser to
+# http://localhost:8099/tests/interaction_tests.html
 ```
 
 These verify DOM state **before and after** backend responses by mocking
