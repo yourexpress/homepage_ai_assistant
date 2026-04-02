@@ -38,6 +38,17 @@ Protected manager UI for editing homepage content through:
 - `GET /api/admin/site-content`
 - `PUT /api/admin/site-content`
 
+### `beta.html`
+
+Beta homepage with:
+
+- wide CSS-Grid personal-information zone (hero + sidebar, education + skills,
+  experience highlights + data model)
+- sticky chat bar with suggestion chips, drag-to-resize via centered pill bar,
+  clear-session, and minimize
+- separate CSS (`css/beta.css`) and JS (`js/beta-home.js`, `js/beta-chat.js`)
+- reuses `js/app-config.js` and the same backend APIs
+
 ## Frontend Scripts
 
 - `js/app-config.js`
@@ -58,6 +69,14 @@ Protected manager UI for editing homepage content through:
   - metrics polling and rendering
 - `js/manager.js`
   - admin content loading and save flow
+- `js/beta-home.js`
+  - beta homepage profile data loading and rendering
+  - locale switching for the beta layout
+- `js/beta-chat.js`
+  - beta sticky chat bar with suggestion chips
+  - drag-to-resize via centered pill bar (no button toggle)
+  - minimize, clear-session with confirmation dialog
+  - session history persistence
 
 ## Backend Endpoints
 

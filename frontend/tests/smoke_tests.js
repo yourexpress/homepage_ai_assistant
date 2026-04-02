@@ -115,6 +115,7 @@ betaFrame.addEventListener("load", () => {
   assert(doc.getElementById("chat-clear-btn") !== null, "beta.html includes a clear chat button");
   assert(doc.getElementById("chat-zone-resize-handle") !== null, "beta.html includes a centered pill resize handle");
   assert(doc.querySelector(".chat-zone-pill-handle .pill-bar") !== null, "beta.html pill handle contains a visible pill bar element");
+  assert(doc.getElementById("chat-resize-toggle-btn") === null, "beta.html does not include a resize toggle button (drag-only resize)");
   assert(doc.getElementById("chat-zone-drag-handle") === null, "beta.html does not include a drag-to-move handle");
 
   /* Responsive meta */

@@ -53,7 +53,9 @@ This document describes the current intended coverage areas.
 These check only static DOM structure and basic page wiring. They do not
 replace browser automation or full end-to-end tests. Manager page smoke tests
 verify that the profile override sections (About, Education, Research, Contact)
-are present in the DOM.
+are present in the DOM. Beta page smoke tests verify the personal-information
+zone cards, sticky chat bar elements, pill-bar drag resize handle, and that
+the resize toggle button is absent (drag-only resize).
 
 ## Lightweight Validation Commands
 

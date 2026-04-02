@@ -531,11 +531,6 @@ body.is-resizing-chat * {
   box-shadow: var(--beta-shadow-sm);
 }
 
-/* Expanded state for quick toggle */
-.chat-zone-body.is-expanded {
-  /* Height set by JS; this class is kept for the toggle button state */
-}
-
 .chat-zone-body.has-messages {
   display: block;
 }

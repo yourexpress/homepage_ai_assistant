@@ -69,20 +69,14 @@
   var suggestionButtons = chatSuggestions ? Array.from(chatSuggestions.querySelectorAll(".suggestion-btn")) : [];
   var minimizeBtn = document.getElementById("chat-minimize-btn");
   var clearBtn = document.getElementById("chat-clear-btn");
-  var resizeToggleBtn = document.getElementById("chat-resize-toggle-btn");
   var pillHandle = document.getElementById("chat-zone-resize-handle");
 
   /* ---- Resize constants ---- */
   var CHAT_MIN_HEIGHT = 120;
   var CHAT_DEFAULT_HEIGHT = 200;
-  var CHAT_EXPANDED_HEIGHT = 420;
   var CHAT_ABSOLUTE_MAX_HEIGHT = 700;
-  var CHAT_EXPAND_THRESHOLD = (CHAT_DEFAULT_HEIGHT + CHAT_EXPANDED_HEIGHT) / 2;
   var chatBodyHeight = CHAT_DEFAULT_HEIGHT;
   var resizeState = null;
-
-  var EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V13h3"/><path d="M13 6V3h-3"/><path d="M3 13l4.5-4.5"/><path d="M13 3L8.5 7.5"/></svg>';
-  var COMPACT_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v3h3"/><path d="M6 13v-3H3"/><path d="M13 6l-4.5 4.5"/><path d="M3 10l4.5-4.5"/></svg>';
 
   /* ---- Helpers ---- */
   function currentLocale() { return getLocale(); }
@@ -421,9 +415,7 @@
     updateMessagesVisibility();
     if (chatSuggestions) { chatSuggestions.style.display = ""; }
     if (chatZone) { chatZone.classList.remove("is-minimized"); }
-    if (chatZoneBody) { chatZoneBody.classList.remove("is-expanded"); }
     applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
-    syncToggleState();
     updateCharCounter();
     updateSendButtonState();
     if (chatInput) { chatInput.focus(); }
@@ -520,7 +512,6 @@
     window.removeEventListener("pointermove", onPillPointerMove);
     window.removeEventListener("pointerup", onPillPointerUp);
     window.removeEventListener("pointercancel", onPillPointerUp);
-    syncToggleState();
     resizeState = null;
   }
 
@@ -528,41 +519,8 @@
     pillHandle.addEventListener("pointerdown", onPillPointerDown);
   }
 
-  /* ---- Resize toggle (compact / expanded via header icon) ---- */
-
-  /**
-   * Sync the expand/compact toggle button state with the current height.
-   */
-  function syncToggleState() {
-    if (!resizeToggleBtn || !chatZoneBody) { return; }
-    var isExpanded = chatBodyHeight > CHAT_EXPAND_THRESHOLD;
-    if (isExpanded) {
-      chatZoneBody.classList.add("is-expanded");
-    } else {
-      chatZoneBody.classList.remove("is-expanded");
-    }
-    resizeToggleBtn.innerHTML = isExpanded ? COMPACT_ICON : EXPAND_ICON;
-    resizeToggleBtn.title = isExpanded ? "Compact chat" : "Expand chat";
-    resizeToggleBtn.setAttribute("aria-label", isExpanded ? "Compact chat" : "Expand chat");
-  }
-
-  /* ---- Resize toggle (compact / expanded via header icon) ---- */
-  (function initResizeToggle() {
-    if (!resizeToggleBtn || !chatZoneBody) { return; }
-
-    resizeToggleBtn.addEventListener("click", function () {
-      var isExpanded = chatZoneBody.classList.contains("is-expanded");
-      if (isExpanded) {
-        applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
-      } else {
-        applyChatBodyHeight(CHAT_EXPANDED_HEIGHT);
-      }
-      syncToggleState();
-    });
-
-    /* Apply the default height on init */
-    applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
-  })();
+  /* Apply the default height on init */
+  applyChatBodyHeight(CHAT_DEFAULT_HEIGHT);
 
   /* ---- Init ---- */
   loadHistory();
