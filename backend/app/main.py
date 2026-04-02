@@ -25,15 +25,13 @@ def create_app() -> FastAPI:
         version="1.0.0",
     )
 
-    # CORS — must be registered before rate/concurrency middleware
-    application.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.origins_list,
-        allow_methods=["GET", "POST", "PUT", "OPTIONS"],
-        allow_headers=["*"],
-    )
+    # Middleware is stacked inside-out: the LAST registered wraps everything
+    # (outermost).  CORS must be outermost so that error responses from the
+    # rate / concurrency limiters still carry Access-Control-* headers;
+    # otherwise the browser blocks 429 / 503 and the frontend cannot read
+    # the status code.
 
-    # Rate limiter — runs before concurrency limiter
+    # Rate limiter (innermost of the three)
     application.add_middleware(
         RateLimiterMiddleware,
         capacity=settings.rate_limit_burst,
@@ -44,6 +42,14 @@ def create_app() -> FastAPI:
     application.add_middleware(
         ConcurrencyLimiterMiddleware,
         max_concurrent=settings.max_concurrent_requests,
+    )
+
+    # CORS — registered last so it wraps rate/concurrency middleware
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.origins_list,
+        allow_methods=["GET", "POST", "PUT", "OPTIONS"],
+        allow_headers=["*"],
     )
 
     application.include_router(health.router, prefix="/api")
