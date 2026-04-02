@@ -280,7 +280,7 @@ betaFrame.addEventListener("load", function () {
             "beta: suggestion buttons have data-question attributes"
           );
 
-          /* ========== Group: Beta Chat – Inline clear pill ========== */
+          /* ========== Group: Beta Chat – Inline Clear Pill ========== */
           group("Beta Chat – Inline clear pill");
 
           var clearPill = doc.querySelector(".chat-clear-pill");
